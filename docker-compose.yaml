@@ -1,0 +1,52 @@
+services:
+  nginx-dev:
+    image: nginx:1.29.0-alpine
+    networks:
+      - traefik_net
+      - web-network
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/dev:/etc/nginx/conf.d/
+    depends_on:
+      - app-dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+      - "traefik.http.routers.ttt-api.rule=Host(`ttt-api.dev.local`)"
+      - "traefik.http.services.ttt-api.loadbalancer.server.port=80"
+
+  app-dev:
+    build:
+      context: ./docker/php/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    networks:
+      - db-network
+      - web-network
+    depends_on:
+      - mysql-dev
+
+  mysql-dev:
+    image: mysql:9.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_EXTERNAL_PORT}:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - db-network
+
+networks:
+  db-network:
+  web-network:
+  traefik_net:
+    external: true
+volumes:
+  db-data:
