@@ -26,5 +26,6 @@ class Init extends Command
     public function handle(): void
     {
         $this->call('app:init-roles');
+        $this->call('app:init-admin-user');
     }
 }
