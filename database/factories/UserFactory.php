@@ -23,13 +23,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ];
+        return [];
     }
 
     /**
@@ -40,5 +34,31 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function makeGuest()
+    {
+        $user = self::create();
+
+        $user->assignRole('guest');
+
+        return $user;
+    }
+
+    public function makeUser(array $fields = [])
+    {
+        $defaultFields = [
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'username' => fake()->unique()->username(),
+            'email' => fake()->unique()->safeEmail(),
+            'password' => static::$password ??= Hash::make('password'),
+        ];
+
+        $user = self::create(array_merge($defaultFields, $fields));
+
+        $user->assignRole('user');
+
+        return $user;
     }
 }
