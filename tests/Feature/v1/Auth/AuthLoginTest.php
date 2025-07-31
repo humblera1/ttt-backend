@@ -61,4 +61,27 @@ class AuthLoginTest extends TestCase
 
         $this->assertIsString($response->json('errors.general'));
     }
+
+    public function test_banned_user_cannot_login(): void
+    {
+        $password = 'strongPassword123!';
+
+        // Создаём забаненного пользователя
+        $user = User::factory()->makeUser([
+            'password' => Hash::make($password),
+            'banned_at' => now(),
+        ]);
+
+        $this->actingAs(User::factory()->makeGuest());
+
+        $response = $this->postJson(route('api.v1.auth.login'), [
+            'username' => $user->username,
+            'password' => $password,
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'message',
+            ]);
+    }
 }
