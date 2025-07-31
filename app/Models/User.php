@@ -26,6 +26,8 @@ class User extends Authenticatable implements FilamentUser, HasName
         HasFilamentName,
         HasFilamentAccess;
 
+    protected $with = ['roles'];
+
     /**
      * The attributes that are mass assignable.
      *
