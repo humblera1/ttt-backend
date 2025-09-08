@@ -40,10 +40,15 @@ class UserBanService
      */
     public function banMany(iterable $users): void
     {
-        $ids = collect($users)
-            ->filter(fn(User $user) => ! $user->hasRole('admin'))
-            ->pluck('id')
-            ->all();
+        $usersCollection = collect($users);
+
+        $adminExists = $usersCollection->contains(fn(User $user) => $user->hasRole('admin'));
+
+        if ($adminExists) {
+            throw new BusinessLogicException('You cannot ban the admin!');
+        }
+
+        $ids = $usersCollection->pluck('id')->all();
 
         if (empty($ids)) {
             return;

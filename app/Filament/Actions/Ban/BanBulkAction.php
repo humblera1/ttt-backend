@@ -8,6 +8,7 @@ use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\TrashedFilter;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 
 class BanBulkAction extends BulkAction
@@ -40,6 +41,10 @@ class BanBulkAction extends BulkAction
         $this->modalIcon(FilamentIcon::resolve('actions::ban-action.modal') ?? 'heroicon-o-no-symbol');
 
         $this->action(function (): void {
+            if (!auth()->user()->can('ban-bulk-user')) {
+                throw new AuthorizationException('You do not have permission to bulk ban users.');
+            }
+
             $this->process(function (Collection $records) {
                 $service = app(UserBanService::class);
 
