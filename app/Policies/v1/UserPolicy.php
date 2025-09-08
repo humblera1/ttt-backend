@@ -11,7 +11,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->hasPermissionTo('view-any-user');
     }
 
     /**
@@ -35,7 +35,17 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return true;
+        // permission to edit own profile
+        if ($user->hasPermissionTo('edit-own-user') && $user->id === $model->id) {
+            return true;
+        }
+
+        // permission to edit any user except admin; to edit an admin user should be another admin
+        if ($user->hasPermissionTo('edit-any-user') && ($user->hasRole('admin') || !$model->hasRole('admin'))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -70,5 +80,10 @@ class UserPolicy
     public function forceDelete(User $user, User $model): bool
     {
         return false;
+    }
+
+    public function ban(User $user, User $model): bool
+    {
+        return true;
     }
 }
