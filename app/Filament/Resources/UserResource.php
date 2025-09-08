@@ -85,8 +85,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make()
-                    ->visible(fn () => auth()->user()->hasRole('admin')),
+                DeleteAction::make(),
             ])
             ->headerActions([
                 // ...
@@ -94,9 +93,9 @@ class UserResource extends Resource
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                        ->visible(fn () => auth()->user()->hasRole('admin')),
+                        ->visible(fn () => auth()->user()->hasPermissionTo('delete-bulk-user')),
                     BanBulkAction::make()
-                        ->visible(fn () => auth()->user()->hasRole('admin')),
+                        ->visible(fn () => auth()->user()->hasPermissionTo('ban-bulk-user')),
                 ]),
             ]);
     }
