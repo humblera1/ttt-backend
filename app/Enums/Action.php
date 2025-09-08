@@ -5,20 +5,24 @@ namespace App\Enums;
 enum Action
 {
     case Create;
-    case View;
     case ViewOwn;
     case ViewAny;
     case ViewPremium;
     case ViewDeleted;
-    case Edit;
+
+    // Например, просмотр закрытых профилей
+//    case ViewClosed;
     case EditOwn;
-    case Delete;
+    case EditAny;
     case DeleteOwn;
     case DeleteAny;
+    case DeleteBulk;
     case Approve;
     case Reject;
     case Ban;
-    case BanAny;
+
+    //    case BanAny;
+    case BanBulk;
     case Unban;
     case Favorite;
     case Vote;
