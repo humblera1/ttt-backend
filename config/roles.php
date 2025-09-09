@@ -24,6 +24,7 @@ return [
             Action::EditAny,
             Action::DeleteAny,
             Action::DeleteBulk,
+            Action::Assign,
         ],
         Entity::Position->name => [
             Action::Suggest,

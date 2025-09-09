@@ -41,4 +41,5 @@ enum Action
     case Send;
     case Reply;
     case Suggest;
+    case Assign;
 }
