@@ -4,6 +4,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use App\Services\api\v1\UserBanService;
+use Closure;
 use Filament\Actions;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -14,6 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Enums\Role as RoleEnum;
 
 class EditUser extends EditRecord
 {
@@ -33,43 +35,61 @@ class EditUser extends EditRecord
                        ->schema([
                            TextInput::make('username')
                                ->required()
-                               ->maxLength(255),
+                               ->maxLength(255)
+                                ->columnSpan(2),
 
                            TextInput::make('first_name')
-                               ->required()
                                ->maxLength(255),
 
                            TextInput::make('last_name')
-                               ->required()
                                ->maxLength(255),
-
-                           TextInput::make('password')
-                               ->password()
-                               ->dehydrateStateUsing(fn($state) => !empty($state) ? Hash::make($state) : null)
-                               ->required(fn ($context) => $context === 'create')
-                               ->maxLength(255)
-                               ->label('Password')
                        ]),
                ]),
+           Section::make('Password')
+                ->schema([
+                    Grid::make()
+                        ->schema([
+                            TextInput::make('password')
+                                ->password()
+                                ->confirmed()
+                                ->dehydrateStateUsing(fn($state) => !empty($state) ? Hash::make($state) : null)
+                                ->required(fn ($context) => $context === 'create')
+                                ->maxLength(255)
+                                ->label('Password'),
+                            TextInput::make('password_confirmation')
+                                ->password()
+                                ->dehydrateStateUsing(fn($state) => !empty($state) ? Hash::make($state) : null)
+                                ->required(fn ($context) => $context === 'create')
+                                ->maxLength(255)
+                                ->label('Password Again'),
+                        ]),
+                ])
        ];
 
        if ($canAssignRole) {
-           $schema[] = Section::make('Roles')
+           $schema[] = Section::make('Role')
                        ->schema([
-                           Select::make('roles')
-                               ->multiple()
+                           Select::make('role')
+                               ->required()
                                ->relationship('roles', 'name')
                                ->preload()
                                ->options(
                                    Role::all()->pluck('name', 'id')->toArray()
                                )
-                               ->disableOptionWhen(
-                               // Нельзя снять у себя роль администратора (если редактируешь себя)
-                                   fn ($roleId) =>
-                                       $currentUser->id === $user->id
-                                       && Role::find($roleId)?->name === 'admin'
-                               )
-                               ->hint('You cannot remove your own admin role.')
+                               ->hint('You cannot remove admin role.')
+                               ->rules([
+                                   fn (): Closure => function (string $attribute, int $value, Closure $fail) {
+                                       $user = $this->record;
+                                       $adminRoleId = Role::where('name', RoleEnum::Admin->value)->value('id') ?? null;
+
+                                       $hadAdminRole = $user->hasRole(RoleEnum::Admin->value);
+                                       $newRoleIsNotAdmin = $value != $adminRoleId;
+
+                                       if ($hadAdminRole && $newRoleIsNotAdmin) {
+                                           $fail('You cannot remove admin role!');
+                                       }
+                                   },
+                               ]),
                        ]);
        }
 
@@ -90,7 +110,7 @@ class EditUser extends EditRecord
         if ($currentUser->can('ban', $user)) {
             $actions[] = Actions\Action::make('ban')
                 ->label('Ban')
-                ->color('danger')
+                ->color('warning')
                 ->action(function () use ($user) {
                     $banService = app(UserBanService::class);
 
