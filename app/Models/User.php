@@ -6,12 +6,14 @@ use App\Models\Scopes\User\NotBannedScope;
 use App\Policies\v1\UserPolicy;
 use App\Traits\User\HasFilamentAccess;
 use App\Traits\User\HasFilamentName;
+use App\Traits\User\WithBanned;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -25,6 +27,8 @@ class User extends Authenticatable implements FilamentUser, HasName
     use HasFactory,
         HasApiTokens,
         Notifiable,
+        SoftDeletes,
+        WithBanned,
         HasRoles,
         HasFilamentName,
         HasFilamentAccess;

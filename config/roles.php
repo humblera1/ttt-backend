@@ -70,6 +70,7 @@ return [
             Action::Ban,
             Action::BanBulk,
             Action::Unban,
+            Action::RestoreAny,
         ],
         Entity::Question->name => [
             Action::Create,
@@ -182,6 +183,7 @@ return [
             Action::DeleteOwn,
             Action::Ban,
             Action::Unban,
+            Action::RestoreOwn,
         ],
         Entity::Question->name => [
             Action::ViewAny,
@@ -265,6 +267,7 @@ return [
             Action::ViewAny,
             Action::EditOwn,
             Action::DeleteOwn,
+            Action::RestoreOwn,
         ],
         Entity::Question->name => [
             Action::ViewAny,
@@ -329,6 +332,7 @@ return [
             Action::ViewAny,
             Action::EditOwn,
             Action::DeleteOwn,
+            Action::RestoreOwn,
         ],
         Entity::Question->name => [
             Action::ViewOwn,

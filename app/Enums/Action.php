@@ -17,6 +17,8 @@ enum Action
     case DeleteOwn;
     case DeleteAny;
     case DeleteBulk;
+    case RestoreOwn;
+    case RestoreAny;
     case Approve;
     case Reject;
     case Ban;

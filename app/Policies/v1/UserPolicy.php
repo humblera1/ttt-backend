@@ -71,6 +71,16 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
+        // permission to restore own profile
+        if ($user->hasPermissionTo('restore-own-user') && $user->id === $model->id) {
+            return true;
+        }
+
+        // permission to restore any user except admin
+        if ($user->hasPermissionTo('restore-any-user') && !$model->hasRole('admin')) {
+            return true;
+        }
+
         return false;
     }
 
@@ -84,6 +94,19 @@ class UserPolicy
 
     public function ban(User $user, User $model): bool
     {
-        return true;
+        if ($user->hasPermissionTo('ban-user') && !$model->hasRole('admin')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function unban(User $user, User $model): bool
+    {
+        if ($user->hasPermissionTo('unban-user') && !$model->hasRole('admin')) {
+            return true;
+        }
+
+        return false;
     }
 }

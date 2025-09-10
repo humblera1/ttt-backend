@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
-use App\Services\api\v1\UserBanService;
 use Closure;
 use Filament\Actions;
 use Filament\Forms\Components\Grid;
@@ -103,25 +102,62 @@ class EditUser extends EditRecord
 
         $actions = [];
 
-        if ($currentUser->can('delete', $user)) {
-            $actions[] = Actions\DeleteAction::make();
+        // delete or restore
+        if ($user->trashed()) {
+            if ($currentUser->can('restore', $user)) {
+                $actions[] = Actions\Action::make('restore')
+                    ->label('Restore')
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-path')
+                    ->action(function () use ($user) {
+                        $user->restore();
+
+                        Notification::make()
+                            ->title('User has been restored.')
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation();
+            }
+        } else {
+            if ($currentUser->can('delete', $user)) {
+                $actions[] = Actions\DeleteAction::make();
+            }
         }
 
-        if ($currentUser->can('ban', $user)) {
-            $actions[] = Actions\Action::make('ban')
-                ->label('Ban')
-                ->color('warning')
-                ->action(function () use ($user) {
-                    $banService = app(UserBanService::class);
+        // ban or unban
+        if ($user->banned()) {
+            if ($currentUser->can('unban', $user)) {
+                $actions[] = Actions\Action::make('unban')
+                    ->label('Unban')
+                    ->color('success')
+                    ->icon('heroicon-o-lock-open')
+                    ->action(function () use ($user) {
+                        $user->unban();
 
-                    $banService->ban($user);
+                        Notification::make()
+                            ->title('Ban has been removed.')
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation();
+            }
+        } else {
+            if ($currentUser->can('ban', $user)) {
+                $actions[] = Actions\Action::make('ban')
+                    ->label('Ban')
+                    ->color('warning')
+                    ->icon('heroicon-o-lock-closed')
+                    ->action(function () use ($user) {
+                        $user->ban();
 
-                    Notification::make()
-                        ->title('User has been banned.')
-                        ->success()
-                        ->send();
-                })
-                ->requiresConfirmation();
+                        Notification::make()
+                            ->title('User has been banned.')
+                            ->warning()
+                            ->send();
+                    })
+                    ->requiresConfirmation();
+            }
         }
 
         return $actions;

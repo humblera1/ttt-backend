@@ -38,6 +38,22 @@ class UserBanService
     /**
      * @throws BusinessLogicException
      */
+    public function unban(User $user): void
+    {
+        $user->banned_at = null;
+
+        try {
+            $this->repository->save($user);
+        } catch (RepositoryException $e) {
+            Log::error('Failed to ban user', ['exception' => $e]);
+
+            throw new BusinessLogicException($e->getMessage());
+        }
+    }
+
+    /**
+     * @throws BusinessLogicException
+     */
     public function banMany(iterable $users): void
     {
         $usersCollection = collect($users);

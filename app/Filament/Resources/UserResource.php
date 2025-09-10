@@ -13,6 +13,7 @@ use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -30,7 +31,8 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->withoutGlobalScopes([NotBannedScope::class]);
+            ->withoutGlobalScopes([NotBannedScope::class])
+            ->withTrashed();
     }
 
     public static function form(Form $form): Form
@@ -85,7 +87,10 @@ class UserResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->visible(fn (User $record) => !$record->trashed() && auth()->user()->can('delete', $record)),
+                RestoreAction::make()
+                    ->visible(fn (User $record) => $record->trashed() && auth()->user()->can('restore', $record)),
             ])
             ->headerActions([
                 // ...
