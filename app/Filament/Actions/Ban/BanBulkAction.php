@@ -20,6 +20,7 @@ class BanBulkAction extends BulkAction
         return 'ban';
     }
 
+    // todo: обновить метод когда поумнею
     protected function setUp(): void
     {
         parent::setUp();
