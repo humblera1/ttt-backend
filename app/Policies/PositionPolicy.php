@@ -12,7 +12,7 @@ class PositionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasPermissionTo('view-any-position');
     }
 
     /**
@@ -20,7 +20,7 @@ class PositionPolicy
      */
     public function view(User $user, Position $position): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class PositionPolicy
      */
     public function update(User $user, Position $position): bool
     {
-        return false;
+        return $user->hasPermissionTo('edit-any-permission');
     }
 
     /**
@@ -44,7 +44,7 @@ class PositionPolicy
      */
     public function delete(User $user, Position $position): bool
     {
-        return false;
+        return $user->hasPermissionTo('delete-any-permission');
     }
 
     /**
@@ -52,7 +52,8 @@ class PositionPolicy
      */
     public function restore(User $user, Position $position): bool
     {
-        return false;
+        return true;
+        return $user->hasPermissionTo('restore-any-permission');
     }
 
     /**
@@ -61,5 +62,10 @@ class PositionPolicy
     public function forceDelete(User $user, Position $position): bool
     {
         return false;
+    }
+
+    public function changeStatus(User $user): bool
+    {
+        return $user->hasPermissionTo('change-status-position');
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Enums\Status;
+use App\Interfaces\v1\Status\StatusInterface;
 use App\Policies\PositionPolicy;
+use App\Traits\Status\HasStatus;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,9 +14,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[UsePolicy(PositionPolicy::class)]
-class Position extends Model
+class Position extends Model implements StatusInterface
 {
-    use HasFactory;
+    use HasFactory,
+        HasStatus;
 
     /**
      * The attributes that are mass assignable.
