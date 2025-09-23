@@ -21,6 +21,7 @@ enum Action
     case RestoreAny;
     case Approve;
     case Reject;
+    case ChangeStatus;
     case Ban;
 
     //    case BanAny;
