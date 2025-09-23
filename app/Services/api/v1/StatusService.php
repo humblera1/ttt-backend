@@ -35,6 +35,14 @@ class StatusService
     /**
      * @throws BusinessLogicException
      */
+    public function reset(Model $record): void
+    {
+        $this->changeStatus($record, Status::Pending);
+    }
+
+    /**
+     * @throws BusinessLogicException
+     */
     protected function changeStatus(Model $record, Status $status): void
     {
         $record->status = $status->value;

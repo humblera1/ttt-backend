@@ -7,4 +7,6 @@ interface StatusInterface
     public function isApproved(): bool;
 
     public function isRejected(): bool;
+
+    public function isPending(): bool;
 }

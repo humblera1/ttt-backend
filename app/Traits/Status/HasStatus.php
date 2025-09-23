@@ -15,4 +15,9 @@ trait HasStatus
     {
         return $this->status === Status::Rejected->value;
     }
+
+    public function isPending(): bool
+    {
+        return $this->status === Status::Pending->value;
+    }
 }
