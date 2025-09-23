@@ -12,12 +12,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(PositionPolicy::class)]
 class Position extends Model implements StatusInterface
 {
     use HasFactory,
-        HasStatus;
+        HasStatus,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
