@@ -21,7 +21,23 @@ class StatusService
      */
     public function approve(Model $record): void
     {
-        $record->status = Status::Approved->value;
+        $this->changeStatus($record, Status::Approved);
+    }
+
+    /**
+     * @throws BusinessLogicException
+     */
+    public function reject(Model $record): void
+    {
+        $this->changeStatus($record, Status::Rejected);
+    }
+
+    /**
+     * @throws BusinessLogicException
+     */
+    protected function changeStatus(Model $record, Status $status): void
+    {
+        $record->status = $status->value;
 
         try {
             $this->repository->save($record);

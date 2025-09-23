@@ -10,4 +10,9 @@ trait HasStatus
     {
         return $this->status === Status::Approved->value;
     }
+
+    public function isRejected(): bool
+    {
+        return $this->status === Status::Rejected->value;
+    }
 }
