@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(CompanyPolicy::class)]
@@ -30,5 +31,10 @@ class Company extends Model implements StatusInterface
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function questions(): BelongsToMany
+    {
+        return $this->belongsToMany(Question::class);
     }
 }

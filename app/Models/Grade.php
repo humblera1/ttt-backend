@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Policies\GradePolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(GradePolicy::class)]
@@ -20,4 +21,9 @@ class Grade extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function questions(): MorphToMany
+    {
+        return $this->morphedByMany(Question::class, 'taggables');
+    }
 }
