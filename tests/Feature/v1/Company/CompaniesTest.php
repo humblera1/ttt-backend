@@ -3,31 +3,23 @@
 namespace Feature\v1\Company;
 
 use App\Models\Company;
-use App\Models\Position;
 use App\Models\User;
+use App\Traits\Tests\WithUser;
 use DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
 class CompaniesTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, WithUser;
+
+    protected string $permission = 'view-any-company';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         DB::table('companies')->delete();
-    }
-
-    private function createUserWithPermission(string $permission): User
-    {
-        $user = User::factory()->create();
-
-        $user->givePermissionTo($permission);
-
-        return $user;
     }
 
     public function test_regular_user_cannot_access_companies_list(): void
@@ -43,9 +35,7 @@ class CompaniesTest extends TestCase
 
     public function test_premium_user_sees_only_active_companies(): void
     {
-        $premiumUser = $this->createUserWithPermission('view-any-company');
-
-        $this->actingAs($premiumUser);
+        $this->actingAs($this->getUser());
 
         $activeCompanies = Company::factory()
             ->count(3)
@@ -70,9 +60,7 @@ class CompaniesTest extends TestCase
 
     public function test_premium_user_sees_only_approved_companies(): void
     {
-        $premiumUser = $this->createUserWithPermission('view-any-company');
-
-        $this->actingAs($premiumUser);
+        $this->actingAs($this->getUser());
 
         $approvedCompanies = Company::factory()
             ->count(3)
@@ -99,9 +87,7 @@ class CompaniesTest extends TestCase
 
     public function test_premium_user_can_search_companies_by_name(): void
     {
-        $premiumUser = $this->createUserWithPermission('view-any-company');
-
-        $this->actingAs($premiumUser);
+        $this->actingAs($this->getUser());
 
         Company::factory()
             ->count(3)
