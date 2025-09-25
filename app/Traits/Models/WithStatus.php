@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Traits\Status;
+namespace App\Traits\Models;
 
 use App\Enums\Status;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 
-trait HasStatus
+trait WithStatus
 {
     public function isApproved(): bool
     {
@@ -19,5 +21,11 @@ trait HasStatus
     public function isPending(): bool
     {
         return $this->status === Status::Pending->value;
+    }
+
+    #[Scope]
+    protected function approved(Builder $query): void
+    {
+        $query->where('status', Status::Approved->value);
     }
 }

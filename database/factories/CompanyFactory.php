@@ -7,9 +7,9 @@ use App\Traits\Factories\WithStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Position>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Company>
  */
-class PositionFactory extends Factory
+class CompanyFactory extends Factory
 {
     use WithStatus;
 
@@ -21,7 +21,7 @@ class PositionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->jobTitle(),
+            'name' => $this->faker->company(),
             'status' => $this->faker->randomElement(Status::class),
         ];
     }
