@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\v1\Position;
 
+use App\Models\Position;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PositionsListRequest extends FormRequest
@@ -11,8 +12,9 @@ class PositionsListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // todo: policy
-        return true;
+        $user = auth()->user();
+
+        return $user && $user->can('viewAny', Position::class);
     }
 
     /**
