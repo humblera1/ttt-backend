@@ -36,4 +36,11 @@ class QuestionFactory extends Factory
             'is_premium' => true,
         ]);
     }
+
+    public function common(): static
+    {
+        return $this->state( fn () => [
+            'is_premium' => false,
+        ]);
+    }
 }
