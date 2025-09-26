@@ -11,5 +11,6 @@ Route::name('api.')->group(function () {
             require_once "{$path}/companies.php";
             require_once "{$path}/tags.php";
             require_once "{$path}/grade.php";
+            require_once "{$path}/questions.php";
         });
 });
