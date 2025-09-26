@@ -7,6 +7,17 @@ use App\Models\User;
 
 class QuestionPolicy
 {
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermissionTo('view-any-question');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
     public function view(User $user, Question $question): bool
     {
         // todo: просмотр собственных вопросов независимо от премиальности

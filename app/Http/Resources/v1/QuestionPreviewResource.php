@@ -21,11 +21,12 @@ class QuestionPreviewResource extends JsonResource
             'is_premium' => $this->is_premium,
             'locked' => !$canView,
             $this->mergeWhen($canView, [
+                'rating' => $this->rating,
                 'title' => $this->title,
                 'published_at' => $this->published_at,
                 'views_count' => $this->views_count,
                 'likes_count' => $this->likes_count,
-                'tags' => TagResource::collection($this->whenLoaded('tags')),
+                'grades' => GradeResource::collection($this->whenLoaded('grades')),
             ]),
         ];
     }
