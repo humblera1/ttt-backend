@@ -52,6 +52,11 @@ class CompanyPolicy
         return $user->hasPermissionTo('delete-bulk-company');
     }
 
+    public function bulkForceDelete(User $user): bool
+    {
+        return $user->hasPermissionTo('force-delete-bulk-company');
+    }
+
     /**
      * Determine whether the user can restore the model.
      */

@@ -36,4 +36,13 @@ class Repository
             throw new RepositoryException('Failed to bulk update models');
         }
     }
+
+    public function bulkForceDelete(array $ids): void
+    {
+        try {
+            $this->modelClass::query()->whereIn('id', $ids)->forceDelete();
+        } catch (Throwable) {
+            throw new RepositoryException('Failed to bulk delete models');
+        }
+    }
 }
