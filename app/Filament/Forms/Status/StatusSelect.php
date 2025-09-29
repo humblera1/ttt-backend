@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class StatusSelect
 {
-    public static function make(string|Model $record): Select
+    public static function make(Model $record): Select
     {
         return Select::make('status')
             ->required()
             ->options(Status::options())
             ->default(Status::Approved->value)
             ->selectablePlaceholder(false)
-            ->visible(auth()->user()->can('changeStatus', $record));
+            ->visible(auth()->user()->can('changeStatus', $record))
+            ->afterStateUpdated(fn ($state, $set, $livewire) => $livewire->record->status = $state);
     }
 }

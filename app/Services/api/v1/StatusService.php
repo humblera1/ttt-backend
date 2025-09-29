@@ -5,17 +5,12 @@ namespace App\Services\api\v1;
 use App\Enums\Status;
 use App\Exceptions\v1\BusinessLogicException;
 use App\Exceptions\v1\RepositoryException;
-use App\Repositories\v1\UserRepository;
+use App\Repositories\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 class StatusService
 {
-    public function __construct(
-        protected UserRepository $repository,
-    )
-    {}
-
     /**
      * @throws BusinessLogicException
      */
@@ -45,12 +40,16 @@ class StatusService
      */
     protected function changeStatus(Model $record, Status $status): void
     {
+        $repository = app(Repository::class, [
+            'modelClass' => $record::class,
+        ]);
+
         $record->status = $status->value;
 
         try {
-            $this->repository->save($record);
+            $repository->save($record);
         } catch (RepositoryException $e) {
-            Log::error('Failed to approve record', ['exception' => $e]);
+            Log::error('Failed to update status', ['exception' => $e]);
 
             throw new BusinessLogicException($e->getMessage());
         }
