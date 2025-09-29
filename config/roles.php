@@ -44,6 +44,9 @@ return [
             Action::EditAny,
             Action::DeleteAny,
             Action::DeleteBulk,
+            Action::ForceDeleteAny,
+            Action::ForceDeleteBulk,
+            Action::RestoreAny,
             Action::ChangeStatus,
         ],
         Entity::Tag->name => [
