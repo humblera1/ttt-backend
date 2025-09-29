@@ -6,9 +6,12 @@ use App\Exceptions\v1\RepositoryException;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
-abstract class Repository
+class Repository
 {
-    abstract protected function getModelInstance(): Model;
+    public function __construct
+    (
+        protected string $modelClass
+    ) {}
 
     /**
      * @throws RepositoryException
@@ -28,9 +31,7 @@ abstract class Repository
     public function bulkUpdate(array $ids, array $attributes): void
     {
         try {
-            $model = $this->getModelInstance();
-
-            $model->newQuery()->whereIn('id', $ids)->update($attributes);
+            $this->modelClass::query()->whereIn('id', $ids)->update($attributes);
         } catch (Throwable) {
             throw new RepositoryException('Failed to bulk update models');
         }
