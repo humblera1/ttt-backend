@@ -7,15 +7,18 @@ use Database\Factories\QuestionFactory;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(QuestionPolicy::class)]
 class Question extends Model
 {
     /** @use HasFactory<QuestionFactory> */
-    use HasFactory;
+    use HasFactory,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -57,5 +60,10 @@ class Question extends Model
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
