@@ -55,6 +55,9 @@ return [
             Action::EditAny,
             Action::DeleteAny,
             Action::DeleteBulk,
+            Action::ForceDeleteAny,
+            Action::ForceDeleteBulk,
+            Action::RestoreAny,
             Action::ChangeStatus,
         ],
         Entity::Grade->name => [
@@ -63,6 +66,7 @@ return [
             Action::EditAny,
             Action::DeleteAny,
             Action::DeleteBulk,
+            Action::RestoreAny,
         ],
         Entity::User->name => [
             Action::ViewOwn,
