@@ -26,6 +26,7 @@ class Tag extends Model implements StatusInterface
      */
     protected $fillable = [
         'name',
+        'status',
     ];
 
     public function updatedBy(): BelongsTo
