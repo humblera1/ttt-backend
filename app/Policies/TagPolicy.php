@@ -68,6 +68,11 @@ class TagPolicy
         return $user->hasPermissionTo('force-delete-any-tag');
     }
 
+    public function bulkForceDelete(User $user): bool
+    {
+        return $user->hasPermissionTo('force-delete-bulk-tag');
+    }
+
     public function changeStatus(User $user): bool
     {
         return $user->hasPermissionTo('change-status-tag');
