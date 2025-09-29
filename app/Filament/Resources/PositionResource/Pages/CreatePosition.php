@@ -2,13 +2,10 @@
 
 namespace App\Filament\Resources\PositionResource\Pages;
 
-use App\Enums\Status;
 use App\Filament\Forms\Status\StatusSelect;
 use App\Filament\Resources\PositionResource;
 use App\Models\Position;
-use Filament\Actions;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
