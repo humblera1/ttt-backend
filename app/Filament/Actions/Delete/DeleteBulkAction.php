@@ -2,7 +2,7 @@
 
 namespace App\Filament\Actions\Delete;
 
-use App\Services\api\v1\UserDeleteService;
+use App\Services\api\v1\BulkDeleteService;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables\Actions\BulkAction;
@@ -15,9 +15,18 @@ class DeleteBulkAction extends BulkAction
 {
     use CanCustomizeProcess;
 
+    protected string $modelClass;
+
     public static function getDefaultName(): ?string
     {
         return 'delete';
+    }
+
+    public function model(string $modelClass): static
+    {
+        $this->modelClass = $modelClass;
+
+        return $this;
     }
 
     protected function setUp(): void
@@ -41,12 +50,14 @@ class DeleteBulkAction extends BulkAction
         $this->modalIcon(FilamentIcon::resolve('actions::delete-action.modal') ?? 'heroicon-o-trash');
 
         $this->action(function (): void {
-            if (!auth()->user()->can('delete-bulk-user')) {
-                throw new AuthorizationException('You do not have permission to bulk delete users.');
+            if (auth()->user()->cannot('bulkDelete', $this->modelClass)) {
+                throw new AuthorizationException('You do not have permission to bulk delete records.');
             }
 
             $this->process(function (Collection $records) {
-                $service = app(UserDeleteService::class);
+                $service = app(BulkDeleteService::class, [
+                    'modelClass' => $this->modelClass,
+                ]);
 
                 $service->deleteMany($records);
             });
@@ -57,6 +68,10 @@ class DeleteBulkAction extends BulkAction
         $this->deselectRecordsAfterCompletion();
 
         $this->hidden(function (HasTable $livewire): bool {
+            if (auth()->user()->cannot('bulkDelete', $this->modelClass)) {
+                return true;
+            }
+
             $trashedFilterState = $livewire->getTableFilterState(TrashedFilter::class) ?? [];
 
             if (! array_key_exists('value', $trashedFilterState)) {

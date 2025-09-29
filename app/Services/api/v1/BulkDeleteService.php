@@ -18,6 +18,25 @@ class BulkDeleteService
         ]);
     }
 
+    public function deleteMany(iterable $records): void
+    {
+        $recordsCollection = collect($records);
+
+        $ids = $recordsCollection->pluck('id')->all();
+
+        if (empty($ids)) {
+            return;
+        }
+
+        try {
+            $this->repository->bulkDelete($ids);
+        } catch (RepositoryException $e) {
+            Log::error('Failed to delete records', ['exception' => $e]);
+
+            throw new BusinessLogicException($e->getMessage());
+        }
+    }
+
     /**
      * @throws BusinessLogicException
      */
@@ -34,7 +53,7 @@ class BulkDeleteService
         try {
             $this->repository->bulkForceDelete($ids);
         } catch (RepositoryException $e) {
-            Log::error('Failed to bulk delete users', ['exception' => $e]);
+            Log::error('Failed to bulk delete records', ['exception' => $e]);
 
             throw new BusinessLogicException($e->getMessage());
         }
