@@ -7,6 +7,7 @@ use App\Filament\Resources\QuestionResource;
 use App\Models\Company;
 use App\Models\Grade;
 use App\Models\Tag;
+use App\Traits\Filament\Forms\Question\WithRelatedSelects;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class CreateQuestion extends CreateRecord
 {
+    use WithRelatedSelects;
+
     protected static string $resource = QuestionResource::class;
 
     public function form(Form $form): Form
@@ -53,52 +56,9 @@ class CreateQuestion extends CreateRecord
 
             Section::make()
                 ->schema([
-                    Select::make('grades')
-                        ->multiple()
-                        ->preload()
-                        ->relationship(
-                            name: 'grades',
-                            titleAttribute: 'name',
-                        )
-                        ->visible(auth()->user()->can('create', Grade::class)),
-                    Select::make('tags')
-                        ->multiple()
-                        ->searchable()
-                        ->preload()
-                        ->optionsLimit(10)
-                        ->relationship(
-                            name: 'tags',
-                            titleAttribute: 'name',
-                            modifyQueryUsing: fn (Builder $query) => $query->approved(),
-                        )
-                        ->createOptionForm([
-                            TextInput::make('name')->required(),
-                        ])
-                        ->createOptionUsing(function (array $data) {
-                            $data['status'] = Status::Approved->value;
-
-                            return Tag::create($data);
-                        })
-                        ->visible(auth()->user()->can('create', Tag::class)),
-                    Select::make('companies')
-                        ->multiple()
-                        ->searchable()
-                        ->preload()
-                        ->optionsLimit(10)
-                        ->relationship(
-                            name: 'companies',
-                            titleAttribute: 'name',
-                            modifyQueryUsing: fn (Builder $query) => $query->approved(),
-                        )
-                        ->createOptionForm([
-                            TextInput::make('name')->required(),
-                        ])
-                        ->createOptionUsing(function (array $data) {
-                            $data['status'] = Status::Approved->value;
-
-                            return Company::create($data);
-                        })
-                        ->visible(auth()->user()->can('create', Company::class)),
+                    $this->getGradesSelect(),
+                    $this->getTagsSelect(),
+                    $this->getCompaniesSelect(),
                 ])
                 ->compact()
                 ->columnSpan(1),
