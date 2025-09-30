@@ -28,6 +28,8 @@ class Question extends Model
     protected $fillable = [
         'title',
         'answer',
+        'is_premium',
+        'published_at',
     ];
 
     /**
