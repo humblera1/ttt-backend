@@ -19,4 +19,5 @@ enum Entity
     case Payment;
     case Notification;
     case Comment;
+    case Setting;
 }

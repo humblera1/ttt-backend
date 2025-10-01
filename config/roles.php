@@ -155,6 +155,9 @@ return [
             Action::Reply,
             Action::ViewDeleted,
         ],
+        Entity::Setting->name => [
+            Action::ViewAny,
+        ],
     ],
 
     /**
