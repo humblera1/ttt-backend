@@ -42,10 +42,14 @@ class ImportSettings extends Command
 
         foreach ($settings as $section => $items) {
             foreach ($items as $data) {
-                $key = $section . '.' . $data['key'];
+                $key = $data['key'];
 
-                if (Setting::where('key', $key)->exists()) {
-                    $this->line("Setting [$key] already exists, skipping.");
+                $isExists = Setting::where('section', $section)
+                    ->where('key', $key)
+                    ->exists();
+
+                if ($isExists) {
+                    $this->line("Setting [$key] for section [$section] already exists, skipping.");
 
                     continue;
                 }
@@ -58,7 +62,7 @@ class ImportSettings extends Command
                     'type' => $data['type'] ?? self::DEFAULT_TYPE,
                 ]);
 
-                $this->info("Imported setting: $key");
+                $this->info("Imported setting $key for section [$section]");
             }
         }
 

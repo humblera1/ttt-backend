@@ -12,21 +12,24 @@ class SettingsService
         protected TypeService $service,
     ) {}
 
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $name, mixed $default = null): mixed
     {
+        [$section, $key] = $this->getSectionKeyByName($name);
+
         $settings = $this->all();
 
-        return $settings[$key] ?? $default;
+        return $settings[$section][$key] ?? $default;
     }
 
     public function all(): array
     {
         return Cache::rememberForever('global_settings', function () {
             return Setting::all()
-                ->mapWithKeys(function (Setting $setting) {
-                    return [
+                ->groupBy('section')
+                ->map(function ($settings) {
+                    return $settings->mapWithKeys(fn (Setting $setting) => [
                         $setting->key => $this->service->convertStringToType($setting->value, $setting->type),
-                    ];
+                    ]);
                 })
                 ->toArray();
         });
@@ -35,5 +38,10 @@ class SettingsService
     public function clearCache(): void
     {
         Cache::forget('global_settings');
+    }
+
+    protected function getSectionKeyByName(string $name): array
+    {
+        return explode('.', $name);
     }
 }
