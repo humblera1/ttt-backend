@@ -16,6 +16,9 @@ class TagController extends Controller
 
     public function list(TagsListRequest $request): AnonymousResourceCollection
     {
-        return TagResource::collection($this->service->getTagsList($request->get('name')));
+        return TagResource::collection($this->service->getTagsList(
+            $request->get('name'),
+            $request->get('page', 1),
+        ));
     }
 }

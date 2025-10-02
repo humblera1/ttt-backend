@@ -10,4 +10,16 @@ return [
             'value' => 10,
         ],
     ],
+    Section::Tag->value => [
+        [
+            'key' => 'first_page_per_page',
+            'label' => 'Количество записей на превью',
+            'value' => 10,
+        ],
+        [
+            'key' => 'per_page',
+            'label' => 'Количество подгружаемых за раз записей',
+            'value' => 15,
+        ],
+    ],
 ];
