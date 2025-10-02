@@ -16,6 +16,9 @@ class CompanyController extends Controller
 
     public function list(CompaniesListRequest $request): AnonymousResourceCollection
     {
-        return PositionResource::collection($this->service->getCompaniesList($request->get('name')));
+        return PositionResource::collection($this->service->getCompaniesList(
+            $request->get('name'),
+            $request->get('page', 1)
+        ));
     }
 }

@@ -22,4 +22,16 @@ return [
             'value' => 15,
         ],
     ],
+    Section::Company->value => [
+        [
+            'key' => 'first_page_per_page',
+            'label' => 'Количество записей на превью',
+            'value' => 10,
+        ],
+        [
+            'key' => 'per_page',
+            'label' => 'Количество подгружаемых за раз записей',
+            'value' => 15,
+        ],
+    ],
 ];
