@@ -102,4 +102,9 @@ class QuestionPolicy
     {
         return $user->hasPermissionTo('force-delete-bulk-question');
     }
+
+    public function changeStatus(User $user): bool
+    {
+        return $user->hasPermissionTo('change-status-question');
+    }
 }

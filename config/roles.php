@@ -99,6 +99,7 @@ return [
             Action::Favorite,
             Action::Vote,
             Action::MarkAsSeen,
+            Action::ChangeStatus,
         ],
         Entity::Suggestion->name => [
             Action::Create,
