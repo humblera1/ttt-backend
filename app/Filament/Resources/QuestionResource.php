@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Grade;
 use App\Filament\Actions\Delete\DeleteBulkAction;
 use App\Filament\Actions\Delete\ForceDeleteBulkAction;
+use App\Filament\Resources\QuestionResource\RelationManagers\StatisticsRelationManager;
 use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction};
 use App\Filament\Columns\Status\StatusColumn;
 use App\Filament\Filters\Status\StatusFilter;
@@ -121,7 +122,7 @@ class QuestionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            StatisticsRelationManager::class,
         ];
     }
 

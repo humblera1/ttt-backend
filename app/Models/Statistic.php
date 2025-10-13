@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Policies\StatisticPolicy;
 use Database\Factories\StatisticFactory;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[UsePolicy(StatisticPolicy::class)]
 class Statistic extends Model
 {
     /** @use HasFactory<StatisticFactory> */
