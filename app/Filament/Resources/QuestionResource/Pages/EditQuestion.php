@@ -4,6 +4,7 @@ namespace App\Filament\Resources\QuestionResource\Pages;
 
 use App\Filament\Actions\Delete\ForceDeleteAction;
 use App\Filament\Resources\QuestionResource;
+use App\Filament\Widgets\Status\StatusBadge;
 use App\Traits\Filament\Forms\Question\WithRelatedSelects;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\RestoreAction;
@@ -19,6 +20,16 @@ class EditQuestion extends EditRecord
     use WithRelatedSelects;
 
     protected static string $resource = QuestionResource::class;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatusBadge::make([
+                'status' => $this->record->status,
+            ]),
+        ];
+    }
+
 
     public function form(Form $form): Form
     {

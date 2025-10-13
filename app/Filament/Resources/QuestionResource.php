@@ -5,6 +5,9 @@ namespace App\Filament\Resources;
 use App\Enums\Grade;
 use App\Filament\Actions\Delete\DeleteBulkAction;
 use App\Filament\Actions\Delete\ForceDeleteBulkAction;
+use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction};
+use App\Filament\Columns\Status\StatusColumn;
+use App\Filament\Filters\Status\StatusFilter;
 use App\Filament\Filters\Trash\TrashedFilter;
 use App\Filament\Resources\QuestionResource\Pages;
 use App\Models\Question;
@@ -50,6 +53,7 @@ class QuestionResource extends Resource
                     ->badge()
                     ->color(fn (bool $state): string => $state ? 'warning' : 'gray')
                     ->formatStateUsing(fn (bool $state): string => $state ? 'premium' : 'common'),
+                StatusColumn::make(),
                 TextColumn::make('rating')
                     ->sortable()
                     ->icon('heroicon-m-star')
@@ -63,6 +67,7 @@ class QuestionResource extends Resource
                     ->color(fn (string $state) => Grade::colorByValue($state)),
             ])
             ->filters([
+                StatusFilter::make(),
                 TrashedFilter::make(),
                 Tables\Filters\TernaryFilter::make('is_premium')
                     ->placeholder(__('All'))
@@ -94,6 +99,11 @@ class QuestionResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                Tables\Actions\ActionGroup::make([
+                    ApproveAction::make(),
+                    RejectAction::make(),
+                    ResetAction::make(),
+                ]),
                 EditAction::make(),
                 DeleteAction::make(),
                 RestoreAction::make(),

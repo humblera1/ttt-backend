@@ -2,20 +2,16 @@
 
 namespace App\Filament\Resources\QuestionResource\Pages;
 
-use App\Enums\Status;
+use App\Filament\Forms\Status\StatusSelect;
 use App\Filament\Resources\QuestionResource;
-use App\Models\Company;
-use App\Models\Grade;
-use App\Models\Tag;
+use App\Models\Question;
 use App\Traits\Filament\Forms\Question\WithRelatedSelects;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Database\Eloquent\Builder;
 
 class CreateQuestion extends CreateRecord
 {
@@ -31,6 +27,7 @@ class CreateQuestion extends CreateRecord
                     TextInput::make('title')
                         ->required()
                         ->maxLength(255),
+                    StatusSelect::make(Question::class),
                     Toggle::make('is_premium'),
                     RichEditor::make('answer')
                         ->toolbarButtons([
