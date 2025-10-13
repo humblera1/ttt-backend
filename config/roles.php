@@ -159,6 +159,10 @@ return [
         Entity::Setting->name => [
             Action::ViewAny,
         ],
+        Entity::Statistic->name => [
+            Action::ViewAny,
+            Action::DeleteAny,
+        ],
     ],
 
     /**
@@ -249,6 +253,10 @@ return [
             Action::Vote,
             Action::Reply,
             Action::ViewDeleted,
+        ],
+        Entity::Statistic->name => [
+            Action::ViewAny,
+            Action::DeleteAny,
         ],
     ],
 

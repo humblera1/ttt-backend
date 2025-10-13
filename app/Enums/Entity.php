@@ -20,4 +20,5 @@ enum Entity
     case Notification;
     case Comment;
     case Setting;
+    case Statistic;
 }
