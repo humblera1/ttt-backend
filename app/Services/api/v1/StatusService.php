@@ -11,34 +11,22 @@ use Illuminate\Support\Facades\Log;
 
 class StatusService
 {
-    /**
-     * @throws BusinessLogicException
-     */
-    public function approve(Model $record): void
+    public function approve(Model $record): bool
     {
-        $this->changeStatus($record, Status::Approved);
+        return $this->changeStatus($record, Status::Approved);
     }
 
-    /**
-     * @throws BusinessLogicException
-     */
-    public function reject(Model $record): void
+    public function reject(Model $record): bool
     {
-        $this->changeStatus($record, Status::Rejected);
+        return $this->changeStatus($record, Status::Rejected);
     }
 
-    /**
-     * @throws BusinessLogicException
-     */
-    public function reset(Model $record): void
+    public function reset(Model $record): bool
     {
-        $this->changeStatus($record, Status::Pending);
+        return $this->changeStatus($record, Status::Pending);
     }
 
-    /**
-     * @throws BusinessLogicException
-     */
-    protected function changeStatus(Model $record, Status $status): void
+    protected function changeStatus(Model $record, Status $status): bool
     {
         $repository = app(Repository::class, [
             'modelClass' => $record::class,
@@ -51,7 +39,9 @@ class StatusService
         } catch (RepositoryException $e) {
             Log::error('Failed to update status', ['exception' => $e]);
 
-            throw new BusinessLogicException($e->getMessage());
+            return false;
         }
+
+        return true;
     }
 }

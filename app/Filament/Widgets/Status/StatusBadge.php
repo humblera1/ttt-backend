@@ -4,20 +4,25 @@ namespace App\Filament\Widgets\Status;
 
 use App\Enums\Status;
 use Filament\Widgets\Widget;
+use Illuminate\Database\Eloquent\Model;
 
 class StatusBadge extends Widget
 {
     protected static string $view = 'filament.widgets.status-badge';
 
-    public string $status;
+    public ?Model $record = null;
+
+    protected $listeners = [
+        'statusUpdated',
+    ];
 
     public function getBadgeColor(): string
     {
-        return Status::colorByValue($this->status);
+        return Status::colorByValue($this->record->status);
     }
 
     public function getBadgeLabel(): string
     {
-        return ucfirst($this->status);
+        return ucfirst($this->record->status);
     }
 }

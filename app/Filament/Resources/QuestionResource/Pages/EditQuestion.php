@@ -3,6 +3,10 @@
 namespace App\Filament\Resources\QuestionResource\Pages;
 
 use App\Filament\Actions\Delete\ForceDeleteAction;
+use App\Filament\Actions\Question\{ApproveQuestionAction,
+    RejectDuplicateQuestionAction,
+    RejectQuestionAction,
+    ResetQuestionAction};
 use App\Filament\Resources\QuestionResource;
 use App\Filament\Widgets\Status\StatusBadge;
 use App\Traits\Filament\Forms\Question\WithRelatedSelects;
@@ -24,9 +28,7 @@ class EditQuestion extends EditRecord
     protected function getHeaderWidgets(): array
     {
         return [
-            StatusBadge::make([
-                'status' => $this->record->status,
-            ]),
+            StatusBadge::class,
         ];
     }
 
@@ -76,6 +78,10 @@ class EditQuestion extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            ApproveQuestionAction::make(),
+            RejectQuestionAction::make(),
+            RejectDuplicateQuestionAction::make(),
+            ResetQuestionAction::make(),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),
