@@ -43,7 +43,7 @@ class ApproveQuestionAction extends Action
 
                 $service = app(StatusService::class);
 
-                $service->approve($record);
+                return $service->approve($record);
             });
 
             if (! $result) {
@@ -53,8 +53,6 @@ class ApproveQuestionAction extends Action
             }
 
             $this->success();
-
-
         });
 
         $this->visible(function (StatusInterface $record) {

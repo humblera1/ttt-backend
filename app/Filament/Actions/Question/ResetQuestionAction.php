@@ -43,8 +43,7 @@ class ResetQuestionAction extends Action
 
                 $service = app(StatusService::class);
 
-                $service->reset($record);
-
+                return $service->reset($record);
             });
 
             if (! $result) {
