@@ -33,6 +33,7 @@ class Question extends Model implements StatusInterface
         'title',
         'answer',
         'is_premium',
+        'is_anonymous',
         'status',
         'published_at',
     ];

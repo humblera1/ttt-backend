@@ -25,6 +25,7 @@ class QuestionFactory extends Factory
             'title' => $this->faker->sentence(),
             'answer' => $this->faker->paragraphs(3, true),
             'is_premium' => $this->faker->boolean(20),
+            'is_anonymous' => $this->faker->boolean(25),
             'status' => $this->faker->randomElement(Status::class),
             'views_count' => $this->faker->numberBetween(0, 20000),
             'likes_count' => $this->faker->numberBetween(-500, 3000),
