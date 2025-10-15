@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\QuestionRejectionReason;
 use App\Enums\Status;
 use App\Models\Question;
 use App\Traits\Factories\WithStatus;
@@ -33,6 +34,18 @@ class QuestionFactory extends Factory
             'rating' => $this->faker->numberBetween(0, 50000),
             'published_at' => $this->faker->dateTimeBetween('-2 years'),
             'updated_at' => now(),
+
+            'rejection_reason'  => function (array $attributes) {
+                return $attributes['status'] === Status::Rejected->value
+                    ? $this->faker->randomElement(QuestionRejectionReason::class)
+                    : null;
+            },
+
+            'rejection_comment' => function (array $attributes) {
+                return $attributes['status'] === Status::Rejected->value
+                    ? $this->faker->paragraph()
+                    : null;
+            },
         ];
     }
 
