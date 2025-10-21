@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Interfaces\v1\Status\StatusInterface;
 use App\Policies\PositionPolicy;
+use App\Traits\Models\WithNormalizedName;
 use App\Traits\Models\WithStatus;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ class Position extends Model implements StatusInterface
 {
     use HasFactory,
         WithStatus,
+        WithNormalizedName,
         SoftDeletes;
 
     /**
