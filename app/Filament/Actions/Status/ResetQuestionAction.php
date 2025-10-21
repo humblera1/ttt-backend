@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Filament\Actions\Question;
+namespace App\Filament\Actions\Status;
 
-use App\Filament\Resources\QuestionResource\Pages\EditQuestion;
-use App\Interfaces\v1\Status\StatusInterface;
 use App\Models\Question;
 use App\Services\api\v1\QuestionService;
-use Filament\Actions\Action;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Illuminate\Auth\Access\AuthorizationException;
 
-class ResetQuestionAction extends Action
+class ResetQuestionAction extends ResetAction
 {
     use CanCustomizeProcess;
 
@@ -23,21 +20,9 @@ class ResetQuestionAction extends Action
     {
         parent::setUp();
 
-        $this->label(__('Reset'));
-
-        $this->defaultColor('warning');
-
-        $this->icon('heroicon-m-arrow-path');
-
-        $this->requiresConfirmation();
-
-        $this->modalIcon('heroicon-m-arrow-path');
-
-        $this->modalHeading('Reset Question Status');
-
         $this->action(function (): void {
             $result = $this->process(function (Question $record) {
-                if (!auth()->user()->can('changeStatus', $record)) {
+                if (! auth()->user()->can('changeStatus', $record)) {
                     throw new AuthorizationException('You do not have permission to change status.');
                 }
 
@@ -48,17 +33,10 @@ class ResetQuestionAction extends Action
 
             if (! $result) {
                 $this->failure();
-
                 return;
             }
 
             $this->success();
         });
-
-        $this->visible(function (StatusInterface $record) {
-            return !$record->isPending() && auth()->user()->can('changeStatus', $record);
-        });
-
-        $this->after(fn (EditQuestion $livewire) => $livewire->dispatch('statusUpdated'));
     }
 }

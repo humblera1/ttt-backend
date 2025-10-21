@@ -67,7 +67,11 @@ class RejectDuplicateQuestionAction extends Action
             return $record->isPending() && auth()->user()->can('changeStatus', $record);
         });
 
-        $this->after(fn (EditQuestion $livewire) => $livewire->dispatch('statusUpdated'));
+        $this->after(function (EditQuestion $livewire) {
+            $livewire->dispatch('statusUpdated');
+
+            $livewire->dispatch('statisticsUpdated');
+        });
     }
 
     private function getFormForModal(): array

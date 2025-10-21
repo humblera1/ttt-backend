@@ -17,6 +17,10 @@ class StatisticsRelationManager extends RelationManager
 {
     protected static string $relationship = 'statistics';
 
+    protected $listeners = [
+        'statisticsUpdated',
+    ];
+
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
         return auth()->user()->can('viewAny', Statistic::class);

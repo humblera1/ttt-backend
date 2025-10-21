@@ -6,7 +6,8 @@ use App\Enums\Grade;
 use App\Filament\Actions\Delete\DeleteBulkAction;
 use App\Filament\Actions\Delete\ForceDeleteBulkAction;
 use App\Filament\Resources\QuestionResource\RelationManagers\StatisticsRelationManager;
-use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction};
+use App\Services\api\v1\QuestionService;
+use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction, ResetQuestionAction};
 use App\Filament\Columns\Status\StatusColumn;
 use App\Filament\Filters\Status\StatusFilter;
 use App\Filament\Filters\Trash\TrashedFilter;
@@ -18,7 +19,9 @@ use Filament\Tables;
 use Filament\Tables\Actions\{DeleteAction, EditAction, RestoreAction};
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class QuestionResource extends Resource
 {
@@ -103,7 +106,7 @@ class QuestionResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     ApproveAction::make(),
                     RejectAction::make(),
-                    ResetAction::make(),
+                    ResetQuestionAction::make(),
                 ]),
                 EditAction::make(),
                 DeleteAction::make(),
