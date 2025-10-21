@@ -21,7 +21,7 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company(),
+            'name' => $this->faker->unique()->company(),
             'status' => $this->faker->randomElement(Status::class),
         ];
     }
