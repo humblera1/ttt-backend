@@ -100,6 +100,7 @@ return [
             Action::Vote,
             Action::MarkAsSeen,
             Action::ChangeStatus,
+            Action::Propose,
         ],
         Entity::Suggestion->name => [
             Action::Create,
