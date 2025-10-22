@@ -13,8 +13,6 @@ class NormalizerServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(NormalizerInterface::class, function ($app) {
-            return $app->make(Normalizer::class);
-        });
+        $this->app->bind(NormalizerInterface::class, Normalizer::class);
     }
 }
