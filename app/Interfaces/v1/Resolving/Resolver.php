@@ -28,6 +28,31 @@ abstract class Resolver
     )
     {}
 
+    public function resolveOne(string $name): ?int
+    {
+        $normalizedName = $this->normalizer->normalize($name);
+
+        if (empty($normalizedName)) {
+            return null;
+        }
+
+        $existingId = $this->modelClass::query()
+            ->where($this->normalizedFieldName, '=', $normalizedName)
+            ->value($this->pkFieldName);
+
+        if ($existingId) {
+            return $existingId;
+        }
+
+        $created = $this->modelClass::query()
+            ->create([
+                $this->rawValueFieldName => $name,
+                $this->statusFieldName => $this->defaultStatusValue,
+            ]);
+
+        return $created->{$this->pkFieldName};
+    }
+
     public function resolveMany(array $names): array
     {
         $normalizedMap = $this->getNormalizedMap($names);
