@@ -107,4 +107,9 @@ class QuestionPolicy
     {
         return $user->hasPermissionTo('change-status-question');
     }
+
+    public function propose(User $user): bool
+    {
+        return $user->hasPermissionTo('propose-question');
+    }
 }
