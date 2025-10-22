@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Services\api\v1;
+namespace App\Entities\Normalizer;
 
-class NormalizationService
+use App\Interfaces\v1\Normalization\NormalizerInterface;
+
+class Normalizer implements NormalizerInterface
 {
     public function normalize(string $value): string
     {

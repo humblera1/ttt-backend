@@ -1,8 +1,11 @@
 <?php
 
+use App\Providers\v1\{NormalizerServiceProvider, PasswordServiceProvider, SettingsServiceProvider};
+
 return [
     App\Providers\AppServiceProvider::class,
     App\Providers\Filament\AdminPanelProvider::class,
-    App\Providers\v1\PasswordServiceProvider::class,
-    \App\Providers\v1\SettingsServiceProvider::class,
+    PasswordServiceProvider::class,
+    SettingsServiceProvider::class,
+    NormalizerServiceProvider::class,
 ];

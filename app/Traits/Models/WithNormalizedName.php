@@ -2,8 +2,8 @@
 
 namespace App\Traits\Models;
 
-use App\Entities\NormalizedNameOptions;
-use App\Services\api\v1\NormalizationService;
+use App\Entities\Normalizer\NormalizedNameOptions;
+use App\Interfaces\v1\Normalization\NormalizerInterface;
 
 trait WithNormalizedName
 {
@@ -24,7 +24,7 @@ trait WithNormalizedName
     {
         $options = $this->getOptions();
 
-        $service = app(NormalizationService::class);
+        $service = app(NormalizerInterface::class);
 
         $value = $this->{$options->fieldName};
 
