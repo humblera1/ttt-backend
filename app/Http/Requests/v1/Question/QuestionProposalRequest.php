@@ -3,9 +3,11 @@
 namespace App\Http\Requests\v1\Question;
 
 use App\DTOs\v1\Question\QuestionProposalDTO;
+use App\Enums\Period;
 use App\Http\Requests\BaseFormRequest;
 use App\Interfaces\v1\Requests\RequestDTOInterface;
 use App\Models\Question;
+use Illuminate\Validation\Rule;
 
 class QuestionProposalRequest extends BaseFormRequest implements RequestDTOInterface
 {
@@ -45,19 +47,22 @@ class QuestionProposalRequest extends BaseFormRequest implements RequestDTOInter
             // Interview
             'interview' => ['sometimes', 'array'],
             'interview.metInRealInterview' => ['required_with:interview', 'boolean'],
+            'interview.whenAsked' => [
+                'sometimes',
+                'nullable',
+                Rule::enum(Period::class)
+            ],
 
             // Company
             'interview.companyExisting' => [
                 'sometimes',
                 'nullable',
-                'required_with:interview',
                 'integer',
                 'exists:companies,id'
             ],
             'interview.companyNew' => [
                 'sometimes',
                 'nullable',
-                'required_with:interview',
                 'string',
                 'min:1',
                 'max:255'
@@ -67,14 +72,12 @@ class QuestionProposalRequest extends BaseFormRequest implements RequestDTOInter
             'interview.positionExisting' => [
                 'sometimes',
                 'nullable',
-                'required_with:interview',
                 'integer',
                 'exists:positions,id'
             ],
             'interview.positionNew' => [
                 'sometimes',
                 'nullable',
-                'required_with:interview',
                 'string',
                 'min:1',
                 'max:255'
@@ -96,6 +99,7 @@ class QuestionProposalRequest extends BaseFormRequest implements RequestDTOInter
             grades: $this->validated('grades', []),
 
             metInRealInterview: $this->validated('interview.metInRealInterview'),
+            whenAsked: $this->validated('interview.whenAsked'),
 
             companyExisting: $this->validated('interview.companyExisting'),
             companyNew: $this->validated('interview.companyNew'),

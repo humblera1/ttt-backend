@@ -49,7 +49,7 @@ class QuestionProposalService
                 $statistic->user()->associate($user);
 
                 if ($dto->metInRealInterview === true) {
-                    // todo: when_asked
+                    $statistic->when_asked = $dto->whenAsked;
 
                     $this->bindCompanyToStatistic($statistic, $dto->companyExisting, $dto->companyNew);
                     $this->bindPositionToStatistic($statistic, $dto->positionExisting, $dto->positionNew);
