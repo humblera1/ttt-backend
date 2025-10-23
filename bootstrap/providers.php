@@ -1,6 +1,9 @@
 <?php
 
-use App\Providers\v1\{NormalizerServiceProvider, PasswordServiceProvider, SettingsServiceProvider};
+use App\Providers\v1\{NormalizerServiceProvider,
+    PasswordServiceProvider,
+    ResponseCreatedServiceProvider,
+    SettingsServiceProvider};
 
 return [
     App\Providers\AppServiceProvider::class,
@@ -8,4 +11,5 @@ return [
     PasswordServiceProvider::class,
     SettingsServiceProvider::class,
     NormalizerServiceProvider::class,
+    ResponseCreatedServiceProvider::class,
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Exceptions\v1\WithPlainErrorsValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Question\QuestionProposalRequest;
 use App\Http\Requests\v1\Question\QuestionsListRequest;
@@ -20,11 +21,20 @@ class QuestionController extends Controller
 
     public function list(QuestionsListRequest $request): AnonymousResourceCollection
     {
-        return QuestionPreviewResource::collection($this->service->getQuestionsList($request->getDTO()));
+        return QuestionPreviewResource::collection(
+            $this->service->getQuestionsList($request->getDTO())
+        );
     }
 
-    public function propose(QuestionProposalRequest $request): void
+    /**
+     * @throws WithPlainErrorsValidationException
+     */
+    public function propose(QuestionProposalRequest $request)
     {
-        $this->proposalService->propose($request->getDTO());
+        if ($this->proposalService->propose($request->getDTO())) {
+            return response()->created();
+        }
+
+        $this->responseWithPlainValidationError('Failed to save the proposal, please try again later.');
     }
 }
