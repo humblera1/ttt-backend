@@ -7,5 +7,5 @@ Route::controller(QuestionController::class)
     ->name('questions.')
     ->group(function () {
         Route::get('/list', 'list')->name('list');
-        Route::post('/propose', 'propose')->name('propose');
+        Route::post('/propose', 'propose')->name('propose')->middleware('auth:sanctum');
     });

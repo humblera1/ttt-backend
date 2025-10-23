@@ -25,6 +25,8 @@ class QuestionProposalService
     {
         DB::beginTransaction();
 
+        $user = auth()->user();
+
         try {
             $question = new Question([
                 'title' => $dto->title,
@@ -32,7 +34,7 @@ class QuestionProposalService
                 'is_anonymous' => $dto->isAnonymous,
             ]);
 
-            // todo: user_id
+            $question->user()->associate($user);
 
             $question->save();
 
@@ -44,8 +46,10 @@ class QuestionProposalService
                     'met_in_real_interview' => $dto->metInRealInterview,
                 ]);
 
+                $statistic->user()->associate($user);
+
                 if ($dto->metInRealInterview === true) {
-                    // todo: user_id, when_asked
+                    // todo: when_asked
 
                     $this->bindCompanyToStatistic($statistic, $dto->companyExisting, $dto->companyNew);
                     $this->bindPositionToStatistic($statistic, $dto->positionExisting, $dto->positionNew);
