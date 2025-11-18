@@ -36,6 +36,7 @@ class QuestionsTest extends TestCase
 
         $response->assertForbidden();
     }
+
     public function test_user_with_permission_can_access_questions_list()
     {
         $this->actingAs($this->getUser());
