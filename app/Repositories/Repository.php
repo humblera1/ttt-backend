@@ -28,6 +28,18 @@ class Repository
     /**
      * @throws RepositoryException
      */
+    public function delete(Model $model): void
+    {
+        $deleted = $model->delete();
+
+        if ($deleted === false) {
+            throw new RepositoryException('Failed to delete model');
+        }
+    }
+
+    /**
+     * @throws RepositoryException
+     */
     public function bulkUpdate(array $ids, array $attributes): void
     {
         try {
