@@ -7,4 +7,5 @@ enum Section: string
     case Question = 'question';
     case Tag = 'tag';
     case Company = 'company';
+    case Statistics = 'statistics';
 }

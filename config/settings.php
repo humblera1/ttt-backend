@@ -34,4 +34,11 @@ return [
             'value' => 15,
         ],
     ],
+    Section::Statistics->value => [
+        [
+            'key' => 'max_records_per_user_question',
+            'label' => 'Максимальное число опросов, которое пользователь может пройти для одного вопроса',
+            'value' => 3,
+        ],
+    ]
 ];
