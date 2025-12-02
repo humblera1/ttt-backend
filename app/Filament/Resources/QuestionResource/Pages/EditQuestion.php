@@ -69,6 +69,7 @@ class EditQuestion extends EditRecord
                     $this->getGradesSelect(),
                     $this->getTagsSelect(),
                     $this->getCompaniesSelect(),
+                    $this->getPositionsSelect(),
                 ])
                 ->compact()
                 ->columnSpan(1),

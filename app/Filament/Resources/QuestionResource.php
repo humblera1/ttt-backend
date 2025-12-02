@@ -95,6 +95,13 @@ class QuestionResource extends Resource
                         modifyQueryUsing: fn ($query) => $query->approved()
                     )
                     ->searchable(),
+                Tables\Filters\SelectFilter::make('positions')
+                    ->relationship(
+                        'positions',
+                        'name',
+                        modifyQueryUsing: fn ($query) => $query->approved()
+                    )
+                    ->searchable(),
                 Tables\Filters\SelectFilter::make('user')
                     ->relationship(
                         'user',

@@ -5,6 +5,7 @@ namespace App\Traits\Filament\Forms\Question;
 use App\Enums\Status;
 use App\Models\Company;
 use App\Models\Grade;
+use App\Models\Position;
 use App\Models\Tag;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -76,5 +77,32 @@ trait WithRelatedSelects
                     })
             )
             ->visible(auth()->user()->can('viewAny', Company::class));
+    }
+
+    protected function getPositionsSelect(): Select
+    {
+        return Select::make('positions')
+            ->multiple()
+            ->searchable()
+            ->preload()
+            ->optionsLimit(10)
+            ->relationship(
+                name: 'positions',
+                titleAttribute: 'name',
+                modifyQueryUsing: fn (Builder $query) => $query->approved(),
+            )
+            ->when(
+                auth()->user()->can('create', Position::class),
+                fn ($field) => $field
+                    ->createOptionForm([
+                        TextInput::make('name')->required(),
+                    ])
+                    ->createOptionUsing(function (array $data) {
+                        $data['status'] = Status::Approved->value;
+
+                        return Position::create($data);
+                    })
+            )
+            ->visible(auth()->user()->can('viewAny', Position::class));
     }
 }

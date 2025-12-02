@@ -56,6 +56,7 @@ class CreateQuestion extends CreateRecord
                     $this->getGradesSelect(),
                     $this->getTagsSelect(),
                     $this->getCompaniesSelect(),
+                    $this->getPositionsSelect(),
                 ])
                 ->compact()
                 ->columnSpan(1),
