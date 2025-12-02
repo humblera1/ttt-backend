@@ -18,7 +18,8 @@ RUN apk --no-cache add \
     autoconf \
     make \
     gcc \
-    g++
+    g++ \
+    su-exec
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -47,4 +48,7 @@ COPY ./xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 WORKDIR /var/www
 
-ENTRYPOINT ["php-fpm"]
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
