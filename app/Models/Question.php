@@ -80,6 +80,11 @@ class Question extends Model implements StatusInterface
         return $this->belongsToMany(Company::class);
     }
 
+    public function positions(): BelongsToMany
+    {
+        return $this->belongsToMany(Position::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

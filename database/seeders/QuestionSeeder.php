@@ -29,6 +29,7 @@ class QuestionSeeder extends Seeder
             ->count(5)
             ->hasTags(2)
             ->hasCompanies()
+            ->hasPositions()
             ->create()
             ->each(function ($question) use ($gradeIds, $userIds) {
                 $randomAmount = rand(1, count($gradeIds));
