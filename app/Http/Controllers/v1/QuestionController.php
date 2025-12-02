@@ -4,11 +4,10 @@ namespace App\Http\Controllers\v1;
 
 use App\Exceptions\v1\WithPlainErrorsValidationException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\Question\QuestionProposalRequest;
-use App\Http\Requests\v1\Question\QuestionsListRequest;
+use App\Http\Requests\v1\Question\{QuestionProposalRequest, QuestionsListRequest, SubmitQuestionFeedbackRequest};
 use App\Http\Resources\v1\QuestionPreviewResource;
-use App\Services\api\v1\QuestionProposalService;
-use App\Services\api\v1\QuestionService;
+use App\Models\Question;
+use App\Services\api\v1\{QuestionFeedbackService, QuestionProposalService, QuestionService};
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuestionController extends Controller
@@ -17,6 +16,7 @@ class QuestionController extends Controller
     (
         protected QuestionService $service,
         protected QuestionProposalService $proposalService,
+        protected QuestionFeedbackService $feedbackService,
     ) {}
 
     public function list(QuestionsListRequest $request): AnonymousResourceCollection
@@ -36,5 +36,17 @@ class QuestionController extends Controller
         }
 
         $this->responseWithPlainValidationError('Failed to save the proposal, please try again later.');
+    }
+
+    /**
+     * @throws WithPlainErrorsValidationException
+     */
+    public function submitFeedback(Question $question, SubmitQuestionFeedbackRequest $request)
+    {
+        if ($this->feedbackService->saveFeedback($question, $request->getDTO())) {
+            return response()->created();
+        }
+
+        $this->responseWithPlainValidationError('Failed to save the feedback, please try again later.');
     }
 }

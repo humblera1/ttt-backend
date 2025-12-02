@@ -8,4 +8,8 @@ Route::controller(QuestionController::class)
     ->group(function () {
         Route::get('/list', 'list')->name('list');
         Route::post('/propose', 'propose')->name('propose')->middleware('auth:sanctum');
+
+        Route::post('/{question}/feedback', 'submitFeedback')
+            ->name('feedback.submit')
+            ->middleware('auth:sanctum');
     });
