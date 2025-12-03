@@ -6,9 +6,10 @@ use App\DTOs\v1\Question\QuestionFeedbackDTO;
 use App\Enums\Period;
 use App\Http\Requests\BaseFormRequest;
 use App\Interfaces\v1\Requests\RequestDTOInterface;
+use App\Models\Question;
 use Illuminate\Validation\Rule;
 
-class SubmitQuestionFeedbackRequest extends BaseFormRequest implements RequestDTOInterface
+class QuestionFeedbackRequest extends BaseFormRequest implements RequestDTOInterface
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +18,7 @@ class SubmitQuestionFeedbackRequest extends BaseFormRequest implements RequestDT
     {
         $user = $this->user();
 
-        return true;
+        return $user && $user->can('sendFeedback', Question::class);
     }
 
     /**

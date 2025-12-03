@@ -99,7 +99,7 @@ class QuestionFeedbackService
      */
     protected function handleMet(int $questionId, QuestionFeedbackDTO $feedback): void
     {
-        $maxRecordsPerUserQuestion = setting('statistics.max_records_per_user_question');
+        $maxRecordsPerUserQuestion = setting('statistics.max_records_per_user_question', 3);
 
         $userId = auth()->id();
 

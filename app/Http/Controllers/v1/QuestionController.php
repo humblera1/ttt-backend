@@ -4,7 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Exceptions\v1\WithPlainErrorsValidationException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\Question\{QuestionProposalRequest, QuestionsListRequest, SubmitQuestionFeedbackRequest};
+use App\Http\Requests\v1\Question\{QuestionProposalRequest, QuestionsListRequest, QuestionFeedbackRequest};
 use App\Http\Resources\v1\QuestionPreviewResource;
 use App\Models\Question;
 use App\Services\api\v1\{QuestionFeedbackService, QuestionProposalService, QuestionService};
@@ -41,7 +41,7 @@ class QuestionController extends Controller
     /**
      * @throws WithPlainErrorsValidationException
      */
-    public function submitFeedback(Question $question, SubmitQuestionFeedbackRequest $request)
+    public function submitFeedback(Question $question, QuestionFeedbackRequest $request)
     {
         if ($this->feedbackService->saveFeedback($question, $request->getDTO())) {
             return response()->created();

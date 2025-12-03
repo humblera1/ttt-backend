@@ -49,4 +49,5 @@ enum Action
     case Suggest;
     case Assign;
     case Propose;
+    case SendFeedback;
 }

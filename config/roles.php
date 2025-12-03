@@ -101,6 +101,7 @@ return [
             Action::MarkAsSeen,
             Action::ChangeStatus,
             Action::Propose,
+            Action::SendFeedback,
         ],
         Entity::Suggestion->name => [
             Action::Create,
@@ -213,6 +214,7 @@ return [
             Action::MarkAsSeen,
             Action::ChangeStatus,
             Action::Propose,
+            Action::SendFeedback,
         ],
         Entity::Suggestion->name => [
             Action::Create,
@@ -295,6 +297,7 @@ return [
             Action::Vote,
             Action::MarkAsSeen,
             Action::Propose,
+            Action::SendFeedback,
         ],
         Entity::Suggestion->name => [
             Action::Create,
@@ -361,6 +364,7 @@ return [
             Action::Vote,
             Action::MarkAsSeen,
             Action::Propose,
+            Action::SendFeedback,
         ],
         Entity::Suggestion->name => [
             Action::Create,
@@ -414,6 +418,7 @@ return [
             Action::ViewAny,
             Action::MarkAsSeen,
             Action::Propose,
+            Action::SendFeedback,
         ],
         Entity::Notification->name => [
 //            Action::ViewOwn,

@@ -112,4 +112,9 @@ class QuestionPolicy
     {
         return $user->hasPermissionTo('propose-question');
     }
+
+    public function sendFeedback(User $user): bool
+    {
+        return $user->hasPermissionTo('send-feedback-question');
+    }
 }
