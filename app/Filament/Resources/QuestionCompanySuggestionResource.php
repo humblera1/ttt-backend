@@ -82,7 +82,8 @@ class QuestionCompanySuggestionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('last_seen_at', 'desc');
     }
 
     public static function getRelations(): array
