@@ -3,6 +3,7 @@
 namespace App\Services\api\v1;
 
 use App\DTOs\v1\Question\QuestionProposalDTO;
+use App\Events\v1\Question\QuestionStatisticCreated;
 use App\Interfaces\v1\Resolving\CompanyResolver;
 use App\Interfaces\v1\Resolving\PositionResolver;
 use App\Interfaces\v1\Resolving\TagResolver;
@@ -56,6 +57,8 @@ class QuestionProposalService
                 }
 
                 $question->statistics()->save($statistic);
+
+                QuestionStatisticCreated::dispatch($statistic);
             }
         } catch (Throwable $t) {
             Log::error('Failed to save question proposal', ['exception' => $t]);

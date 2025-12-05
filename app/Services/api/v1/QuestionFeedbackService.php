@@ -3,6 +3,7 @@
 namespace App\Services\api\v1;
 
 use App\DTOs\v1\Question\QuestionFeedbackDTO;
+use App\Events\v1\Question\QuestionStatisticCreated;
 use App\Exceptions\v1\RepositoryException;
 use App\Interfaces\v1\Resolving\CompanyResolver;
 use App\Interfaces\v1\Resolving\PositionResolver;
@@ -113,12 +114,12 @@ class QuestionFeedbackService
         $companyId = $this->resolveCompany($feedback->companyExisting, $feedback->companyNew);
         $positionId = $this->resolvePosition($feedback->positionExisting, $feedback->positionNew);
 
-        $statistics = $this->repository->findByCombination($userId, $questionId, $companyId, $positionId);
+        $statistic = $this->repository->findByCombination($userId, $questionId, $companyId, $positionId);
 
-        if ($statistics) {
-            $statistics->when_asked = $feedback->whenAsked;
+        if ($statistic) {
+            $statistic->when_asked = $feedback->whenAsked;
 
-            $this->repository->save($statistics);
+            $this->repository->save($statistic);
 
             return;
         }
@@ -130,16 +131,18 @@ class QuestionFeedbackService
             return;
         }
 
-        $statistics = new Statistic();
+        $statistic = new Statistic();
 
-        $statistics->met_in_real_interview = true;
-        $statistics->user_id = $userId;
-        $statistics->question_id = $questionId;
-        $statistics->company_id = $companyId;
-        $statistics->position_id = $positionId;
-        $statistics->when_asked = $feedback->whenAsked;
+        $statistic->met_in_real_interview = true;
+        $statistic->user_id = $userId;
+        $statistic->question_id = $questionId;
+        $statistic->company_id = $companyId;
+        $statistic->position_id = $positionId;
+        $statistic->when_asked = $feedback->whenAsked;
 
-        $this->repository->save($statistics);
+        $this->repository->save($statistic);
+
+        QuestionStatisticCreated::dispatch($statistic);
     }
 
     protected function resolveCompany(?int $companyId, ?string $companyName): int
