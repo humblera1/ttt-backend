@@ -113,9 +113,15 @@ return [
             Action::ChangeStatus,
         ],
         Entity::QuestionCompanySuggestion->name => [
+            Action::ViewAny,
+            Action::ForceDeleteAny,
+            Action::ForceDeleteBulk,
             Action::ChangeStatus,
         ],
         Entity::QuestionPositionSuggestion->name => [
+            Action::ViewAny,
+            Action::ForceDeleteAny,
+            Action::ForceDeleteBulk,
             Action::ChangeStatus,
         ],
         Entity::Subscription->name => [
@@ -225,9 +231,11 @@ return [
             Action::ChangeStatus,
         ],
         Entity::QuestionCompanySuggestion->name => [
+            Action::ViewAny,
             Action::ChangeStatus,
         ],
         Entity::QuestionPositionSuggestion->name => [
+            Action::ViewAny,
             Action::ChangeStatus,
         ],
         Entity::Subscription->name => [
