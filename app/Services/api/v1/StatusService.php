@@ -26,6 +26,9 @@ class StatusService
         return $this->changeStatus($record, Status::Pending);
     }
 
+    /**
+     * todo: Делегировать логику смены статуса сервисам
+     */
     protected function changeStatus(Model $record, Status $status): bool
     {
         $repository = app(Repository::class, [
