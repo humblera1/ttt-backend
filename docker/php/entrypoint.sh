@@ -2,8 +2,14 @@
 set -eu
 
 # Ensure writable directories exist
-mkdir -p /var/www/storage/framework/{cache,sessions,views,testing} || true
-mkdir -p /var/www/storage/app/{public,private} || true
+mkdir -p /var/www/storage/framework/cache \
+         /var/www/storage/framework/sessions \
+         /var/www/storage/framework/views \
+         /var/www/storage/framework/testing || true
+
+mkdir -p /var/www/storage/app/public \
+         /var/www/storage/app/private || true
+
 mkdir -p /var/www/bootstrap/cache || true
 
 # Fix ownership and permissions for Laravel writable dirs
@@ -28,5 +34,10 @@ if [ -f /var/www/artisan ]; then
   su-exec www-data php /var/www/artisan route:cache || true
 fi
 
-# Finally exec php-fpm (PID 1)
-exec php-fpm
+# run php-fpm process by default
+if [ "$#" -eq 0 ]; then
+  exec php-fpm
+else
+  # for horizon service
+  exec "$@"
+fi

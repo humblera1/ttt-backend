@@ -38,8 +38,8 @@ RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
           intl \
           xml \
           pdo_pgsql \
-    && pecl install xdebug \
-    && docker-php-ext-enable xdebug
+    && pecl install redis xdebug \
+    && docker-php-ext-enable redis xdebug
 
 # переменная окружения для Xdebug
 ENV PHP_IDE_CONFIG 'serverName=app-dev'
