@@ -3,7 +3,7 @@
 namespace App\Services\api\v1;
 
 use App\Enums\Status;
-use App\Exceptions\v1\BusinessLogicException;
+use App\Enums\Suggestion\Status as StatusWithReview;
 use App\Exceptions\v1\RepositoryException;
 use App\Repositories\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +29,7 @@ class StatusService
     /**
      * todo: Делегировать логику смены статуса сервисам
      */
-    protected function changeStatus(Model $record, Status $status): bool
+    protected function changeStatus(Model $record, Status|StatusWithReview $status): bool
     {
         $repository = app(Repository::class, [
             'modelClass' => $record::class,
