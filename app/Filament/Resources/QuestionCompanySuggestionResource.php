@@ -9,6 +9,7 @@ use App\Filament\Actions\Status\ResetAction;
 use App\Filament\Actions\Status\ReturnCompanyForReviewAction;
 use App\Filament\Resources\QuestionCompanySuggestionResource\Pages;
 use App\Filament\Resources\QuestionCompanySuggestionResource\RelationManagers;
+use App\Filament\Resources\QuestionResource\RelationManagers\CompanySuggestionRelationManager;
 use App\Models\QuestionCompanySuggestion;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -89,7 +90,7 @@ class QuestionCompanySuggestionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CompanySuggestionRelationManager::class,
         ];
     }
 

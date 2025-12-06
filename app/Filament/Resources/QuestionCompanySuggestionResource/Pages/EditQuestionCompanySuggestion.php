@@ -42,6 +42,11 @@ class EditQuestionCompanySuggestion extends EditRecord
         ];
     }
 
+    protected function getFormActions(): array
+    {
+        return [];
+    }
+
     public function form(Form $form): Form
     {
         return $form->schema([
