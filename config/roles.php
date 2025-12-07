@@ -171,6 +171,15 @@ return [
             Action::ViewAny,
             Action::DeleteAny,
         ],
+        Entity::NotificationCategory->name => [
+            Action::ViewAny,
+            Action::EditAny,
+            Action::DeleteAny,
+            Action::DeleteBulk,
+            Action::ForceDeleteAny,
+            Action::ForceDeleteBulk,
+            Action::RestoreAny,
+        ],
     ],
 
     /**
@@ -269,6 +278,12 @@ return [
         Entity::Statistic->name => [
             Action::ViewAny,
             Action::DeleteAny,
+        ],
+        Entity::NotificationCategory->name => [
+            Action::ViewAny,
+            Action::EditAny,
+            Action::DeleteAny,
+            Action::RestoreAny,
         ],
     ],
 
