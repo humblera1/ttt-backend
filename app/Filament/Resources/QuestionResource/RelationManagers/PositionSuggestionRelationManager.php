@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources\QuestionResource\RelationManagers;
 
-use App\Models\QuestionCompanySuggestion;
+use App\Models\QuestionPositionSuggestion;
 use App\Models\Statistic;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class CompanySuggestionRelationManager extends RelationManager
+class PositionSuggestionRelationManager extends RelationManager
 {
-    protected static string $relationship = 'company';
+    protected static string $relationship = 'position';
 
     protected static ?string $title = 'Statistics';
 
@@ -26,7 +26,7 @@ class CompanySuggestionRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        /** @var QuestionCompanySuggestion $record */
+        /** @var QuestionPositionSuggestion $record */
         $record = $this->getOwnerRecord();
 
         return $table
@@ -34,7 +34,7 @@ class CompanySuggestionRelationManager extends RelationManager
                 Statistic::query()
                     ->with('user')
                     ->where('question_id', $record->question_id)
-                    ->where('company_id', $record->company_id)
+                    ->where('position_id', $record->position_id)
             )
             ->columns([
                 TextColumn::make('user.username')

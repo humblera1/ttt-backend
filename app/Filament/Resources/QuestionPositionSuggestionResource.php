@@ -9,6 +9,7 @@ use App\Filament\Actions\Status\ResetAction;
 use App\Filament\Actions\Status\ReturnPositionForReviewAction;
 use App\Filament\Resources\QuestionPositionSuggestionResource\Pages;
 use App\Filament\Resources\QuestionPositionSuggestionResource\RelationManagers;
+use App\Filament\Resources\QuestionResource\RelationManagers\PositionSuggestionRelationManager;
 use App\Models\QuestionPositionSuggestion;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -89,7 +90,7 @@ class QuestionPositionSuggestionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PositionSuggestionRelationManager::class,
         ];
     }
 

@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\QuestionCompanySuggestionResource\Pages;
 
-use App\Filament\Actions\Forms\Status\CompanySuggestion\RejectAction;
-use App\Filament\Actions\Forms\Status\ResetAction;
 use App\Filament\Actions\Forms\Status\CompanySuggestion\ApproveAction;
 use App\Filament\Actions\Forms\Status\CompanySuggestion\ReturnToReviewAction;
+use App\Filament\Actions\Forms\Status\ResetAction;
+use App\Filament\Actions\Forms\Status\Suggestion\RejectAction;
 use App\Filament\Resources\QuestionCompanySuggestionResource;
 use App\Filament\Widgets\Status\StatusWithReviewBadge;
 use App\Models\QuestionCompanySuggestion;
+use App\Traits\Filament\Forms\Utils\HasLinkUtils;
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -18,6 +19,8 @@ use Illuminate\Support\HtmlString;
 
 class EditQuestionCompanySuggestion extends EditRecord
 {
+    use HasLinkUtils;
+
     protected static string $resource = QuestionCompanySuggestionResource::class;
 
     public function getHeading(): string
@@ -39,6 +42,17 @@ class EditQuestionCompanySuggestion extends EditRecord
     {
         return [
             StatusWithReviewBadge::class,
+        ];
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            DeleteAction::make(),
+            ApproveAction::make(),
+            ResetAction::make(),
+            ReturnToReviewAction::make(),
+            RejectAction::make(),
         ];
     }
 
@@ -91,25 +105,5 @@ class EditQuestionCompanySuggestion extends EditRecord
                 ->compact()
                 ->columnSpan(4),
         ])->columns(12);
-    }
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            DeleteAction::make(),
-            ApproveAction::make(),
-            ResetAction::make(),
-            ReturnToReviewAction::make(),
-            RejectAction::make(),
-        ];
-    }
-
-    protected function createLink(string $link, string $label): HtmlString
-    {
-        return new HtmlString(sprintf(
-            '<a href="%s" class="text-primary-600 font-medium">%s</a>',
-            e($link),
-            e($label),
-        ));
     }
 }

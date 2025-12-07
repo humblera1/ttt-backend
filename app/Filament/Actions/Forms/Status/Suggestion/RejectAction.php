@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Actions\Forms\Status\CompanySuggestion;
+namespace App\Filament\Actions\Forms\Status\Suggestion;
 
 use App\Filament\Actions\Forms\Status\RejectAction as BaseRejectAction;
 use App\Interfaces\v1\Status\StatusWithReviewInterface;
