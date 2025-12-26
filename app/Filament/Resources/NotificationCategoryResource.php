@@ -47,7 +47,8 @@ class NotificationCategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('key')
-                    ->searchable(),
+                    ->searchable()
+                    ->badge(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('description')

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\NotificationCategoryResource\Pages;
 
 use App\Filament\Actions\Delete\ForceDeleteAction;
 use App\Filament\Resources\NotificationCategoryResource;
+use App\Filament\Resources\Widgets\Notification\KeyBadge;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Forms\Components\Section;
@@ -19,6 +20,13 @@ class EditNotificationCategory extends EditRecord
     public function getTitle(): string
     {
         return 'Edit Notification Category';
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            KeyBadge::class,
+        ];
     }
 
     public function form(Form $form): Form

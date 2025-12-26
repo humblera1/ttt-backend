@@ -17,7 +17,11 @@ class TypesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('key')
+                    ->searchable()
+                    ->badge(),
+                TextColumn::make('name')
+                    ->searchable(),
                 TextColumn::make('description')
                     ->wrap(),
                 TextColumn::make('created_at')
