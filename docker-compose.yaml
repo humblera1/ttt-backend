@@ -7,6 +7,7 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/nginx/dev:/etc/nginx/conf.d/
+      - storage-data:/var/www/storage
     depends_on:
       - app-dev
     labels:
@@ -21,6 +22,7 @@ services:
       dockerfile: dev.Dockerfile
     volumes:
       - ./:/var/www
+      - storage-data:/var/www/storage
     env_file:
       - .env
     extra_hosts:
@@ -39,6 +41,7 @@ services:
       dockerfile: dev.Dockerfile
     volumes:
       - ./:/var/www
+      - storage-data:/var/www/storage
     env_file:
       - .env
     extra_hosts:
@@ -88,3 +91,4 @@ networks:
     external: true
 volumes:
   db-data:
+  storage-data:
