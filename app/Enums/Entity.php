@@ -22,4 +22,5 @@ enum Entity
     case Setting;
     case Statistic;
     case NotificationCategory;
+    case NotificationType;
 }
