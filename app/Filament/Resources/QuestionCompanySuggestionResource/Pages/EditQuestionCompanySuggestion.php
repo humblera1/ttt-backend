@@ -7,7 +7,7 @@ use App\Filament\Actions\Forms\Status\CompanySuggestion\ReturnToReviewAction;
 use App\Filament\Actions\Forms\Status\ResetAction;
 use App\Filament\Actions\Forms\Status\Suggestion\RejectAction;
 use App\Filament\Resources\QuestionCompanySuggestionResource;
-use App\Filament\Widgets\Status\StatusWithReviewBadge;
+use App\Filament\Resources\Widgets\Status\StatusWithReviewBadge;
 use App\Models\QuestionCompanySuggestion;
 use App\Traits\Filament\Forms\Utils\HasLinkUtils;
 use Filament\Actions\DeleteAction;

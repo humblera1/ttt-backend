@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets\Status;
+namespace App\Filament\Resources\Widgets\Status;
 
 use App\Enums\Suggestion\Status;
 

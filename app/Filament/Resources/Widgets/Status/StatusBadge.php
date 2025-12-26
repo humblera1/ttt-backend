@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets\Status;
+namespace App\Filament\Resources\Widgets\Status;
 
 use App\Enums\Status;
 use Filament\Widgets\Widget;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StatusBadge extends Widget
 {
-    protected static string $view = 'filament.widgets.status-badge';
+    protected static string $view = 'filament.widgets.status.status-badge';
 
     public ?Model $record = null;
 

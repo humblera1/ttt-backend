@@ -8,7 +8,7 @@ use App\Filament\Actions\Question\{ApproveQuestionAction,
     RejectQuestionAction,
     ResetQuestionAction};
 use App\Filament\Resources\QuestionResource;
-use App\Filament\Widgets\Status\StatusBadge;
+use App\Filament\Resources\Widgets\Status\StatusBadge;
 use App\Traits\Filament\Forms\Question\WithRelatedSelects;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\RestoreAction;
