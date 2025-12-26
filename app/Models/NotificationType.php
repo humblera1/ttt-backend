@@ -31,4 +31,16 @@ class NotificationType extends Model
     {
         return $this->belongsTo(NotificationCategory::class);
     }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'placeholders' => 'array',
+        ];
+    }
 }
