@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Policies\NotificationCategoryPolicy;
+use App\Policies\NotificationTypePolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[UsePolicy(NotificationCategoryPolicy::class)]
-class NotificationCategory extends Model
+#[UsePolicy(NotificationTypePolicy::class)]
+class NotificationType extends Model
 {
     use SoftDeletes;
 
@@ -22,10 +22,13 @@ class NotificationCategory extends Model
         'key',
         'name',
         'description',
+        'template_title',
+        'template_body',
+        'placeholders',
     ];
 
-    public function types(): HasMany
+    public function category(): BelongsTo
     {
-        return $this->hasMany(NotificationType::class);
+        return $this->belongsTo(NotificationCategory::class);
     }
 }
