@@ -56,9 +56,27 @@ class NotificationTypeRepository extends Repository
         $type->name = $data['name'];
         $type->description = $data['description'] ?? null;
 
-        $type->template_title = $data['template']['title'] ?? null;
-        $type->template_body = $data['template']['body'] ?? null;
+        $title = $data['template']['title'] ?? null;
+        $body  = $data['template']['body'] ?? null;
+
+        $type->template_title = $this->normalizeTemplateContent($title);
+        $type->template_body  = $this->normalizeTemplateContent($body);
 
         $type->placeholders = $data['placeholders'] ?? null;
+    }
+
+    private function normalizeTemplateContent(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+
+        // Если уже начинается с <p> или вообще содержит блочную разметку – не трогаем
+        if (preg_match('/^\s*<p[\s>]/i', $value) || str_contains($value, '<')) {
+            return $value;
+        }
+
+        // Иначе оборачиваем в <p>...</p>
+        return '<p>' . e($value) . '</p>';
     }
 }
