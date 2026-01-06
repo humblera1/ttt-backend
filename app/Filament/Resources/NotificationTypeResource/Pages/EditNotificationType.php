@@ -13,6 +13,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditNotificationType extends EditRecord
@@ -86,5 +87,46 @@ class EditNotificationType extends EditRecord
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    protected function beforeSave(): void
+    {
+        $title = $this->data['template_title'] ?? '';
+        $body  = $this->data['template_body'] ?? '';
+
+        $usedKeys = array_unique(
+            array_merge(
+                $this->extractInterpolationKeys($title),
+                $this->extractInterpolationKeys($body),
+            )
+        );
+
+        $placeholders = $this->record->placeholders ?? [];
+
+        $allowedKeys = array_column($placeholders, 'key');
+
+        $unknownKeys = array_diff($usedKeys, $allowedKeys);
+
+        if (!empty($unknownKeys)) {
+            $unknownKeysString = implode(', ', $unknownKeys);
+
+            Notification::make()
+                ->danger()
+                ->title('The template contains invalid placeholders.')
+                ->body('Unknown keys: ' . $unknownKeysString)
+                ->persistent()
+                ->send();
+
+            $this->halt();
+        }
+    }
+
+    private function extractInterpolationKeys(string $content): array
+    {
+        preg_match_all('/{{\s*([\w.:-]+)\s*}}/', $content, $matches);
+
+        $matchesArray = $matches[1] ?? [];
+
+        return array_values($matchesArray);
     }
 }
