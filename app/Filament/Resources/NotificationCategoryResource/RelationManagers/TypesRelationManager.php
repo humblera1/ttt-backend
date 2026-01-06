@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\NotificationCategoryResource\RelationManagers;
 
 use App\Filament\Filters\Trash\TrashedFilter;
+use App\Filament\Resources\NotificationTypeResource;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -35,10 +35,11 @@ class TypesRelationManager extends RelationManager
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //
             ])
             ->bulkActions([
                 //
-            ]);
+            ])
+            ->recordUrl(fn ($record) => NotificationTypeResource::getUrl('edit', ['record' => $record]));
     }
 }
