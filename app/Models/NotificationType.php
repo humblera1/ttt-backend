@@ -29,7 +29,7 @@ class NotificationType extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(NotificationCategory::class);
+        return $this->belongsTo(NotificationCategory::class, 'notification_category_id');
     }
 
     /**
