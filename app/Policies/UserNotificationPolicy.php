@@ -29,7 +29,7 @@ class UserNotificationPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create-any-notification');
+        return $user->hasPermissionTo('create-notification');
     }
 
     /**
