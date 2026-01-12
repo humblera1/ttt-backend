@@ -2,6 +2,7 @@
 
 namespace App\Services\api\v1\Notification;
 
+use App\DTOs\v1\Notification\CustomNotificationDTO;
 use App\DTOs\v1\Notification\FinalNotificationDTO;
 use App\DTOs\v1\Notification\TemplatedNotificationDTO;
 use App\Entities\Notification\NotificationRenderer;
@@ -43,6 +44,28 @@ class NotificationService
             $this->sender->send($final);
         } catch (BusinessLogicException $e) {
             Log::error('Failed to send templated notification. Skipping.', ['exception' => $e]);
+        }
+    }
+
+    /**
+     * Prepares and sends custom in-app notifications.
+     */
+    public function sendCustom(CustomNotificationDTO $notification): void
+    {
+        try {
+            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+
+            $final = new FinalNotificationDTO(
+                user: $notification->user,
+                type: $type,
+                title: $notification->title,
+                body: $notification->body,
+                data: [],
+            );
+
+            $this->sender->send($final);
+        } catch (BusinessLogicException $e) {
+            Log::error('Failed to send custom notification. Skipping.', ['exception' => $e]);
         }
     }
 }
