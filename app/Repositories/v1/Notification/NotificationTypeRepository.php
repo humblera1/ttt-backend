@@ -2,6 +2,7 @@
 
 namespace App\Repositories\v1\Notification;
 
+use App\Exceptions\v1\Notification\NotificationTypeNotFound;
 use App\Exceptions\v1\RepositoryException;
 use App\Models\NotificationCategory;
 use App\Models\NotificationType;
@@ -12,6 +13,27 @@ class NotificationTypeRepository extends Repository
     public function __construct()
     {
         parent::__construct(NotificationType::class);
+    }
+
+    public function findByKey(string $key): ?NotificationType
+    {
+        return NotificationType::query()
+            ->where('key', $key)
+            ->first();
+    }
+
+    /**
+     * @throws NotificationTypeNotFound
+     */
+    public function findByKeyOrFail(string $key): NotificationType
+    {
+        $type = $this->findByKey($key);
+
+        if (!$type) {
+            throw new NotificationTypeNotFound("Unknown notification type: {$key}");
+        }
+
+        return $type;
     }
 
     public function findByKeyInCategory(NotificationCategory $category, string $key): ?NotificationType
