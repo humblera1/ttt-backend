@@ -57,6 +57,30 @@ services:
         condition: service_started
     command: [ "php", "artisan", "horizon" ]
 
+  scheduler-dev:
+    build:
+      context: ./docker/php/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/var/www
+      - storage-data:/var/www/storage
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - db-network
+      - web-network
+      - redis-network
+    depends_on:
+      mysql-dev:
+        condition: service_healthy
+    command: >
+      sh -c "while true; do
+               php artisan schedule:run >> /dev/null 2>&1;
+               sleep 60;
+             done"
+
   redis-dev:
     image: redis:8.4-alpine
     command: [ "redis-server", "--appendonly", "yes" ]
