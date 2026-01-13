@@ -155,6 +155,8 @@ return [
             Action::ForceDeleteOwn,
             Action::ForceDeleteAny,
             Action::ForceDeleteBulk,
+            Action::RestoreOwn,
+            Action::RestoreAny,
             Action::Send,
             Action::MarkAsRead,
             Action::MarkAsUnread,
@@ -282,6 +284,8 @@ return [
             Action::ForceDeleteOwn,
             Action::ForceDeleteAny,
             Action::ForceDeleteBulk,
+            Action::RestoreOwn,
+            Action::RestoreAny,
             Action::Send,
             Action::MarkAsRead,
             Action::MarkAsUnread,
@@ -435,6 +439,7 @@ return [
             Action::DeleteOwn,
             Action::MarkAsRead,
             Action::MarkAsUnread,
+            Action::RestoreOwn,
         ],
         Entity::Comment->name => [
             Action::Create,
@@ -474,6 +479,7 @@ return [
             Action::DeleteOwn,
             Action::MarkAsRead,
             Action::MarkAsUnread,
+            Action::RestoreOwn,
         ],
         Entity::Comment->name => [
             Action::ViewAny,
