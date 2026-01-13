@@ -12,9 +12,4 @@ class ListPlaceholders extends ViewField
     {
         return parent::make($name);
     }
-
-    public function test(): string
-    {
-        return 'test';
-    }
 }
