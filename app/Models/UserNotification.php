@@ -13,6 +13,16 @@ class UserNotification extends Model
 {
     use SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'title',
+        'body',
+    ];
+
     public function type(): BelongsTo
     {
         return $this->belongsTo(NotificationType::class, 'notification_type_id');

@@ -55,6 +55,7 @@ class UserNotificationResource extends Resource
                     ->badge()
                     ->color('info'),
                 TextColumn::make('title')
+                    ->html()
                     ->wrap(),
                 TextColumn::make('is_read')
                     ->label('Is Read?')
@@ -103,8 +104,11 @@ class UserNotificationResource extends Resource
                     }),
             ])
             ->actions([
-                // ...
+                Tables\Actions\EditAction::make(),
             ])
+            ->recordUrl(
+                fn (UserNotification $record): string => static::getUrl('view', ['record' => $record])
+            )
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     DeleteBulkAction::make()
