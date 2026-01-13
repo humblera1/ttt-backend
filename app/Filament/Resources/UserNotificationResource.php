@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Actions\Delete\DeleteBulkAction;
 use App\Filament\Actions\Delete\ForceDeleteBulkAction;
+use App\Filament\Filters\Trash\TrashedFilter;
 use App\Filament\Resources\UserNotificationResource\Pages;
 use App\Filament\Resources\UserNotificationResource\RelationManagers;
 use App\Models\UserNotification;
@@ -82,6 +83,7 @@ class UserNotificationResource extends Resource
                         'type',
                         'name',
                     ),
+                TrashedFilter::make(),
                 Tables\Filters\TernaryFilter::make('is_read')
                     ->label(__('Is Read'))
                     ->placeholder(__('All'))
