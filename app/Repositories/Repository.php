@@ -13,6 +13,15 @@ class Repository
         protected string $modelClass
     ) {}
 
+    public function insert(array $data): void
+    {
+        try {
+            $this->modelClass::query()->insert($data);
+        } catch (Throwable) {
+            throw new RepositoryException('Failed to insert records');
+        }
+    }
+
     /**
      * @throws RepositoryException
      */

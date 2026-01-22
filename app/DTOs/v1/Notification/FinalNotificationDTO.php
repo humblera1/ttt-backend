@@ -9,7 +9,6 @@ use App\Models\User;
 class FinalNotificationDTO extends BaseDTO
 {
     public function __construct(
-        public readonly User $user,
         public readonly NotificationType $type,
         public readonly string $title,
         public readonly string $body,

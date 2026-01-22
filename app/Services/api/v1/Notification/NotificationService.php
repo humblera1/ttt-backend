@@ -8,6 +8,7 @@ use App\DTOs\v1\Notification\TemplatedNotificationDTO;
 use App\Entities\Notification\NotificationRenderer;
 use App\Entities\Notification\NotificationSender;
 use App\Exceptions\v1\BusinessLogicException;
+use App\Models\User;
 use App\Repositories\v1\Notification\NotificationTypeRepository;
 use Illuminate\Support\Facades\Log;
 
@@ -26,7 +27,7 @@ class NotificationService
     /**
      * Prepares and sends templated in-app notifications.
      */
-    public function sendTemplated(TemplatedNotificationDTO $notification): void
+    public function sendTemplatedTo(User $user, TemplatedNotificationDTO $notification): void
     {
         try {
             $type = $this->repository->findByKeyOrFail($notification->typeKey);
@@ -34,14 +35,13 @@ class NotificationService
             [$title, $body] = $this->renderer->render($type, $notification->data);
 
             $final = new FinalNotificationDTO(
-                user: $notification->user,
                 type: $type,
                 title: $title,
                 body: $body,
                 data: $notification->data,
             );
 
-            $this->sender->send($final);
+            $this->sender->sendTo($user, $final);
         } catch (BusinessLogicException $e) {
             Log::error('Failed to send templated notification. Skipping.', ['exception' => $e]);
         }
@@ -50,22 +50,42 @@ class NotificationService
     /**
      * Prepares and sends custom in-app notifications.
      */
-    public function sendCustom(CustomNotificationDTO $notification): void
+    public function sendCustomTo(User $user, CustomNotificationDTO $notification): void
     {
         try {
             $type = $this->repository->findByKeyOrFail($notification->typeKey);
 
             $final = new FinalNotificationDTO(
-                user: $notification->user,
                 type: $type,
                 title: $notification->title,
                 body: $notification->body,
                 data: [],
             );
 
-            $this->sender->send($final);
+            $this->sender->sendTo($user, $final);
         } catch (BusinessLogicException $e) {
             Log::error('Failed to send custom notification. Skipping.', ['exception' => $e]);
+        }
+    }
+
+    /**
+     * Prepares and sends custom in-app notifications to provided users.
+     */
+    public function sendCustomToMany(iterable $users, CustomNotificationDTO $notification): void
+    {
+        try {
+            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+
+            $final = new FinalNotificationDTO(
+                type: $type,
+                title: $notification->title,
+                body: $notification->body,
+                data: [],
+            );
+
+            $this->sender->sendToMany($users, $final);
+        } catch (BusinessLogicException $e) {
+            Log::error('Failed to mass send custom notification. Skipping.', ['exception' => $e]);
         }
     }
 }
