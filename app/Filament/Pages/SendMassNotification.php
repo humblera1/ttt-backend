@@ -2,8 +2,10 @@
 
 namespace App\Filament\Pages;
 
+use App\DTOs\v1\Notification\CustomNotificationDTO;
 use App\Enums\Notification\RecipientMode;
 use App\Filament\Resources\UserNotificationResource;
+use App\Jobs\DispatchMassAdminNotificationJob;
 use App\Models\NotificationType;
 use App\Models\User;
 use Filament\Forms\Components\RichEditor;
@@ -106,9 +108,20 @@ class SendMassNotification extends Page implements HasForms
     {
         $data = $this->form->getState();
 
-        $mode = RecipientMode::tryFrom($data['recipient_mode']);
+        $type = $data['type'];
+        $title = $data['title'];
+        $body = $data['body'];
+        $userIds = $data['users'] ?? [];
 
-        $forAll = $mode === RecipientMode::All;
+        $scope = RecipientMode::tryFrom($data['recipient_mode']);
+
+        $notification = new CustomNotificationDTO(
+            typeKey: $type,
+            title: $title,
+            body: $body,
+        );
+
+        DispatchMassAdminNotificationJob::dispatch($notification, $scope, $userIds);
 
         Notification::make()
             ->success()
