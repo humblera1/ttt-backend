@@ -21,7 +21,11 @@ class UserNotificationPolicy
      */
     public function view(User $user, UserNotification $userNotification): bool
     {
-        return $user->hasPermissionTo('view-own-notification') && $user->id === $userNotification->user_id;
+        if ($user->hasPermissionTo('view-own-notification') && $user->id === $userNotification->user_id) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('view-any-notification');
     }
 
     /**
