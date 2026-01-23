@@ -32,6 +32,7 @@ class ViewUserNotification extends ViewRecord
                         Section::make('User')
                             ->schema([
                                 TextEntry::make('user.username')
+                                    ->label('Username')
                                     ->color('primary')
                                     ->url(
                                         fn (UserNotification $record) => UserResource::getUrl(
@@ -41,6 +42,7 @@ class ViewUserNotification extends ViewRecord
                                     )
                                     ->openUrlInNewTab(),
                                 TextEntry::make('user.email')
+                                    ->label('Email')
                                     ->icon('heroicon-m-envelope'),
                             ])
                             ->icon('heroicon-m-user'),

@@ -132,10 +132,8 @@ class UserNotificationResource extends Resource
     {
         return [
             'index' => Pages\ListUserNotifications::route('/'),
-            'create' => Pages\CreateUserNotification::route('/create'),
             'edit' => Pages\EditUserNotification::route('/{record}/edit'),
             'view' => Pages\ViewUserNotification::route('/{record}'),
-//            'send-mass' => Pages\SendMassNotification::route('/send-mass'),
         ];
     }
 }
