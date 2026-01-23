@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\v1;
 
-use App\DTOs\v1\Notification\CustomNotificationDTO;
-use App\DTOs\v1\Notification\TemplatedNotificationDTO;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Requests\v1\Notification\NotificationsListRequest;
+use App\Http\Resources\v1\Notification\NotificationResource;
 use App\Services\api\v1\Notification\NotificationService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -15,20 +16,13 @@ class NotificationController extends Controller
     )
     {}
 
-    public function test(): void
+    public function list(NotificationsListRequest $request): AnonymousResourceCollection
     {
-        $user = User::find(139);
-        $typeKey = 'admin_message';
-        $title = 'Тест';
-        $body = 'Тестовое содержание';
-
-        $dto = new CustomNotificationDTO(
-            user: $user,
-            typeKey: $typeKey,
-            title: $title,
-            body: $body,
+        return NotificationResource::collection(
+            $this->service->getNotificationsFor(
+                Auth::user(),
+                $request->input('per_page'),
+            )
         );
-
-        $this->service->sendCustom($dto);
     }
 }

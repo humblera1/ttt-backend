@@ -10,6 +10,7 @@ use App\Entities\Notification\NotificationSender;
 use App\Exceptions\v1\BusinessLogicException;
 use App\Models\User;
 use App\Repositories\v1\Notification\NotificationTypeRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -23,6 +24,18 @@ class NotificationService
         private readonly NotificationSender $sender,
     )
     {}
+
+    /**
+     * Returns a list of notifications for the given user.
+     */
+    public function getNotificationsFor(User $user, ?int $perPage): LengthAwarePaginator
+    {
+        $perPage = $perPage ?? setting('notification.default_per_page', 10);
+
+        $query = $user->notifications()->with('type', 'category');
+
+        return $query->paginate($perPage);
+    }
 
     /**
      * Prepares and sends templated in-app notifications.

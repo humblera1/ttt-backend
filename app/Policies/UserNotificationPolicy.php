@@ -17,6 +17,14 @@ class UserNotificationPolicy
     }
 
     /**
+     * Determine whether the user can view own models. Used in FormRequset.
+     */
+    public function viewOwn(User $user): bool
+    {
+        return $user->hasPermissionTo('view-own-notification');
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, UserNotification $userNotification): bool

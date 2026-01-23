@@ -77,6 +77,11 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(Statistic::class);
     }
 
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
     protected function fullName(): Attribute
     {
         return Attribute::make(
