@@ -5,7 +5,7 @@ namespace App\Filament\Pages;
 use App\DTOs\v1\Notification\CustomNotificationDTO;
 use App\Enums\Notification\RecipientMode;
 use App\Filament\Resources\UserNotificationResource;
-use App\Jobs\DispatchMassAdminNotificationJob;
+use App\Jobs\Notification\DispatchMassAdminNotificationJob;
 use App\Models\NotificationType;
 use App\Models\User;
 use Filament\Forms\Components\RichEditor;
@@ -52,11 +52,11 @@ class SendMassNotification extends Page implements HasForms
                 Section::make()
                     ->schema([
                         Select::make('type')
-                            ->options(NotificationType::all()->pluck('name', 'id'))
+                            ->options(NotificationType::all()->pluck('name', 'key'))
                             ->searchable()
                             ->required(),
                         Select::make('recipient_mode')
-                            ->label('Получатели')
+                            ->label('Recipients')
                             ->options(RecipientMode::options())
                             ->default(RecipientMode::All->value)
                             ->reactive()
@@ -127,5 +127,7 @@ class SendMassNotification extends Page implements HasForms
             ->success()
             ->title('Notifications are queued for sending.')
             ->send();
+
+        $this->form->fill();
     }
 }
