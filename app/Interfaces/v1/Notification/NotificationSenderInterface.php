@@ -9,5 +9,5 @@ interface NotificationSenderInterface
 {
     public function sendTo(User $user, FinalNotificationDTO $notification);
 
-    public function sendToMany(iterable $users, FinalNotificationDTO $notification);
+    public function sendToMany(array $userIds, FinalNotificationDTO $notification);
 }

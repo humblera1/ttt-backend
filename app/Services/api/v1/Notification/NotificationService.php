@@ -71,7 +71,7 @@ class NotificationService
     /**
      * Prepares and sends custom in-app notifications to provided users.
      */
-    public function sendCustomToMany(iterable $users, CustomNotificationDTO $notification): void
+    public function sendCustomToMany(array $usersIds, CustomNotificationDTO $notification): void
     {
         try {
             $type = $this->repository->findByKeyOrFail($notification->typeKey);
@@ -83,7 +83,7 @@ class NotificationService
                 data: [],
             );
 
-            $this->sender->sendToMany($users, $final);
+            $this->sender->sendToMany($usersIds, $final);
         } catch (BusinessLogicException $e) {
             Log::error('Failed to mass send custom notification. Skipping.', ['exception' => $e]);
         }

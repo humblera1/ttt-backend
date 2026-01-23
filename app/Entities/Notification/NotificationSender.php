@@ -44,19 +44,19 @@ readonly class NotificationSender implements NotificationSenderInterface
      *
      * @throws BusinessLogicException
      */
-    public function sendToMany(iterable $users, FinalNotificationDTO $notification): void
+    public function sendToMany(array $userIds, FinalNotificationDTO $notification): void
     {
         $now = now();
 
         $rows = [];
 
-        foreach ($users as $user) {
+        foreach ($userIds as $userId) {
             $rows[] = [
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'notification_type_id' => $notification->type->id,
                 'title' => $notification->title,
                 'body' => $notification->body,
-                'data' => $notification->data,
+                'data' => $this->prepareDataToInsert($notification->data),
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
@@ -71,5 +71,10 @@ readonly class NotificationSender implements NotificationSenderInterface
         }catch (Exception $exception) {
             throw new BusinessLogicException($exception->getMessage());
         }
+    }
+
+    private function prepareDataToInsert(array $data): string
+    {
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 }
