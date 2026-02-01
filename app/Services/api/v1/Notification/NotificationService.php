@@ -8,7 +8,10 @@ use App\DTOs\v1\Notification\TemplatedNotificationDTO;
 use App\Entities\Notification\NotificationRenderer;
 use App\Entities\Notification\NotificationSender;
 use App\Exceptions\v1\BusinessLogicException;
+use App\Exceptions\v1\RepositoryException;
 use App\Models\User;
+use App\Models\UserNotification;
+use App\Repositories\v1\Notification\NotificationRepository;
 use App\Repositories\v1\Notification\NotificationTypeRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +22,8 @@ use Illuminate\Support\Facades\Log;
 class NotificationService
 {
     public function __construct(
-        private readonly NotificationTypeRepository $repository,
+        private readonly NotificationRepository $repository,
+        private readonly NotificationTypeRepository $typeRepository,
         private readonly NotificationRenderer $renderer,
         private readonly NotificationSender $sender,
     )
@@ -38,12 +42,30 @@ class NotificationService
     }
 
     /**
+     * Marks the provided notification as read.
+     *
+     * @throws BusinessLogicException
+     */
+    public function markAsRead(UserNotification $notification): void
+    {
+        try {
+            $notification->read_at = now();
+
+            $this->repository->save($notification);
+        } catch (RepositoryException $e) {
+            Log::error('Failed to mark notification as read', ['exception' => $e]);
+
+            throw new BusinessLogicException($e->getMessage());
+        }
+    }
+
+    /**
      * Prepares and sends templated in-app notifications.
      */
     public function sendTemplatedTo(User $user, TemplatedNotificationDTO $notification): void
     {
         try {
-            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+            $type = $this->typeRepository->findByKeyOrFail($notification->typeKey);
 
             [$title, $body] = $this->renderer->render($type, $notification->data);
 
@@ -66,7 +88,7 @@ class NotificationService
     public function sendCustomTo(User $user, CustomNotificationDTO $notification): void
     {
         try {
-            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+            $type = $this->typeRepository->findByKeyOrFail($notification->typeKey);
 
             $final = new FinalNotificationDTO(
                 type: $type,
@@ -87,7 +109,7 @@ class NotificationService
     public function sendCustomToMany(array $usersIds, CustomNotificationDTO $notification): void
     {
         try {
-            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+            $type = $this->typeRepository->findByKeyOrFail($notification->typeKey);
 
             $final = new FinalNotificationDTO(
                 type: $type,

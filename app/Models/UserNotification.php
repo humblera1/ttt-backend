@@ -25,6 +25,10 @@ class UserNotification extends Model
         'body',
     ];
 
+    protected $casts = [
+        'read_at' => 'datetime',
+    ];
+
     public function type(): BelongsTo
     {
         return $this->belongsTo(NotificationType::class, 'notification_type_id');
