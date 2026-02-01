@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Exceptions\v1\BusinessLogicException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Notification\NotificationsListRequest;
+use App\Http\Requests\v1\Notification\NotificationsMarkAsReadAllRequest;
 use App\Http\Resources\v1\Notification\NotificationResource;
 use App\Models\UserNotification;
 use App\Services\api\v1\Notification\NotificationService;
@@ -45,9 +46,12 @@ class NotificationController extends Controller
         return response()->noContent();
     }
 
-    public function markAsReadAll(): Response
+    /**
+     * @throws BusinessLogicException
+     */
+    public function markAsReadAll(NotificationsMarkAsReadAllRequest $request): Response
     {
-//        $this->service->markAsRead($notification);
+        $this->service->markAsReadAll($request->user());
 
         return response()->noContent();
     }

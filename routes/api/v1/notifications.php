@@ -10,4 +10,5 @@ Route::controller(NotificationController::class)
     ->group(function () {
         Route::get('/list', 'list')->name('list');
         Route::patch('/{notification}/read', 'markAsRead')->name('markAsRead');
+        Route::patch('/read-all', 'markAsReadAll')->name('markAsReadAll');
     });

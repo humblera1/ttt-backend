@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\UserNotification;
-use Illuminate\Auth\Access\Response;
 
 class UserNotificationPolicy
 {
@@ -40,6 +39,11 @@ class UserNotificationPolicy
     {
         return $user->hasPermissionTo('mark-as-read-notification')
             && $user->id === $userNotification->user_id;
+    }
+
+    public function markAsReadAll(User $user): bool
+    {
+        return $user->hasPermissionTo('mark-as-read-notification');
     }
 
     /**
