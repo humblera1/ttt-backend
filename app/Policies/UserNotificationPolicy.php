@@ -36,6 +36,12 @@ class UserNotificationPolicy
         return $user->hasPermissionTo('view-any-notification');
     }
 
+    public function markAsRead(User $user, UserNotification $userNotification): bool
+    {
+        return $user->hasPermissionTo('mark-as-read-notification')
+            && $user->id === $userNotification->user_id;
+    }
+
     /**
      * Determine whether the user can create models.
      */

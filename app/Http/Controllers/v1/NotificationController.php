@@ -8,11 +8,15 @@ use App\Http\Requests\v1\Notification\NotificationsListRequest;
 use App\Http\Resources\v1\Notification\NotificationResource;
 use App\Models\UserNotification;
 use App\Services\api\v1\Notification\NotificationService;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class NotificationController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(
         private NotificationService $service,
     )
@@ -30,10 +34,20 @@ class NotificationController extends Controller
 
     /**
      * @throws BusinessLogicException
+     * @throws AuthorizationException
      */
     public function markAsRead(UserNotification $notification): Response
     {
+        $this->authorize('markAsRead', $notification);
+
         $this->service->markAsRead($notification);
+
+        return response()->noContent();
+    }
+
+    public function markAsReadAll(): Response
+    {
+//        $this->service->markAsRead($notification);
 
         return response()->noContent();
     }
