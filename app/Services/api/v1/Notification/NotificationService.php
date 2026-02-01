@@ -17,15 +17,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Responsible for sending in-app notifications
+ * Responsible for working with in-app notifications.
  */
-class NotificationService
+readonly class NotificationService
 {
     public function __construct(
-        private readonly NotificationRepository $repository,
-        private readonly NotificationTypeRepository $typeRepository,
-        private readonly NotificationRenderer $renderer,
-        private readonly NotificationSender $sender,
+        private NotificationRepository $repository,
     )
     {}
 
@@ -56,71 +53,6 @@ class NotificationService
             Log::error('Failed to mark notification as read', ['exception' => $e]);
 
             throw new BusinessLogicException($e->getMessage());
-        }
-    }
-
-    /**
-     * Prepares and sends templated in-app notifications.
-     */
-    public function sendTemplatedTo(User $user, TemplatedNotificationDTO $notification): void
-    {
-        try {
-            $type = $this->typeRepository->findByKeyOrFail($notification->typeKey);
-
-            [$title, $body] = $this->renderer->render($type, $notification->data);
-
-            $final = new FinalNotificationDTO(
-                type: $type,
-                title: $title,
-                body: $body,
-                data: $notification->data,
-            );
-
-            $this->sender->sendTo($user, $final);
-        } catch (BusinessLogicException $e) {
-            Log::error('Failed to send templated notification. Skipping.', ['exception' => $e]);
-        }
-    }
-
-    /**
-     * Prepares and sends custom in-app notifications.
-     */
-    public function sendCustomTo(User $user, CustomNotificationDTO $notification): void
-    {
-        try {
-            $type = $this->typeRepository->findByKeyOrFail($notification->typeKey);
-
-            $final = new FinalNotificationDTO(
-                type: $type,
-                title: $notification->title,
-                body: $notification->body,
-                data: [],
-            );
-
-            $this->sender->sendTo($user, $final);
-        } catch (BusinessLogicException $e) {
-            Log::error('Failed to send custom notification. Skipping.', ['exception' => $e]);
-        }
-    }
-
-    /**
-     * Prepares and sends custom in-app notifications to provided users.
-     */
-    public function sendCustomToMany(array $usersIds, CustomNotificationDTO $notification): void
-    {
-        try {
-            $type = $this->typeRepository->findByKeyOrFail($notification->typeKey);
-
-            $final = new FinalNotificationDTO(
-                type: $type,
-                title: $notification->title,
-                body: $notification->body,
-                data: [],
-            );
-
-            $this->sender->sendToMany($usersIds, $final);
-        } catch (BusinessLogicException $e) {
-            Log::error('Failed to mass send custom notification. Skipping.', ['exception' => $e]);
         }
     }
 }

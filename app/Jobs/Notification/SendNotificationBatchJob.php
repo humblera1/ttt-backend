@@ -4,7 +4,7 @@ namespace App\Jobs\Notification;
 
 use App\DTOs\v1\Notification\CustomNotificationDTO;
 use App\Enums\Queue\Queue;
-use App\Services\api\v1\Notification\NotificationService;
+use App\Services\api\v1\Notification\NotificationSendingService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -26,7 +26,7 @@ class SendNotificationBatchJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(NotificationService $service): void
+    public function handle(NotificationSendingService $service): void
     {
         $service->sendCustomToMany($this->userIds, $this->notification);
     }
