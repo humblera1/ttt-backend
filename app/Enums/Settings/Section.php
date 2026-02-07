@@ -9,4 +9,5 @@ enum Section: string
     case Company = 'company';
     case Statistics = 'statistics';
     case Notifications = 'notifications';
+    case Comments = 'comments';
 }

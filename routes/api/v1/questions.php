@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\v1\QuestionController;
+use App\Http\Controllers\v1\CommentController;
+use Illuminate\Support\Facades\Route;
 
 Route::controller(QuestionController::class)
     ->prefix('questions')
@@ -12,4 +14,7 @@ Route::controller(QuestionController::class)
         Route::post('/{question}/feedback', 'submitFeedback')
             ->name('feedback.submit')
             ->middleware('auth:sanctum');
+
+        Route::get('/{question}/comments', [CommentController::class, 'list'])
+            ->name('comments.list');
     });

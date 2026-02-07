@@ -94,4 +94,9 @@ class Question extends Model implements StatusInterface
     {
         return $this->hasMany(Statistic::class);
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

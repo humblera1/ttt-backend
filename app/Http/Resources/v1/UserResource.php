@@ -14,10 +14,12 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $hasPersonality = !$this->hasRole('guest');
+
         return [
             'id' => $this->id,
             'username' => $this->username,
-            'personality' => $this->when($this->hasRole('user'), fn () => $this->getPersonality())
+            'personality' => $this->when($hasPersonality, fn () => $this->getPersonality()),
         ];
     }
 
@@ -25,7 +27,8 @@ class UserResource extends JsonResource
     {
         return [
             'email' => $this->email,
-            'name' => $this->name,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
         ];
     }
 }
