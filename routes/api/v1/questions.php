@@ -15,6 +15,11 @@ Route::controller(QuestionController::class)
             ->name('feedback.submit')
             ->middleware('auth:sanctum');
 
+        // comments
         Route::get('/{question}/comments', [CommentController::class, 'list'])
             ->name('comments.list');
+
+        Route::post('/{question}/comments', [CommentController::class, 'store'])
+            ->name('comments.store')
+            ->middleware('auth:sanctum');
     });
