@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Comment\ReasonForDeletion;
 use App\Models\Comment;
 use App\Models\User;
 
@@ -72,7 +73,11 @@ class CommentPolicy
      */
     public function restore(User $user, Comment $comment): bool
     {
-        if ($user->hasPermissionTo('restore-own-comment') && $user->id === $comment->user_id) {
+        if (
+            $user->hasPermissionTo('restore-own-comment')
+            && $user->id === $comment->user_id
+            && $comment->deleted_reason_code === ReasonForDeletion::UserRemoved->value
+        ) {
             return true;
         }
 

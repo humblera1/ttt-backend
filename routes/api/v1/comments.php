@@ -9,4 +9,6 @@ Route::controller(CommentController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::patch('/{comment}', 'update')->name('comments.update');
+        Route::delete('/{comment}', 'delete')->name('comments.delete');
+        Route::post('/{restorable_comment}/restore', 'restore')->name('comments.restore');
     });
