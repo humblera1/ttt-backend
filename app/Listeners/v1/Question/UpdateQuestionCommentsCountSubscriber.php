@@ -4,18 +4,24 @@ namespace App\Listeners\v1\Question;
 
 use App\Events\v1\Comment\CommentCreated;
 use App\Events\v1\Comment\CommentDeleted;
+use App\Services\api\v1\Question\QuestionAggregateService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class UpdateQuestionCommentsCountSubscriber implements ShouldQueue
+readonly class UpdateQuestionCommentsCountSubscriber implements ShouldQueue
 {
-    public function handleCommentCreated($event): void
+    public function __construct(
+        private QuestionAggregateService $service
+    )
+    {}
+
+    public function handleCommentCreated(CommentCreated $event): void
     {
-        // increment comments_count
+        $this->service->incrementCommentsCount($event->comment->question);
     }
 
-    public function handleCommentDeleted($event): void
+    public function handleCommentDeleted(CommentDeleted $event): void
     {
-        // decrement comments_count
+        $this->service->decrementCommentsCount($event->comment->question);
     }
 
     public function subscribe($events): void
