@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Comment\CommentStoreRequest;
+use App\Http\Requests\v1\Comment\CommentUpdateRequest;
 use App\Http\Resources\v1\CommentResource;
 use App\Models\Comment;
 use App\Models\Question;
@@ -33,6 +34,15 @@ class CommentController extends Controller
     public function store(Question $question, CommentStoreRequest $request): CommentResource
     {
         $comment = $this->service->createForQuestion($question, $request->getDTO());
+
+        return new CommentResource($comment->load('user'));
+    }
+
+    public function update(Comment $comment, CommentUpdateRequest $request): CommentResource
+    {
+        $this->authorize('update', $comment);
+
+        $comment = $this->service->updateBody($comment, $request->validated('body'));
 
         return new CommentResource($comment->load('user'));
     }

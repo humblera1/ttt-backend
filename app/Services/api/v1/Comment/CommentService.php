@@ -4,11 +4,14 @@ namespace App\Services\api\v1\Comment;
 
 use App\DTOs\v1\Comment\CommentStoreDTO;
 use App\Events\v1\Comment\CommentCreated;
+use App\Exceptions\v1\BusinessLogicException;
+use App\Exceptions\v1\RepositoryException;
 use App\Models\Comment;
 use App\Models\Question;
 use App\Repositories\v1\Comment\CommentRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CommentService
 {
@@ -47,5 +50,20 @@ class CommentService
 
             return $comment;
         });
+    }
+
+    public function updateBody(Comment $comment, string $body): Comment
+    {
+        try {
+            $comment->body = $body;
+
+            $this->repository->save($comment);
+        } catch (RepositoryException $e) {
+            Log::error('Failed to update comment', ['exception' => $e]);
+
+            throw new BusinessLogicException($e->getMessage());
+        }
+
+        return $comment;
     }
 }
