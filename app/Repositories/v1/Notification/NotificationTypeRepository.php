@@ -7,7 +7,7 @@ use App\Exceptions\v1\RepositoryException;
 use App\Models\NotificationCategory;
 use App\Models\NotificationType;
 use App\Repositories\Repository;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class NotificationTypeRepository extends Repository
 {
