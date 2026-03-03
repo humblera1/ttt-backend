@@ -2,10 +2,10 @@
 
 use App\Enums\Notification\NotificationCategory;
 use App\Enums\Notification\NotificationType;
+use App\Mappers\Notification\Comments\CommentReplyNotificationMapper;
 
-// todo:
 return [
     NotificationCategory::ContentInteraction->value => [
-        NotificationType::NewComment->value => '',
+        NotificationType::CommentReply->value => CommentReplyNotificationMapper::class,
     ],
 ];
