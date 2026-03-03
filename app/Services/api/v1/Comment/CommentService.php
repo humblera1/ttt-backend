@@ -51,6 +51,8 @@ class CommentService
 
             $this->repository->save($comment);
 
+            $comment->load('question', 'user');
+
             event(new CommentCreated($comment));
 
             return $comment;
