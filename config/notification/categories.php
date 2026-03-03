@@ -260,7 +260,7 @@ return [
             [
                 'key' => NotificationType::QuestionLiked,
                 'name' => NotificationType::label(NotificationType::QuestionLiked),
-                'description' => 'Уведомление автору, что его вопросу поставили ла��к.',
+                'description' => 'Уведомление автору, что его вопросу поставили лайк.',
                 'placeholders' => [
                     [
                         'key' => 'question_title',
@@ -347,7 +347,7 @@ return [
                     ],
                 ],
                 'template' => [
-                    'title' => 'Новый ответ на ко��ментарий',
+                    'title' => 'Новый ответ на комментарий',
                     'body'  => 'К вопросу «{{question_title}}» новый ответ: «{{reply_excerpt}}» — {{reply_author}}.',
                 ],
             ],
@@ -425,7 +425,7 @@ return [
                     [
                         'key' => 'ban_reason',
                         'label' => 'Причина блокировки',
-                        'description' => 'Причина блокировки акк��унта.',
+                        'description' => 'Причина блокировки аккаунта.',
                     ],
                 ],
                 'template' => [
@@ -491,7 +491,7 @@ return [
                     [
                         'key' => 'user_agent',
                         'label' => 'Устройство/браузер',
-                        'description' => 'И��формация об устройстве/браузере.',
+                        'description' => 'Информация об устройстве/браузере.',
                     ],
                 ],
                 'template' => [
