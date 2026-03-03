@@ -6,6 +6,7 @@ use App\DTOs\v1\Notification\CustomNotificationDTO;
 use App\Enums\Notification\RecipientMode;
 use App\Filament\Resources\UserNotificationResource;
 use App\Jobs\Notification\DispatchMassAdminNotificationJob;
+use App\Models\NotificationCategory;
 use App\Models\NotificationType;
 use App\Models\User;
 use Filament\Forms\Components\RichEditor;
@@ -51,10 +52,27 @@ class SendMassNotification extends Page implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Select::make('type')
-                            ->options(NotificationType::all()->pluck('name', 'key'))
+                        Select::make('category')
+                            ->options(NotificationCategory::all()->pluck('name', 'key'))
                             ->searchable()
+                            ->reactive()
+                            ->afterStateUpdated(function (callable $set) {
+                                $set('type', null);
+                            })
                             ->required(),
+                        Select::make('type')
+                            ->options(function (callable $get) {
+                                $category = NotificationCategory::where('key', $get('category'))->first();
+
+                                if (!$category) {
+                                    return null;
+                                }
+
+                                return $category->types()->pluck('name', 'key');
+                            })
+                            ->searchable()
+                            ->required()
+                            ->disabled(fn (callable $get) => ! $get('category')),
                         Select::make('recipient_mode')
                             ->label('Recipients')
                             ->options(RecipientMode::options())
@@ -108,6 +126,7 @@ class SendMassNotification extends Page implements HasForms
     {
         $data = $this->form->getState();
 
+        $category = $data['category'];
         $type = $data['type'];
         $title = $data['title'];
         $body = $data['body'];
@@ -116,6 +135,7 @@ class SendMassNotification extends Page implements HasForms
         $scope = RecipientMode::tryFrom($data['recipient_mode']);
 
         $notification = new CustomNotificationDTO(
+            categoryKey: $category,
             typeKey: $type,
             title: $title,
             body: $body,

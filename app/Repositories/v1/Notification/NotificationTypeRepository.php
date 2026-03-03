@@ -7,6 +7,7 @@ use App\Exceptions\v1\RepositoryException;
 use App\Models\NotificationCategory;
 use App\Models\NotificationType;
 use App\Repositories\Repository;
+use Illuminate\Database\Query\Builder;
 
 class NotificationTypeRepository extends Repository
 {
@@ -31,6 +32,27 @@ class NotificationTypeRepository extends Repository
 
         if (!$type) {
             throw new NotificationTypeNotFound("Unknown notification type: {$key}");
+        }
+
+        return $type;
+    }
+
+    /**
+     * @throws NotificationTypeNotFound
+     */
+    public function findInCategoryByKeysOrFail(string $categoryKey, string $typeKey): NotificationType
+    {
+        $type = NotificationType::query()
+            ->where('key', $typeKey)
+            ->whereHas('category', function (Builder $q) use ($categoryKey) {
+                $q->where('key', $categoryKey);
+            })
+            ->first();
+
+        if (!$type) {
+            throw new NotificationTypeNotFound(
+                "Cannot find notification type: {$typeKey} in category: {$categoryKey}"
+            );
         }
 
         return $type;

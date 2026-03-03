@@ -30,7 +30,10 @@ readonly class NotificationSendingService
     public function sendTemplatedTo(User $user, TemplatedNotificationDTO $notification): void
     {
         try {
-            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+            $type = $this->repository->findInCategoryByKeysOrFail(
+                $notification->categoryKey,
+                $notification->typeKey,
+            );
 
             [$title, $body] = $this->renderer->render($type, $notification->data);
 
@@ -53,7 +56,10 @@ readonly class NotificationSendingService
     public function sendCustomTo(User $user, CustomNotificationDTO $notification): void
     {
         try {
-            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+            $type = $this->repository->findInCategoryByKeysOrFail(
+                $notification->categoryKey,
+                $notification->typeKey,
+            );
 
             $final = new FinalNotificationDTO(
                 type: $type,
@@ -74,7 +80,10 @@ readonly class NotificationSendingService
     public function sendCustomToMany(array $usersIds, CustomNotificationDTO $notification): void
     {
         try {
-            $type = $this->repository->findByKeyOrFail($notification->typeKey);
+            $type = $this->repository->findInCategoryByKeysOrFail(
+                $notification->categoryKey,
+                $notification->typeKey,
+            );
 
             $final = new FinalNotificationDTO(
                 type: $type,
