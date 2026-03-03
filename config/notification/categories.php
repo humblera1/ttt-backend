@@ -1,22 +1,25 @@
 <?php
 
+use App\Enums\Notification\NotificationCategory;
+use App\Enums\Notification\NotificationType;
+
 return [
     [
-        'key' => 'system',
-        'name' => 'Системные',
+        'key' => NotificationCategory::System,
+        'name' => NotificationCategory::label(NotificationCategory::System),
         'description' => 'Важные новости и изменения платформы: обновления, технические работы, массовые объявления.',
         'types' => [
             [
-                'key' => 'system_announcement',
-                'name' => 'Системное объявление',
+                'key' => NotificationType::SystemAnnouncement,
+                'name' => NotificationType::label(NotificationType::SystemAnnouncement),
                 'description' => 'Массовое объявление для всех или части пользователей: новости, изменения, технические работы.',
                 'placeholders' => [
                     // текст задаёт администратор
                 ],
             ],
             [
-                'key' => 'admin_message',
-                'name' => 'Сообщение от администратора',
+                'key' => NotificationType::AdminMessage,
+                'name' => NotificationType::label(NotificationType::AdminMessage),
                 'description' => 'Персональное сообщение от администратора конкретному пользователю или группе.',
                 'placeholders' => [
                     [
@@ -34,13 +37,13 @@ return [
     ],
 
     [
-        'key' => 'subscription',
-        'name' => 'Подписка',
+        'key' => NotificationCategory::Subscription,
+        'name' => NotificationCategory::label(NotificationCategory::Subscription),
         'description' => 'Все события по премиум-доступу: активация, продление, истечение, успешные и неуспешные платежи, возвраты.',
         'types' => [
             [
-                'key' => 'subscription_activated',
-                'name' => 'Подписка активирована',
+                'key' => NotificationType::SubscriptionActivated,
+                'name' => NotificationType::label(NotificationType::SubscriptionActivated),
                 'description' => 'Уведомление о том, что премиальная подписка активирована.',
                 'placeholders' => [
                     [
@@ -60,8 +63,8 @@ return [
                 ],
             ],
             [
-                'key' => 'subscription_expiring',
-                'name' => 'Подписка скоро истечет',
+                'key' => NotificationType::SubscriptionExpiring,
+                'name' => NotificationType::label(NotificationType::SubscriptionExpiring),
                 'description' => 'Напоминание о скором истечении подписки.',
                 'placeholders' => [
                     [
@@ -86,8 +89,8 @@ return [
                 ],
             ],
             [
-                'key' => 'subscription_expired',
-                'name' => 'Подписка истекла',
+                'key' => NotificationType::SubscriptionExpired,
+                'name' => NotificationType::label(NotificationType::SubscriptionExpired),
                 'description' => 'Уведомление о том, что подписка более не активна.',
                 'placeholders' => [
                     [
@@ -102,8 +105,8 @@ return [
                 ],
             ],
             [
-                'key' => 'payment_successful',
-                'name' => 'Платеж успешен',
+                'key' => NotificationType::PaymentSuccessful,
+                'name' => NotificationType::label(NotificationType::PaymentSuccessful),
                 'description' => 'Уведомление об успешной оплате подписки или продления.',
                 'placeholders' => [
                     [
@@ -128,8 +131,8 @@ return [
                 ],
             ],
             [
-                'key' => 'payment_failed',
-                'name' => 'Платеж не прошел',
+                'key' => NotificationType::PaymentFailed,
+                'name' => NotificationType::label(NotificationType::PaymentFailed),
                 'description' => 'Уведомление о неуспешной оплате (ошибка карты, отклонение банком и т. п.).',
                 'placeholders' => [
                     [
@@ -144,8 +147,8 @@ return [
                 ],
             ],
             [
-                'key' => 'payment_refunded',
-                'name' => 'Платеж возвращен',
+                'key' => NotificationType::PaymentRefunded,
+                'name' => NotificationType::label(NotificationType::PaymentRefunded),
                 'description' => 'Уведомление о возврате средств за подписку или покупку.',
                 'placeholders' => [
                     [
@@ -168,13 +171,13 @@ return [
     ],
 
     [
-        'key' => 'proposal',
-        'name' => 'Предложения вопросов',
+        'key' => NotificationCategory::Proposal,
+        'name' => NotificationCategory::label(NotificationCategory::Proposal),
         'description' => 'Статусы и действия по предложенным пользователями вопросам: получено, на модерации, принято, отклонено, запрошены правки.',
         'types' => [
             [
-                'key' => 'proposal_received',
-                'name' => 'Предложение получено',
+                'key' => NotificationType::ProposalReceived,
+                'name' => NotificationType::label(NotificationType::ProposalReceived),
                 'description' => 'Подтверждение, что предложенный вопрос успешно получен системой.',
                 'placeholders' => [
                     [
@@ -189,8 +192,8 @@ return [
                 ],
             ],
             [
-                'key' => 'proposal_under_review',
-                'name' => 'Предложение на модерации',
+                'key' => NotificationType::ProposalUnderReview,
+                'name' => NotificationType::label(NotificationType::ProposalUnderReview),
                 'description' => 'Уведомление о том, что вопрос передан на рассмотрение модераторам.',
                 'placeholders' => [
                     [
@@ -205,8 +208,8 @@ return [
                 ],
             ],
             [
-                'key' => 'proposal_accepted',
-                'name' => 'Предложение принято',
+                'key' => NotificationType::ProposalAccepted,
+                'name' => NotificationType::label(NotificationType::ProposalAccepted),
                 'description' => 'Уведомление о том, что предложенный вопрос принят и опубликован в каталоге.',
                 'placeholders' => [
                     [
@@ -226,8 +229,8 @@ return [
                 ],
             ],
             [
-                'key' => 'proposal_rejected',
-                'name' => 'Предложение отклонено',
+                'key' => NotificationType::ProposalRejected,
+                'name' => NotificationType::label(NotificationType::ProposalRejected),
                 'description' => 'Уведомление о том, что предложенный вопрос отклонен модерацией.',
                 'placeholders' => [
                     [
@@ -250,14 +253,14 @@ return [
     ],
 
     [
-        'key' => 'content_interaction',
-        'name' => 'Взаимодействие с контентом',
+        'key' => NotificationCategory::ContentInteraction,
+        'name' => NotificationCategory::label(NotificationCategory::ContentInteraction),
         'description' => 'Реакции и активность: лайки/дизлайки, новые комментарии, ответы/упоминания, добавление в избранное, публикация новых премиальных вопросов.',
         'types' => [
             [
-                'key' => 'question_liked',
-                'name' => 'Ваш вопрос получил лайк',
-                'description' => 'Уведомление автору, что его вопросу поставили лайк.',
+                'key' => NotificationType::QuestionLiked,
+                'name' => NotificationType::label(NotificationType::QuestionLiked),
+                'description' => 'Уведомление автору, что его вопросу поставили ла��к.',
                 'placeholders' => [
                     [
                         'key' => 'question_title',
@@ -276,8 +279,8 @@ return [
                 ],
             ],
             [
-                'key' => 'question_disliked',
-                'name' => 'Ваш вопрос получил дизлайк',
+                'key' => NotificationType::QuestionDisliked,
+                'name' => NotificationType::label(NotificationType::QuestionDisliked),
                 'description' => 'Уведомление автору, что его вопросу поставили дизлайк.',
                 'placeholders' => [
                     [
@@ -297,8 +300,8 @@ return [
                 ],
             ],
             [
-                'key' => 'new_comment',
-                'name' => 'Новый комментарий к вашему вопросу',
+                'key' => NotificationType::NewComment,
+                'name' => NotificationType::label(NotificationType::NewComment),
                 'description' => 'Уведомление автору вопроса о новом комментарии.',
                 'placeholders' => [
                     [
@@ -323,8 +326,8 @@ return [
                 ],
             ],
             [
-                'key' => 'comment_reply',
-                'name' => 'Ответ на ваш комментарий',
+                'key' => NotificationType::CommentReply,
+                'name' => NotificationType::label(NotificationType::CommentReply),
                 'description' => 'Уведомление пользователю, что кто-то ответил на его комментарий.',
                 'placeholders' => [
                     [
@@ -344,13 +347,13 @@ return [
                     ],
                 ],
                 'template' => [
-                    'title' => 'Новый ответ на комментарий',
+                    'title' => 'Новый ответ на ко��ментарий',
                     'body'  => 'К вопросу «{{question_title}}» новый ответ: «{{reply_excerpt}}» — {{reply_author}}.',
                 ],
             ],
             [
-                'key' => 'question_favorited',
-                'name' => 'Ваш вопрос добавлен в избранное',
+                'key' => NotificationType::QuestionFavorited,
+                'name' => NotificationType::label(NotificationType::QuestionFavorited),
                 'description' => 'Уведомление автору, что другой пользователь добавил его вопрос в избранное.',
                 'placeholders' => [
                     [
@@ -365,8 +368,8 @@ return [
                 ],
             ],
             [
-                'key' => 'new_premium_question',
-                'name' => 'Новый премиальный вопрос',
+                'key' => NotificationType::NewPremiumQuestion,
+                'name' => NotificationType::label(NotificationType::NewPremiumQuestion),
                 'description' => 'Уведомление премиальным пользователям о появлении нового премиального вопроса.',
                 'placeholders' => [
                     [
@@ -389,13 +392,13 @@ return [
     ],
 
     [
-        'key' => 'moderation',
-        'name' => 'Модерация и политика',
+        'key' => NotificationCategory::Moderation,
+        'name' => NotificationCategory::label(NotificationCategory::Moderation),
         'description' => 'Предупреждения и действия модерации: скрытие/удаление вопросов или комментариев, причины отклонения, ограничения функционала, блокировки/разблокировки.',
         'types' => [
             [
-                'key' => 'comment_removed',
-                'name' => 'Ваш комментарий удален модерацией',
+                'key' => NotificationType::CommentRemoved,
+                'name' => NotificationType::label(NotificationType::CommentRemoved),
                 'description' => 'Уведомление пользователю, что его комментарий удален модераторами.',
                 'placeholders' => [
                     [
@@ -415,14 +418,14 @@ return [
                 ],
             ],
             [
-                'key' => 'user_banned',
-                'name' => 'Аккаунт заблокирован',
+                'key' => NotificationType::UserBanned,
+                'name' => NotificationType::label(NotificationType::UserBanned),
                 'description' => 'Уведомление о блокировке аккаунта (если показывается в пределах приложения).',
                 'placeholders' => [
                     [
                         'key' => 'ban_reason',
                         'label' => 'Причина блокировки',
-                        'description' => 'Причина блокировки аккаунта.',
+                        'description' => 'Причина блокировки акк��унта.',
                     ],
                 ],
                 'template' => [
@@ -434,13 +437,13 @@ return [
     ],
 
     [
-        'key' => 'account',
-        'name' => 'Аккаунт и безопасность',
+        'key' => NotificationCategory::Account,
+        'name' => NotificationCategory::label(NotificationCategory::Account),
         'description' => 'Изменения и события аккаунта: смена email/пароля, вход с нового устройства, включение/отключение 2FA, подтверждение почты.',
         'types' => [
             [
-                'key' => 'email_changed',
-                'name' => 'Email аккаунта изменен',
+                'key' => NotificationType::EmailChanged,
+                'name' => NotificationType::label(NotificationType::EmailChanged),
                 'description' => 'Уведомление о смене адреса электронной почты аккаунта.',
                 'placeholders' => [
                     [
@@ -460,8 +463,8 @@ return [
                 ],
             ],
             [
-                'key' => 'password_changed',
-                'name' => 'Пароль изменен',
+                'key' => NotificationType::PasswordChanged,
+                'name' => NotificationType::label(NotificationType::PasswordChanged),
                 'description' => 'Уведомление о том, что пароль аккаунта был изменен.',
                 'placeholders' => [
                     [
@@ -476,8 +479,8 @@ return [
                 ],
             ],
             [
-                'key' => 'new_login',
-                'name' => 'Новый вход в аккаунт',
+                'key' => NotificationType::NewLogin,
+                'name' => NotificationType::label(NotificationType::NewLogin),
                 'description' => 'Уведомление о входе в аккаунт с нового устройства или из нового расположения.',
                 'placeholders' => [
                     [
@@ -488,7 +491,7 @@ return [
                     [
                         'key' => 'user_agent',
                         'label' => 'Устройство/браузер',
-                        'description' => 'Информация об устройстве/браузере.',
+                        'description' => 'И��формация об устройстве/браузере.',
                     ],
                 ],
                 'template' => [
@@ -500,13 +503,13 @@ return [
     ],
 
     [
-        'key' => 'custom',
-        'name' => 'Прочие / Кастомные',
+        'key' => NotificationCategory::Custom,
+        'name' => NotificationCategory::label(NotificationCategory::Custom),
         'description' => 'Любые сообщения, не попадающие в стандартные категории, в том числе вручную отправленные администратором.',
         'types' => [
             [
-                'key' => 'custom_message',
-                'name' => 'Кастомное сообщение',
+                'key' => NotificationType::CustomMessage,
+                'name' => NotificationType::label(NotificationType::CustomMessage),
                 'description' => 'Гибкое уведомление, текст которого полностью задается администратором.',
                 'placeholders' => [
                     // без плейсхолдеров - текст целиком задается вручную
