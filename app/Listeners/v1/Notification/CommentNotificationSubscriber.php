@@ -7,7 +7,7 @@ use App\Enums\Queue\Queue;
 use App\Events\v1\Comment\CommentCreated;
 use App\Interfaces\v1\Scenarios\ScenarioInterface;
 use App\Scenarios\Notifications\NotificationScenario;
-use App\Scenarios\Notifications\Comments\{CommentReplyScenario};
+use App\Scenarios\Notifications\Comments\{CommentReplyScenario, NewCommentForQuestionScenario};
 use App\Services\api\v1\Notification\NotificationSendingService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -26,6 +26,7 @@ class CommentNotificationSubscriber implements ScenarioInterface, ShouldQueue
     {
         return [
             CommentReplyScenario::class,
+            NewCommentForQuestionScenario::class,
         ];
     }
 

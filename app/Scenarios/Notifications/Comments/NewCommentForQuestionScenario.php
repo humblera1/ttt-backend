@@ -9,42 +9,39 @@ use App\DTOs\v1\Notification\Scenarios\Instructions\InstructionToOne;
 use App\DTOs\v1\Notification\TemplatedNotificationDTO;
 use App\Enums\Notification\NotificationCategory;
 use App\Enums\Notification\NotificationType;
-use App\Mappers\Notification\Comments\CommentReplyNotificationMapper;
+use App\Mappers\Notification\Comments\NewCommentNotificationMapper;
 use App\Scenarios\Notifications\NotificationScenario;
 
-final class CommentReplyScenario extends NotificationScenario
+final class NewCommentForQuestionScenario extends NotificationScenario
 {
     protected NotificationCategory $category = NotificationCategory::ContentInteraction;
 
-    protected NotificationType $type = NotificationType::CommentReply;
+    protected NotificationType $type = NotificationType::NewComment;
 
-    /** @inheritdoc */
     public function build(ScenarioContext $context): ?Instruction
     {
         $comment = $context->comment;
 
         $comment->loadMissing([
-            'parent.user',
-            'question',
+            'question.user',
             'user',
         ]);
 
-        $parent = $comment->parent;
         $question = $comment->question;
         $responded = $comment->user;
 
-        if (!$parent) {
+        $recipient = $question->user;
+
+        if (!$recipient) {
             return null;
         }
 
-        $recipient = $parent->user;
-
-        // user replies on his own comment
+        // user comments on his own question
         if ($recipient->id === $responded->id) {
             return null;
         }
 
-        /** @var CommentReplyNotificationMapper $mapper */
+        /** @var NewCommentNotificationMapper $mapper */
         $mapper = $this->getMapper();
 
         $payloadContext = new CommentNotificationPayloadContext(

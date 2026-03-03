@@ -7,7 +7,7 @@ use App\Models\Comment;
 use App\Models\Question;
 use App\Models\User;
 
-final class CommentReplyNotificationPayloadContext extends PayloadContext
+final class CommentNotificationPayloadContext extends PayloadContext
 {
     public function __construct(
         public readonly Comment $reply,

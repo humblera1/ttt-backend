@@ -7,7 +7,7 @@ use App\DTOs\v1\Notification\Mappers\Contexts\PayloadContext;
 use App\Mappers\Notification\NotificationPayloadMapper;
 use Illuminate\Support\Str;
 
-class CommentReplyNotificationMapper extends NotificationPayloadMapper
+class NewCommentNotificationMapper extends NotificationPayloadMapper
 {
     /**
      * @param CommentNotificationPayloadContext $context
@@ -23,8 +23,8 @@ class CommentReplyNotificationMapper extends NotificationPayloadMapper
 
         return [
             'question_title' => $questionTitle,
-            'reply_excerpt' => $excerpt,
-            'reply_author' => $respondent->username,
+            'comment_excerpt' => $excerpt,
+            'comment_author' => $respondent->username,
         ];
     }
 }
