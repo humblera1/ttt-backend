@@ -1,0 +1,20 @@
+# Runtime logs & compiled bootstrap cache
+/storage/logs/
+/bootstrap/cache/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Application keys & Composer auth tokens
+/storage/*.key
+/auth.json
+
+# PHPUnit / tooling caches
+.phpunit.result.cache
+.phpunit.cache
+
+# Large generated frontend assets
+/public/build
+/public/hot

@@ -1,0 +1,5 @@
+# Dependencies — index app code only; vendor is restored via Composer
+/vendor/
+
+# Frontend toolchain
+/node_modules/
