@@ -1,0 +1,63 @@
+---
+description: Repository pattern — base class, writes, query methods
+globs: app/Repositories/**/*.php
+alwaysApply: false
+---
+
+# Repositories
+
+## Base class
+
+All repositories extend `App\Repositories\Repository` and pass the model class to `parent::__construct()`:
+
+```php
+class QuestionRepository extends Repository
+{
+    public function __construct()
+    {
+        parent::__construct(Question::class);
+    }
+}
+```
+
+Namespace: `App\Repositories\v1\` or `App\Repositories\v1\{Domain}\` (e.g. `Comment\CommentRepository`).
+
+## Writes (use base methods)
+
+| Operation | Method |
+|-----------|--------|
+| Single save | `save(Model $model)` |
+| Insert rows | `insert(array $data)` |
+| Single/bulk delete | `delete()`, `bulkDelete()`, `bulkForceDelete()` |
+| Bulk update | `bulkUpdate(array $ids, array $attributes)` |
+
+Base methods throw `App\Exceptions\v1\RepositoryException` on failure. Services catch and handle; repositories do not swallow errors silently.
+
+## Reads and domain queries
+
+Put **entity-specific query logic** in the repository, not in services:
+
+```php
+// StatisticsRepository — good
+public function findByUserAndQuestion(int $userId, int $questionId): ?Statistic
+{
+    return Statistic::query()
+        ->byUserAndQuestion($userId, $questionId)
+        ->first();
+}
+
+public function createNotMet(int $userId, int $questionId): void
+{
+    $statistic = new Statistic();
+    // set attributes…
+    $this->save($statistic);
+}
+```
+
+Prefer model scopes (`->byUserAndQuestion()`) inside repository methods. Add new finder/counter/create helpers here when a query is reused or non-trivial.
+
+## Do not
+
+- Call `$model->save()` from services — use `$repository->save($model)`
+- Duplicate the same `Model::query()` chain across multiple services
+- Put Filament- or HTTP-specific logic in repositories

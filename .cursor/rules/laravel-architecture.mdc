@@ -1,0 +1,53 @@
+---
+description: Laravel API layering — controllers, services, DTOs, filters
+globs: app/Http/**/*.php,app/Services/**/*.php,app/DTOs/**/*.php
+alwaysApply: false
+---
+
+# Laravel architecture
+
+## Controllers stay thin
+
+Inject services via constructor. Validate with Form Request, map to DTO, delegate, return Resource/response.
+
+```php
+// app/Http/Controllers/v1/QuestionController.php
+public function list(QuestionsListRequest $request): AnonymousResourceCollection
+{
+    return QuestionPreviewResource::collection(
+        $this->service->getQuestionsList($request->getDTO())
+    );
+}
+```
+
+No business logic, no direct `Model::query()` for writes in controllers.
+
+## Form Request → DTO
+
+- Extend `App\Http\Requests\BaseFormRequest`
+- Implement `App\Interfaces\v1\Requests\RequestDTOInterface` when passing data to a service
+- Build DTO in `getDTO()` from `$this->validated()`
+- DTOs extend `App\DTOs\BaseDTO`, live in `app/DTOs/v1/{Domain}/`, use `readonly` promoted properties
+
+## Services (`app/Services/api/v1/`)
+
+- Orchestrate use cases; accept DTOs/models, not raw `Request`
+- **Persist changes** via repository: `$this->repository->save($model)`, `insert()`, `delete()`, `bulkUpdate()` — not `$model->save()` or `Model::query()->update()` in services
+- Read/list queries for API: dedicated filter classes in `app/Http/Filters/v1/` (e.g. `QuestionsListFilter`), not inline query building in the controller
+- Cross-model transactions: `DB::transaction()` in the service
+- Log failures with `Log::error()`; map `RepositoryException` to domain exceptions or `false` where the API contract expects it
+
+## Authorization
+
+- Form Request `authorize()` + Policies (`$user->can('viewAny', Question::class)`)
+- Route model binding for entity actions
+
+## API resources & routes
+
+- JSON resources: `app/Http/Resources/v1/`
+- Named routes: `route('api.v1.questions.list')`
+
+## Events & side effects
+
+- Dispatch domain events from services after successful persistence (e.g. `CommentCreated`)
+- Listeners/subscribers in `app/Listeners/v1/`

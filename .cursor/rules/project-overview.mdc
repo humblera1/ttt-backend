@@ -1,0 +1,39 @@
+---
+description: Project context — interview Q&A knowledge base (Laravel + Filament)
+alwaysApply: true
+---
+
+# TTT Backend — project context
+
+Pet project in active development: a knowledge base of theoretical technical interview questions with detailed answers.
+
+## Stack
+
+- Laravel 12, PHP 8.4
+- Filament 3 (admin panel)
+- Sanctum (API auth), Spatie Permission (roles/permissions)
+- API versioned under `routes/api.php` → prefix `v1`, route names `api.v1.*`
+
+## Domain (main entities)
+
+- **Question** — title, answer, status workflow (pending/approved/rejected), tags, grades, companies, positions
+- **Comment** — threaded comments on questions
+- **Company / Position / Tag / Grade** — taxonomy and filtering
+- **Suggestion** — user proposals for companies/positions linked to questions
+- **Statistic** — user-reported interview encounter data
+- **Notification** — in-app notifications with categories/types
+
+## Layer map
+
+| Layer | Location |
+|-------|----------|
+| API controllers | `app/Http/Controllers/v1/` |
+| Form requests + DTO | `app/Http/Requests/v1/`, `app/DTOs/v1/` |
+| Services | `app/Services/api/v1/` |
+| Repositories | `app/Repositories/v1/` |
+| List/query filters | `app/Http/Filters/v1/` |
+| Policies | `app/Policies/` (API: `app/Policies/v1/`) |
+| Filament admin | `app/Filament/` |
+| Feature tests | `tests/Feature/v1/` |
+
+Follow the scoped rules in `.cursor/rules/` when editing matching files.

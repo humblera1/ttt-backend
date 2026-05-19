@@ -1,0 +1,34 @@
+---
+description: Code language — English for comments, PHPDoc, and log messages
+alwaysApply: true
+---
+
+# Language
+
+## Code & docs — English
+
+Write in **English**:
+
+- PHPDoc blocks (`@param`, `@return`, `@throws`, class/method descriptions)
+- Inline comments explaining non-obvious logic
+- `Log::error()` / exception messages intended for developers
+- New enum cases, constant names, and identifier names (already English in codebase)
+
+```php
+/**
+ * Creates a record in the statistics table: the submitted user has not encountered
+ * the submitted question in real interviews.
+ *
+ * @throws RepositoryException
+ */
+public function createNotMet(int $userId, int $questionId): void
+```
+
+## User-facing strings
+
+- API validation messages and Filament labels may use `__()` for i18n
+- Prefer existing translation keys over hardcoding duplicate copy
+
+## Communication with the user (Cursor chat)
+
+Respond in the language the user writes in.

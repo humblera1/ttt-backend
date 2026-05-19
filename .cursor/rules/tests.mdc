@@ -1,0 +1,47 @@
+---
+description: Feature tests — layout, DatabaseTransactions, permissions
+globs: tests/**/*.php
+alwaysApply: false
+---
+
+# Tests
+
+## Layout
+
+- API feature tests: `tests/Feature/v1/{Domain}/` (e.g. `Question/QuestionsTest.php`)
+- Namespace matches folder: `Feature\v1\{Domain}` (see existing tests)
+- Extend `Tests\TestCase`
+
+## Database
+
+Use `Illuminate\Foundation\Testing\DatabaseTransactions` — **not** `RefreshDatabase`:
+
+```php
+class QuestionsTest extends TestCase
+{
+    use DatabaseTransactions, WithUser;
+}
+```
+
+PHPUnit uses SQLite in-memory (`phpunit.xml`). Clean specific tables in `setUp()` only when the test requires an empty slate (e.g. `DB::table('questions')->delete()`).
+
+## Auth & permissions
+
+- `App\Traits\Tests\WithUser` — `getUser()` creates a user with `$this->permission`
+- Set `protected string $permission = 'view-any-question';` (or relevant ability) per test class
+- Assert `assertForbidden()` / `assertOk()` against named routes: `route('api.v1.questions.list')`
+
+## Structure
+
+- One test class per endpoint group or feature area
+- Method names: `test_{actor}_{condition}_{expected}` (snake_case, readable)
+- Use factories (`Question::factory()`, `User::factory()`) and `actingAs()`
+- Prefer `getJson` / `postJson` for API tests
+
+## What to cover
+
+- Permission gates (with and without ability)
+- Happy path + validation errors (`assertUnprocessable`, `assertJsonValidationErrors`)
+- Domain-specific edge cases (filters, soft deletes, status transitions)
+
+Do not add trivial unit tests that only assert framework behavior unless requested.

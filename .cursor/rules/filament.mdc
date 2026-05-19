@@ -1,0 +1,56 @@
+---
+description: Filament admin — resources, reusable UI, status actions
+globs: app/Filament/**/*.php
+alwaysApply: false
+---
+
+# Filament conventions
+
+## Resources
+
+- One `Resource` per model under `app/Filament/Resources/`
+- Pages in `{Resource}/Pages/` (List, Create, Edit, View as needed)
+- Relation managers in `{Resource}/RelationManagers/`
+- Delegate business logic to `App\Services\api\v1\*` — resources wire UI only
+
+## Table actions → dedicated classes
+
+Do **not** inline complex `Action::make()` logic in resources. Use classes under `app/Filament/Actions/`:
+
+| Kind | Path examples |
+|------|----------------|
+| Table status actions | `Actions/Status/ApproveAction`, `RejectAction`, `ResetAction` |
+| Question-specific | `Actions/Question/ApproveQuestionAction`, `RejectQuestionAction` |
+| Form/modal actions | `Actions/Forms/Status/...` |
+| Bulk delete | `Actions/Delete/DeleteBulkAction`, `ForceDeleteBulkAction` |
+
+Table actions extend `Filament\Tables\Actions\Action`, call services in `->action()`, check policies with `auth()->user()->can()`.
+
+## Reusable columns & filters
+
+Extract repeated table UI into shared classes:
+
+- **Status column**: `App\Filament\Columns\Status\StatusColumn::make()` — badge + `Status::colorByValue()`
+- **Status filter**: `App\Filament\Filters\Status\StatusFilter::make()` — options from `Status::options()`
+- **Soft deletes**: `App\Filament\Filters\Trash\TrashedFilter::make()`
+- **Forms**: `App\Filament\Forms/Status/StatusSelect`, notification helpers in `Forms/Notification/`
+
+Register in resource `table()`:
+
+```php
+->columns([StatusColumn::make(), /* … */])
+->filters([StatusFilter::make(), TrashedFilter::make()])
+```
+
+## Status workflow
+
+Models implementing `App\Interfaces\v1\Status\StatusInterface` use shared status actions (`ApproveAction`, etc.) and `StatusService` for transitions. Hide actions when `!$record->can('changeStatus')` or terminal state (e.g. `isApproved()`).
+
+## Widgets & infolists
+
+- Widgets: `app/Filament/Resources/Widgets/` or `Resources/{Resource}/Widgets/`
+- Custom pages: `app/Filament/Pages/` (e.g. settings, mass notifications)
+
+## Traits
+
+Shared form/table behavior: `app/Traits/Filament/` (e.g. `WithRelatedSelects`).
