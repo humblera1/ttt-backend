@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Actions\Delete\DeleteBulkAction;
 use App\Filament\Actions\Delete\ForceDeleteBulkAction;
+use App\Filament\Columns\User\UserColumn;
 use App\Filament\Filters\Trash\TrashedFilter;
+use App\Filament\Filters\User\UserFilter;
 use App\Filament\Resources\UserNotificationResource\Pages;
 use App\Filament\Resources\UserNotificationResource\RelationManagers;
 use App\Models\UserNotification;
@@ -46,10 +48,7 @@ class UserNotificationResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.username')
-                    ->searchable()
-                    ->icon('heroicon-m-user')
-                    ->iconColor('primary')
+                UserColumn::make()
                     ->wrap(),
                 TextColumn::make('type.name')
                     ->searchable()
@@ -72,12 +71,7 @@ class UserNotificationResource extends Resource
                     ->since(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('user')
-                    ->relationship(
-                        'user',
-                        'username',
-                    )
-                    ->searchable(),
+                UserFilter::make(),
                 Tables\Filters\SelectFilter::make('type')
                     ->relationship(
                         'type',

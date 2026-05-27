@@ -30,17 +30,104 @@ Table actions extend `Filament\Tables\Actions\Action`, call services in `->actio
 
 Extract repeated table UI into shared classes:
 
-- **Status column**: `App\Filament\Columns\Status\StatusColumn::make()` — badge + `Status::colorByValue()`
+- **Status column**: `App\Filament\Columns\Status\StatusColumn::make()` — badge + `Status::colorByValue()` (workflow `StatusInterface`, not soft deletes)
+- **Trashed column**: `App\Filament\Columns\Trash\TrashedColumn::make()` — Active/Trashed badge from `deleted_at` / `trashed()`
+- **User column**: `App\Filament\Columns\User\UserColumn::make()` — username, user icon, full name in description, search via `User::matchingSearchTerm()`
 - **Status filter**: `App\Filament\Filters\Status\StatusFilter::make()` — options from `Status::options()`
-- **Soft deletes**: `App\Filament\Filters\Trash\TrashedFilter::make()`
+- **User filter**: `App\Filament\Filters\User\UserFilter::make()` — relationship `user` / `username`, includes banned and soft-deleted users in options
+- **Date between filter**: `App\Filament\Filters\Date\BetweenFilter::make()` — `from` / `until` date pickers, `whereDate` on a column (default `created_at`)
 - **Forms**: `App\Filament\Forms/Status/StatusSelect`, notification helpers in `Forms/Notification/`
 
 Register in resource `table()`:
 
 ```php
-->columns([StatusColumn::make(), /* … */])
-->filters([StatusFilter::make(), TrashedFilter::make()])
+->columns([StatusColumn::make(), TrashedColumn::make(), UserColumn::make(), /* … */])
+->filters([StatusFilter::make(), TrashedFilter::make(), UserFilter::make(), BetweenFilter::make()])
 ```
+
+## User relation column (mandatory)
+
+For Filament **table** or **relation manager** columns that display a related **User** (`user.username` or `{relation}.username`):
+
+- **MUST** use `App\Filament\Columns\User\UserColumn::make()` (default column: `user.username`, relationship: `user`).
+- **MUST NOT** inline `TextColumn::make('user.username')` with duplicate icon, description, or `whereHas` + `matchingSearchTerm` search logic.
+- For another relationship name, pass the column path — relationship is taken from the segment before `.`: `UserColumn::make('author.username')`.
+- Extra presentation (e.g. `->wrap()`) may be chained on the returned column.
+
+```php
+use App\Filament\Columns\User\UserColumn;
+
+->columns([
+    UserColumn::make(),
+])
+```
+
+Reference: `CommentResource`, `UserNotificationResource`.
+
+## User relation filter (mandatory)
+
+For Filament **table** or **relation manager** filters by related **User** (`user` or `user_id` on the parent model):
+
+- **MUST** use `App\Filament\Filters\User\UserFilter::make()` (default filter name: `user`, relationship: `user`).
+- **MUST NOT** inline `SelectFilter::make('user_id')` / `SelectFilter::make('user')` with duplicate `relationship('user', 'username')`, `NotBannedScope`, and `withTrashed()` logic.
+- Use `UserFilter::make('user_id')` when the filter attribute is the foreign key column name.
+- Extra options (e.g. `->preload()`) may be chained on the returned filter.
+
+```php
+use App\Filament\Filters\User\UserFilter;
+
+->filters([
+    UserFilter::make(),
+    // or UserFilter::make('user_id'),
+])
+```
+
+Reference: `CommentResource`, `UserNotificationResource`.
+
+## Date range filter (mandatory)
+
+For Filament **table** or **relation manager** filters that constrain a **date/datetime column** by an inclusive **from / until** range:
+
+- **MUST** use `App\Filament\Filters\Date\BetweenFilter::make()` (default filter name and column: `created_at`).
+- **MUST NOT** inline `Filter::make('created_at')` with duplicate `DatePicker` `from`/`until` fields and `whereDate` query logic.
+- Use `BetweenFilter::make('updated_at')` for other columns; optional third argument for a custom label, or chain `->label()` on the returned filter.
+- Pass a second argument when the filter name differs from the queried column: `BetweenFilter::make('period', 'created_at')`.
+
+```php
+use App\Filament\Filters\Date\BetweenFilter;
+
+->filters([
+    BetweenFilter::make(),
+])
+```
+
+Reference: `CommentResource`.
+
+## Soft deletes (mandatory)
+
+For any Filament **table** or **relation manager** on a model that uses Laravel `SoftDeletes` (`deleted_at`):
+
+- **MUST** add `App\Filament\Filters\Trash\TrashedFilter::make()` to `->filters([...])`.
+- **MUST** add `App\Filament\Columns\Trash\TrashedColumn::make()` when the table shows an Active/Trashed status badge column.
+- **MUST** use `->withTrashed()` in the resource/relation manager `getEloquentQuery()` or `modifyQueryUsing` when the list should show trashed rows (same pattern as `QuestionResource`).
+- **MUST NOT** implement a custom `TernaryFilter` (or inline `deleted_at` filter) for trash/active/all — even if planning docs suggest custom labels. Reuse `TrashedFilter`; extend that class in `app/Filament/Filters/Trash/` only if labels or query logic must change project-wide.
+- **MUST NOT** inline `TextColumn::make('deleted_at')` with badge, `getStateUsing`, and color for Active/Trashed — use `TrashedColumn::make()`.
+
+```php
+use App\Filament\Columns\Trash\TrashedColumn;
+use App\Filament\Filters\Trash\TrashedFilter;
+
+// in table():
+->columns([
+    TrashedColumn::make(),
+])
+->filters([
+    TrashedFilter::make(),
+    // other filters…
+])
+```
+
+Reference: `QuestionResource`, `TagResource`, `CompanyResource`, `CommentResource`.
 
 ## Status workflow
 

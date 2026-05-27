@@ -11,6 +11,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -80,6 +81,21 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function notifications(): HasMany
     {
         return $this->hasMany(UserNotification::class);
+    }
+
+    /**
+     * Filter by username, email, or full name (first name + last name).
+     */
+    public function scopeMatchingSearchTerm(Builder $query, string $search): Builder
+    {
+        $like = '%' . $search . '%';
+
+        return $query->where(function (Builder $query) use ($like): void {
+            $query
+                ->where('username', 'like', $like)
+                ->orWhere('email', 'like', $like)
+                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", [$like]);
+        });
     }
 
     protected function fullName(): Attribute
