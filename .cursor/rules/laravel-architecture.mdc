@@ -29,6 +29,22 @@ No business logic, no direct `Model::query()` for writes in controllers.
 - Build DTO in `getDTO()` from `$this->validated()`
 - DTOs extend `App\DTOs\BaseDTO`, live in `app/DTOs/v1/{Domain}/`, use `readonly` promoted properties
 
+## Service method parameters (mandatory)
+
+- If a service (or repository) method needs **more than two** logical arguments, **MUST** introduce a dedicated DTO in `app/DTOs/v1/{Domain}/` instead of a long parameter list.
+- The DTO carries models, enums, and optional fields; the method signature is `method(SomeActionDTO $dto)`.
+- Filament actions, controllers, and form requests construct the DTO and pass it to the service.
+
+```php
+// Good
+public function deleteWithReason(CommentDeleteWithReasonDTO $dto): void
+
+// Avoid
+public function deleteWithReason(Comment $comment, User $moderator, ReasonForDeletion $reason, ?string $text): void
+```
+
+Reference: `CommentDeleteWithReasonDTO`, `CommentService::deleteWithReason()`.
+
 ## Services (`app/Services/api/v1/`)
 
 - Orchestrate use cases; accept DTOs/models, not raw `Request`

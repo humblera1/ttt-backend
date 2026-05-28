@@ -46,7 +46,7 @@ class ApproveAction extends Action
                 return $service->approve($record);
             });
 
-            if (! $result) {
+            if (!$result) {
                 $this->failure();
 
                 return;

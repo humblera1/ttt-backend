@@ -13,6 +13,53 @@ alwaysApply: false
 - Relation managers in `{Resource}/RelationManagers/`
 - Delegate business logic to `App\Services\api\v1\*` — resources wire UI only
 
+## Resource forms (mandatory)
+
+- **`Resource::form()`** — keep empty (`->schema([/* … */])` with no fields). Shared table/filters only.
+- **Create / Edit / View page classes** — define the actual `form()` or `infolist()` schema on the page (`EditRecord`, `CreateRecord`, `ViewRecord`, custom pages).
+- **MUST NOT** put edit/create form fields in the Resource class when a dedicated page exists.
+
+Reference: `CommentResource` (empty `form()`), `CommentResource/Pages/EditComment` (full edit schema).
+
+## Page form readability (mandatory)
+
+On Filament **page** classes (`EditRecord`, `CreateRecord`, custom pages), keep `form()` / `infolist()` **declarative**: field list and wiring only.
+
+- **MUST** move non-trivial `->content()`, `->formatStateUsing()`, `->disabled()`, and similar closures into **protected methods** on the same page class (e.g. `getQuestionLinkPlaceholder()`, `getParentCommentLinkPlaceholder()`).
+- **SHOULD** use one-line delegates in the schema: `->content(fn (?Model $record) => $this->getQuestionLinkPlaceholder($record))`.
+- **MUST NOT** embed multi-step logic (conditionals, `sprintf`, URL building) directly inside `form()->schema([...])` when it hurts readability.
+- Shared logic used across multiple pages belongs in traits (`app/Traits/Filament/`) or dedicated form helpers — not copy-pasted closures.
+
+```php
+Placeholder::make('question.title')
+    ->content(fn (?Comment $record): HtmlString => $this->getQuestionLinkPlaceholder($record)),
+
+protected function getQuestionLinkPlaceholder(?Comment $record): HtmlString { /* … */ }
+```
+
+Reference: `CommentResource/Pages/EditComment`.
+
+## Filament links (mandatory)
+
+When rendering **clickable links** in form placeholders or custom page content:
+
+- **MUST** use `App\Traits\Filament\Forms\Utils\HasLinkUtils` (`createLink($url, $label)`).
+- **MUST NOT** duplicate inline `<a href="..." class="text-primary-600 ...">` markup.
+- Prefer `SomeResource::getUrl('edit', ['record' => $id])` for URLs; pass the result to `createLink()`.
+
+```php
+use App\Traits\Filament\Forms\Utils\HasLinkUtils;
+
+class EditComment extends EditRecord
+{
+    use HasLinkUtils;
+
+    // Placeholder::make(...)->content(fn () => $this->createLink($url, $label))
+}
+```
+
+Reference: `EditComment`, `EditUserNotification`.
+
 ## Table actions → dedicated classes
 
 Do **not** inline complex `Action::make()` logic in resources. Use classes under `app/Filament/Actions/`:
@@ -25,6 +72,49 @@ Do **not** inline complex `Action::make()` logic in resources. Use classes under
 | Bulk delete | `Actions/Delete/DeleteBulkAction`, `ForceDeleteBulkAction` |
 
 Table actions extend `Filament\Tables\Actions\Action`, call services in `->action()`, check policies with `auth()->user()->can()`.
+
+## Force delete (mandatory)
+
+For **permanent delete** on edit/view pages (soft-deleted records):
+
+- **MUST** use `App\Filament\Actions\Delete\ForceDeleteAction::make()` (adds `can('forceDelete', $record)` on top of Filament defaults).
+- **MUST NOT** add domain-specific wrappers such as `ForceDeleteCommentAction` unless there is a strong, documented reason (e.g. shared across many pages and non-trivial UI).
+- When persistence must go through a service (not `$record->forceDelete()` in UI), **chain** `->action(...)` and optional `->successRedirectUrl(...)` on the shared action in `getHeaderActions()` — do not duplicate a whole Action class for that alone.
+
+```php
+use App\Filament\Actions\Delete\ForceDeleteAction;
+
+ForceDeleteAction::make()
+    ->action(function (Comment $record): void {
+        app(CommentService::class)->forceDelete($record);
+    })
+    ->successRedirectUrl(fn (): string => CommentResource::getUrl('index')),
+```
+
+Reference: `EditComment`, `EditQuestion`, `EditUserNotification`.
+
+## Restore (mandatory)
+
+For **restore** on edit/view pages (soft-deleted records):
+
+- **MUST** use `Filament\Actions\RestoreAction::make()` (project has no `App\Filament\Actions\Delete\RestoreAction` wrapper).
+- **MUST NOT** add domain-specific wrappers such as `RestoreCommentAction` unless there is a strong, documented reason.
+- Filament’s default calls `$record->restore()` — only clears `deleted_at`. For models with extra deletion metadata (`deleted_reason_code`, `deleted_by_id`, etc.), **chain** `->action(...)` to the domain service (e.g. `CommentService::restore()`).
+- Add `->visible(fn ($record) => $record->trashed() && auth()->user()->can('restore', $record))` when policy checks are required (Filament only checks `trashed()` by default).
+
+```php
+use Filament\Actions\RestoreAction;
+
+RestoreAction::make(),
+```
+
+Reference: `EditQuestion`, `EditUserNotification` (simple models may use `RestoreAction::make()` without overriding `action`).
+
+## Avoid duplicate Filament components (mandatory)
+
+- **MUST NOT** create new Action/Column/Filter classes when an existing shared component under `app/Filament/Actions/`, `Columns/`, or `Filters/` already covers the case with a small `->action()` / `->label()` override on the page.
+- **MUST** add a dedicated class only when logic is complex, reused in multiple resources, or cannot be expressed as a short chain on the page (see `Actions/Comment/DeleteCommentWithReasonAction` for moderator delete with modal form).
+- Restore / force delete service delegation on a single page is **not** sufficient reason for a new Action class.
 
 ## Reusable columns & filters
 
@@ -140,4 +230,4 @@ Models implementing `App\Interfaces\v1\Status\StatusInterface` use shared status
 
 ## Traits
 
-Shared form/table behavior: `app/Traits/Filament/` (e.g. `WithRelatedSelects`).
+Shared form/table behavior: `app/Traits/Filament/` (e.g. `WithRelatedSelects`, `Forms/Utils/HasLinkUtils` for links).

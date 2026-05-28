@@ -2,6 +2,7 @@
 
 namespace App\Services\api\v1\Comment;
 
+use App\DTOs\v1\Comment\CommentDeleteWithReasonDTO;
 use App\DTOs\v1\Comment\CommentStoreDTO;
 use App\Enums\Comment\ReasonForDeletion;
 use App\Events\v1\Comment\CommentCreated;
@@ -84,6 +85,7 @@ class CommentService
     {
         try {
             $comment->deleted_reason_code = ReasonForDeletion::UserRemoved;
+            $comment->deleted_reason_comment = null;
             $comment->deleted_at = now();
 
             $comment->deletedBy()->associate($user);
@@ -97,6 +99,30 @@ class CommentService
     }
 
     /**
+     * Soft deletes the given comment on behalf of a moderator and records the deletion reason.
+     *
+     * @throws BusinessLogicException
+     */
+    public function deleteWithReason(CommentDeleteWithReasonDTO $dto): void
+    {
+        try {
+            $comment = $dto->comment;
+
+            $comment->deleted_reason_code = $dto->reason;
+            $comment->deleted_reason_comment = $dto->reasonComment;
+            $comment->deleted_at = now();
+
+            $comment->deletedBy()->associate($dto->moderator);
+
+            $this->repository->save($comment);
+        } catch (RepositoryException $e) {
+            Log::error('Failed to delete comment with reason', ['exception' => $e]);
+
+            throw new BusinessLogicException($e->getMessage());
+        }
+    }
+
+    /**
      * Restores a previously soft-deleted comment and clears its deletion metadata.
      */
     public function restore(Comment $comment): Comment
@@ -104,6 +130,7 @@ class CommentService
         try {
             $comment->deleted_at = null;
             $comment->deleted_reason_code = null;
+            $comment->deleted_reason_comment = null;
             $comment->deletedBy()->dissociate();
 
             $this->repository->save($comment);
@@ -114,5 +141,21 @@ class CommentService
         }
 
         return $comment;
+    }
+
+    /**
+     * Permanently deletes a soft-deleted comment.
+     *
+     * @throws BusinessLogicException
+     */
+    public function forceDelete(Comment $comment): void
+    {
+        try {
+            $this->repository->bulkForceDelete([$comment->id]);
+        } catch (RepositoryException $e) {
+            Log::error('Failed to force delete comment', ['exception' => $e]);
+
+            throw new BusinessLogicException($e->getMessage());
+        }
     }
 }
