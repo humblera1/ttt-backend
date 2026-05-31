@@ -5,13 +5,13 @@ namespace App\Filament\Resources;
 use App\Enums\Grade;
 use App\Filament\Actions\Delete\DeleteBulkAction;
 use App\Filament\Actions\Delete\ForceDeleteBulkAction;
-use App\Filament\Resources\QuestionResource\RelationManagers\StatisticsRelationManager;
-use App\Services\api\v1\QuestionService;
-use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction, ResetQuestionAction};
+use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetQuestionAction};
 use App\Filament\Columns\Status\StatusColumn;
 use App\Filament\Filters\Status\StatusFilter;
 use App\Filament\Filters\Trash\TrashedFilter;
 use App\Filament\Resources\QuestionResource\Pages;
+use App\Filament\Resources\QuestionResource\RelationManagers\CommentsRelationManager;
+use App\Filament\Resources\QuestionResource\RelationManagers\StatisticsRelationManager;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,9 +19,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\{DeleteAction, EditAction, RestoreAction};
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class QuestionResource extends Resource
 {
@@ -132,6 +130,7 @@ class QuestionResource extends Resource
     public static function getRelations(): array
     {
         return [
+            CommentsRelationManager::class,
             StatisticsRelationManager::class,
         ];
     }

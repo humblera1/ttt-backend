@@ -4,7 +4,6 @@ namespace App\Filament\Actions\Comment;
 
 use App\DTOs\v1\Comment\CommentDeleteWithReasonDTO;
 use App\Enums\Comment\ReasonForDeletion;
-use App\Filament\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\User;
 use App\Services\api\v1\Comment\CommentService;
