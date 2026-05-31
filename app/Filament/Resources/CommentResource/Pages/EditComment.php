@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\CommentResource\Pages;
 
-use App\Filament\Actions\Page\Delete\Comment\DeleteCommentWithReasonAction;
-use App\Filament\Actions\Page\Restore\Comment\RestoreCommentAction;
+use App\Filament\Actions\Page\Delete\Comment\DeleteWithReasonAction;
+use App\Filament\Actions\Page\Restore\Comment\RestoreAction;
 use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
 use App\Filament\Resources\CommentResource;
 use App\Filament\Resources\QuestionResource;
@@ -62,8 +62,8 @@ class EditComment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteCommentWithReasonAction::make(),
-            RestoreCommentAction::make(),
+            DeleteWithReasonAction::make(),
+            RestoreAction::make(),
             ForceDeleteAction::make(),
         ];
     }

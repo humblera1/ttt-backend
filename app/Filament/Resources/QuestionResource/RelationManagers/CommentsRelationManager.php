@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\QuestionResource\RelationManagers;
 
-use App\Filament\Actions\Table\Moderation\Comment\ToggleCommentTrashedAction;
+use App\Filament\Actions\Table\Moderation\Comment\ToggleTrashedAction;
 use App\Filament\Columns\Trash\TrashedColumn;
 use App\Filament\Columns\User\UserColumn;
 use App\Filament\Resources\CommentResource;
@@ -46,7 +46,7 @@ class CommentsRelationManager extends RelationManager
             ])
             ->headerActions([])
             ->actions([
-                ToggleCommentTrashedAction::make(),
+                ToggleTrashedAction::make(),
                 EditAction::make()
                     ->url(fn (Comment $record): string => CommentResource::getUrl('edit', ['record' => $record])),
             ]);

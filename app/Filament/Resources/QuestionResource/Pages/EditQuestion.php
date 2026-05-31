@@ -3,10 +3,10 @@
 namespace App\Filament\Resources\QuestionResource\Pages;
 
 use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
-use App\Filament\Actions\Page\Status\Question\{ApproveQuestionAction,
-    RejectDuplicateQuestionAction,
-    RejectQuestionAction,
-    ResetQuestionAction};
+use App\Filament\Actions\Page\Status\Question\{ApproveAction,
+    RejectDuplicateAction,
+    RejectAction,
+    ResetAction};
 use App\Filament\Resources\QuestionResource;
 use App\Filament\Resources\Widgets\Status\StatusBadge;
 use App\Traits\Filament\Forms\Question\WithRelatedSelects;
@@ -79,10 +79,10 @@ class EditQuestion extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ApproveQuestionAction::make(),
-            RejectQuestionAction::make(),
-            RejectDuplicateQuestionAction::make(),
-            ResetQuestionAction::make(),
+            ApproveAction::make(),
+            RejectAction::make(),
+            RejectDuplicateAction::make(),
+            ResetAction::make(),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),

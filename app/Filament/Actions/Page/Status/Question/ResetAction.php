@@ -10,7 +10,7 @@ use Filament\Actions\Action;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Illuminate\Auth\Access\AuthorizationException;
 
-class ResetQuestionAction extends Action
+class ResetAction extends Action
 {
     use CanCustomizeProcess;
 

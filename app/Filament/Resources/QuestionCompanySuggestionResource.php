@@ -3,10 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Suggestion\Status;
-use App\Filament\Actions\Table\Status\Suggestion\ApproveCompanySuggestionAction;
+use App\Filament\Actions\Table\Status\Suggestion\ApproveCompanyAction;
 use App\Filament\Actions\Table\Status\Shared\RejectAction;
 use App\Filament\Actions\Table\Status\Shared\ResetAction;
-use App\Filament\Actions\Table\Status\Suggestion\ReturnCompanyForReviewAction;
+use App\Filament\Actions\Table\Status\Suggestion\ReturnCompanyAction;
 use App\Filament\Resources\QuestionCompanySuggestionResource\Pages;
 use App\Filament\Resources\QuestionCompanySuggestionResource\RelationManagers;
 use App\Filament\Resources\QuestionResource\RelationManagers\CompanySuggestionRelationManager;
@@ -71,8 +71,8 @@ class QuestionCompanySuggestionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    ApproveCompanySuggestionAction::make(),
-                    ReturnCompanyForReviewAction::make(),
+                    ApproveCompanyAction::make(),
+                    ReturnCompanyAction::make(),
                     ResetAction::make(),
                     RejectAction::make(),
                 ]),

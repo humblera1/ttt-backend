@@ -14,7 +14,7 @@ use Filament\Tables\Actions\Action;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 
-class ToggleCommentTrashedAction extends Action
+class ToggleTrashedAction extends Action
 {
     use CanCustomizeProcess;
 

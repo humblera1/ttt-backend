@@ -9,7 +9,7 @@ use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Tables\Actions\Action;
 use Illuminate\Auth\Access\AuthorizationException;
 
-class ReturnPositionForReviewAction extends Action
+class ReturnPositionAction extends Action
 {
     use CanCustomizeProcess;
 

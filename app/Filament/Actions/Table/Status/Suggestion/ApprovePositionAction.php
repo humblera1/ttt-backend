@@ -2,12 +2,13 @@
 
 namespace App\Filament\Actions\Table\Status\Suggestion;
 
+use App\Filament\Actions\Table\Status\Shared\ApproveAction;
 use App\Models\QuestionPositionSuggestion;
 use App\Services\api\v1\Suggestion\QuestionPositionSuggestionService;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Illuminate\Auth\Access\AuthorizationException;
 
-class ApprovePositionSuggestionAction extends ApproveAction
+class ApprovePositionAction extends ApproveAction
 {
     use CanCustomizeProcess;
 

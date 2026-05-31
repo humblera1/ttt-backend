@@ -13,7 +13,7 @@ use Filament\Forms\Components\Textarea;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 
-class DeleteCommentWithReasonAction extends DeleteAction
+class DeleteWithReasonAction extends DeleteAction
 {
     public static function getDefaultName(): ?string
     {

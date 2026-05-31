@@ -10,7 +10,7 @@ use Filament\Actions\Concerns\CanCustomizeProcess;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 
-class ApproveQuestionAction extends Action
+class ApproveAction extends Action
 {
     use CanCustomizeProcess;
 

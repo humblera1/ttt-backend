@@ -3,10 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Suggestion\Status;
-use App\Filament\Actions\Table\Status\Suggestion\ApprovePositionSuggestionAction;
+use App\Filament\Actions\Table\Status\Suggestion\ApprovePositionAction;
 use App\Filament\Actions\Table\Status\Shared\RejectAction;
 use App\Filament\Actions\Table\Status\Shared\ResetAction;
-use App\Filament\Actions\Table\Status\Suggestion\ReturnPositionForReviewAction;
+use App\Filament\Actions\Table\Status\Suggestion\ReturnPositionAction;
 use App\Filament\Resources\QuestionPositionSuggestionResource\Pages;
 use App\Filament\Resources\QuestionPositionSuggestionResource\RelationManagers;
 use App\Filament\Resources\QuestionResource\RelationManagers\PositionSuggestionRelationManager;
@@ -71,8 +71,8 @@ class QuestionPositionSuggestionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    ApprovePositionSuggestionAction::make(),
-                    ReturnPositionForReviewAction::make(),
+                    ApprovePositionAction::make(),
+                    ReturnPositionAction::make(),
                     ResetAction::make(),
                     RejectAction::make(),
                 ]),

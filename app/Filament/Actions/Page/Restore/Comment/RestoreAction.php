@@ -5,11 +5,11 @@ namespace App\Filament\Actions\Page\Restore\Comment;
 use App\Filament\Resources\CommentResource;
 use App\Models\Comment;
 use App\Services\api\v1\Comment\CommentService;
-use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreAction as BaseRestoreAction;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 
-class RestoreCommentAction extends RestoreAction
+class RestoreAction extends BaseRestoreAction
 {
     protected function setUp(): void
     {

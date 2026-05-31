@@ -2,7 +2,6 @@
 
 namespace App\Filament\Actions\Page\Status\Question;
 
-use App\Enums\QuestionRejectionReason;
 use App\Filament\Resources\QuestionResource\Pages\EditQuestion;
 use App\Interfaces\v1\Status\StatusInterface;
 use App\Models\Question;
@@ -13,30 +12,30 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Auth\Access\AuthorizationException;
 
-class RejectQuestionAction extends Action
+class RejectDuplicateAction extends Action
 {
     use CanCustomizeProcess;
 
     public static function getDefaultName(): ?string
     {
-        return 'reject';
+        return 'reject-duplicate';
     }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->label(__('Reject'));
+        $this->label(__('Reject as Duplicate'));
 
         $this->defaultColor('danger');
 
-        $this->icon('heroicon-m-x-mark');
+        $this->icon('heroicon-m-document-duplicate');
 
         $this->requiresConfirmation();
 
-        $this->modalIcon('heroicon-m-x-mark');
+        $this->modalIcon('heroicon-m-document-duplicate');
 
-        $this->modalHeading('Reject Question');
+        $this->modalHeading('Reject Question as Duplicate');
 
         $this->form($this->getFormForModal());
 
@@ -48,9 +47,9 @@ class RejectQuestionAction extends Action
 
                 $service = app(QuestionService::class);
 
-                return $service->rejectQuestion(
+                return $service->rejectQuestionAsDuplicate(
                     $record,
-                    $data['rejection_reason'],
+                    $data['original_question_id'],
                     $data['rejection_comment'],
                 );
             });
@@ -68,19 +67,42 @@ class RejectQuestionAction extends Action
             return $record->isPending() && auth()->user()->can('changeStatus', $record);
         });
 
-        $this->after(fn (EditQuestion $livewire) => $livewire->dispatch('statusUpdated'));
+        $this->after(function (EditQuestion $livewire) {
+            $livewire->dispatch('statusUpdated');
+
+            $livewire->dispatch('statisticsUpdated');
+        });
     }
 
     private function getFormForModal(): array
     {
         return [
-            Select::make('rejection_reason')
-                ->label(__('Reason'))
-                ->options(QuestionRejectionReason::options()),
+            Select::make('original_question_id')
+                ->label(__('Original Question'))
+                ->required()
+                ->searchable()
+                ->preload()
+                ->options(fn (): array => $this->getOptionsForSelect())
+                ->getSearchResultsUsing(fn (string $search): array => $this->getOptionsForSelect($search)),
             Textarea::make('rejection_comment')
                 ->label(__('Comment'))
                 ->rows(3)
                 ->placeholder(__('Optional comment')),
         ];
+    }
+
+    private function getOptionsForSelect(?string $search = null): array
+    {
+        $query = Question::query()
+            ->where('id', '!=', $this->record->id)
+            ->orderBy('title')
+            ->limit(10);
+
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        return $query->pluck('title', 'id')
+            ->toArray();
     }
 }
