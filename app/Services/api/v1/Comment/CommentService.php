@@ -142,20 +142,4 @@ class CommentService
 
         return $comment;
     }
-
-    /**
-     * Permanently deletes a soft-deleted comment.
-     *
-     * @throws BusinessLogicException
-     */
-    public function forceDelete(Comment $comment): void
-    {
-        try {
-            $this->repository->bulkForceDelete([$comment->id]);
-        } catch (RepositoryException $e) {
-            Log::error('Failed to force delete comment', ['exception' => $e]);
-
-            throw new BusinessLogicException($e->getMessage());
-        }
-    }
 }
