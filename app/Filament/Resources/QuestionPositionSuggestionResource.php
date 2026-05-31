@@ -3,10 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Suggestion\Status;
-use App\Filament\Actions\Status\ApprovePositionSuggestionAction;
-use App\Filament\Actions\Status\RejectAction;
-use App\Filament\Actions\Status\ResetAction;
-use App\Filament\Actions\Status\ReturnPositionForReviewAction;
+use App\Filament\Actions\Table\Status\Suggestion\ApprovePositionSuggestionAction;
+use App\Filament\Actions\Table\Status\Shared\RejectAction;
+use App\Filament\Actions\Table\Status\Shared\ResetAction;
+use App\Filament\Actions\Table\Status\Suggestion\ReturnPositionForReviewAction;
 use App\Filament\Resources\QuestionPositionSuggestionResource\Pages;
 use App\Filament\Resources\QuestionPositionSuggestionResource\RelationManagers;
 use App\Filament\Resources\QuestionResource\RelationManagers\PositionSuggestionRelationManager;

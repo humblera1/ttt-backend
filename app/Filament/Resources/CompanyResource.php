@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Actions\Delete\DeleteBulkAction;
-use App\Filament\Actions\Delete\ForceDeleteBulkAction;
-use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction};
+use App\Filament\Actions\Table\Delete\Shared\DeleteBulkAction;
+use App\Filament\Actions\Table\Delete\Shared\ForceDeleteBulkAction;
+use App\Filament\Actions\Table\Status\Shared\{ApproveAction, RejectAction, ResetAction};
 use App\Filament\Columns\Status\StatusColumn;
 use App\Filament\Filters\Status\StatusFilter;
 use App\Filament\Filters\Trash\TrashedFilter;

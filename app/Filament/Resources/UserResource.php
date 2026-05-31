@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Role;
-use App\Filament\Actions\Ban\BanBulkAction;
+use App\Filament\Actions\Table\Ban\Shared\BanBulkAction;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\Scopes\User\NotBannedScope;
 use App\Models\User;

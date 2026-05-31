@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\UserNotificationResource\Pages;
 
-use App\Filament\Actions\Delete\ForceDeleteAction;
+use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
 use App\Filament\Forms\Notification\ListData;
 use App\Filament\Resources\UserNotificationResource;
 use App\Models\UserNotification;

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\CommentResource\Pages;
 
-use App\Filament\Actions\Comment\DeleteCommentWithReasonAction;
-use App\Filament\Actions\Comment\RestoreCommentAction;
-use App\Filament\Actions\Delete\ForceDeleteAction;
+use App\Filament\Actions\Page\Delete\Comment\DeleteCommentWithReasonAction;
+use App\Filament\Actions\Page\Restore\Comment\RestoreCommentAction;
+use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
 use App\Filament\Resources\CommentResource;
 use App\Filament\Resources\QuestionResource;
 use App\Models\Comment;

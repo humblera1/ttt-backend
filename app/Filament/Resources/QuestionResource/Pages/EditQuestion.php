@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\QuestionResource\Pages;
 
-use App\Filament\Actions\Delete\ForceDeleteAction;
-use App\Filament\Actions\Question\{ApproveQuestionAction,
+use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
+use App\Filament\Actions\Page\Status\Question\{ApproveQuestionAction,
     RejectDuplicateQuestionAction,
     RejectQuestionAction,
     ResetQuestionAction};

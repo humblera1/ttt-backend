@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Actions\Delete\DeleteBulkAction;
-use App\Filament\Actions\Delete\ForceDeleteBulkAction;
+use App\Filament\Actions\Table\Delete\Shared\DeleteBulkAction;
+use App\Filament\Actions\Table\Delete\Shared\ForceDeleteBulkAction;
 use App\Filament\Columns\User\UserColumn;
 use App\Filament\Filters\Trash\TrashedFilter;
 use App\Filament\Filters\User\UserFilter;

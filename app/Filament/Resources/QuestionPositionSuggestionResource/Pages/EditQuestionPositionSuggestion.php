@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\QuestionPositionSuggestionResource\Pages;
 
-use App\Filament\Actions\Forms\Status\PositionSuggestion\ApproveAction;
-use App\Filament\Actions\Forms\Status\PositionSuggestion\ReturnToReviewAction;
-use App\Filament\Actions\Forms\Status\ResetAction;
-use App\Filament\Actions\Forms\Status\Suggestion\RejectAction;
+use App\Filament\Actions\Form\Status\Suggestion\PositionApproveAction;
+use App\Filament\Actions\Form\Status\Suggestion\PositionReturnToReviewAction;
+use App\Filament\Actions\Form\Status\Shared\ResetAction;
+use App\Filament\Actions\Form\Status\Suggestion\RejectAction;
 use App\Filament\Resources\QuestionPositionSuggestionResource;
 use App\Filament\Resources\Widgets\Status\StatusWithReviewBadge;
 use App\Models\QuestionPositionSuggestion;

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\NotificationTypeResource\Pages;
 
-use App\Filament\Actions\Delete\ForceDeleteAction;
+use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
 use App\Filament\Forms\Notification\ListPlaceholders;
 use App\Filament\Resources\NotificationTypeResource;
 use App\Filament\Resources\Widgets\Notification\KeyBadge;

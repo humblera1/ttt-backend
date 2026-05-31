@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\CompanyResource\Pages;
 
-use App\Filament\Actions\Delete\ForceDeleteAction;
+use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
 use App\Filament\Forms\Status\StatusSelect;
 use App\Filament\Resources\CompanyResource;
 use Filament\Actions\DeleteAction;

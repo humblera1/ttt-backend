@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\QuestionCompanySuggestionResource\Pages;
 
-use App\Filament\Actions\Forms\Status\CompanySuggestion\ApproveAction;
-use App\Filament\Actions\Forms\Status\CompanySuggestion\ReturnToReviewAction;
-use App\Filament\Actions\Forms\Status\ResetAction;
-use App\Filament\Actions\Forms\Status\Suggestion\RejectAction;
+use App\Filament\Actions\Form\Status\Suggestion\CompanyApproveAction;
+use App\Filament\Actions\Form\Status\Suggestion\CompanyReturnToReviewAction;
+use App\Filament\Actions\Form\Status\Shared\ResetAction;
+use App\Filament\Actions\Form\Status\Suggestion\RejectAction;
 use App\Filament\Resources\QuestionCompanySuggestionResource;
 use App\Filament\Resources\Widgets\Status\StatusWithReviewBadge;
 use App\Models\QuestionCompanySuggestion;

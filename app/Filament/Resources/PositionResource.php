@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Status;
-use App\Filament\Actions\Status\{ApproveAction, RejectAction, ResetAction};
+use App\Filament\Actions\Table\Status\Shared\{ApproveAction, RejectAction, ResetAction};
 use App\Filament\Filters\Status\StatusFilter;
 use App\Filament\Filters\Trash\TrashedFilter;
 use App\Filament\Resources\PositionResource\Pages;
