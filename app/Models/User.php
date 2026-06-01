@@ -83,6 +83,11 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(UserNotification::class);
     }
 
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
     /**
      * Filter by username, email, or full name (first name + last name).
      */
