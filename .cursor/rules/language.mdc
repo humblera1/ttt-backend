@@ -24,6 +24,22 @@ Write in **English**:
 public function createNotMet(int $userId, int $questionId): void
 ```
 
+## PHP — negation operator spacing
+
+Write `!` directly before the operand: `!$user`, `!$condition`. Do **not** insert a space after `!`.
+
+```php
+// Prefer
+if (!$user instanceof User || !$question instanceof Question) {
+    return false;
+}
+
+// Avoid
+if (! $user instanceof User || ! $question instanceof Question) {
+    return false;
+}
+```
+
 ## User-facing strings
 
 - API validation messages and Filament labels may use `__()` for i18n

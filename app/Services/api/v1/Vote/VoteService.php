@@ -16,14 +16,12 @@ class VoteService
     ) {}
 
     /**
-     * Toggles the user's vote on a votable entity (like / dislike / remove / switch).
+     * Sets the user's vote to like (1) or dislike (-1). Creates or switches value.
+     * If the vote already has the requested value, returns 0 (no-op).
      *
-     * Dispatches {@see VoteChanged} after the DB transaction commits so listeners
-     * only run on persisted vote rows.
-     *
-     * @return int Delta applied to likes_count (+1, -1, -2, etc.).
+     * @return int Delta applied to likes_count.
      */
-    public function toggle(User $user, ModelVotesInterface $votable, int $value): int
+    public function set(User $user, ModelVotesInterface $votable, int $value): int
     {
         $delta = DB::transaction(function () use ($user, $votable, $value) {
             $existing = $this->repository->findByUserAndVotable($user, $votable, lock: true);
@@ -33,13 +31,35 @@ class VoteService
             }
 
             if ($existing->value === $value) {
-                return $this->removeVote($existing);
+                return 0;
             }
 
             return $this->switchVote($existing, $value);
         });
 
-        event(new VoteChanged($votable, $delta));
+        $this->dispatchVoteChanged($votable, $delta);
+
+        return $delta;
+    }
+
+    /**
+     * Removes the user's vote. Idempotent when no vote exists (delta 0).
+     *
+     * @return int Delta applied to likes_count.
+     */
+    public function clear(User $user, ModelVotesInterface $votable): int
+    {
+        $delta = DB::transaction(function () use ($user, $votable) {
+            $existing = $this->repository->findByUserAndVotable($user, $votable, lock: true);
+
+            if ($existing === null) {
+                return 0;
+            }
+
+            return $this->removeVote($existing);
+        });
+
+        $this->dispatchVoteChanged($votable, $delta);
 
         return $delta;
     }
@@ -67,5 +87,14 @@ class VoteService
         $this->repository->updateValue($vote, $value);
 
         return $delta;
+    }
+
+    private function dispatchVoteChanged(ModelVotesInterface $votable, int $delta): void
+    {
+        if ($delta === 0) {
+            return;
+        }
+
+        event(new VoteChanged($votable, $delta));
     }
 }

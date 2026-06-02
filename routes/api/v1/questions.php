@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\v1\QuestionController;
 use App\Http\Controllers\v1\CommentController;
+use App\Http\Controllers\v1\Question\QuestionVoteController;
+use App\Http\Controllers\v1\QuestionController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(QuestionController::class)
@@ -21,5 +22,10 @@ Route::controller(QuestionController::class)
 
         Route::post('/{question}/comments', [CommentController::class, 'store'])
             ->name('comments.store')
+            ->middleware('auth:sanctum');
+
+        // votes
+        Route::put('/{question}/vote', [QuestionVoteController::class, 'update'])
+            ->name('vote.update')
             ->middleware('auth:sanctum');
     });

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-class VoteServiceToggleTest extends TestCase
+class VoteServiceSetClearTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -29,12 +29,12 @@ class VoteServiceToggleTest extends TestCase
         $this->service = app(VoteService::class);
     }
 
-    public function test_toggle_creates_vote_and_increments_likes_count(): void
+    public function test_set_creates_vote_and_increments_likes_count(): void
     {
         $user = User::factory()->create();
         $question = Question::factory()->create(['likes_count' => 0]);
 
-        $delta = $this->service->toggle($user, $question, 1);
+        $delta = $this->service->set($user, $question, 1);
 
         $this->assertSame(1, $delta);
 
@@ -48,13 +48,32 @@ class VoteServiceToggleTest extends TestCase
         $this->assertSame(1, $question->fresh()->likes_count);
     }
 
-    public function test_toggle_same_value_removes_vote_and_decrements_likes_count(): void
+    public function test_set_same_value_is_no_op(): void
     {
         $user = User::factory()->create();
         $question = Question::factory()->create(['likes_count' => 0]);
 
-        $this->service->toggle($user, $question, 1);
-        $delta = $this->service->toggle($user, $question, 1);
+        $this->service->set($user, $question, 1);
+        $delta = $this->service->set($user, $question, 1);
+
+        $this->assertSame(0, $delta);
+
+        $this->assertDatabaseHas('votes', [
+            'user_id' => $user->id,
+            'votable_id' => $question->id,
+            'value' => 1,
+        ]);
+
+        $this->assertSame(1, $question->fresh()->likes_count);
+    }
+
+    public function test_clear_removes_vote_and_decrements_likes_count(): void
+    {
+        $user = User::factory()->create();
+        $question = Question::factory()->create(['likes_count' => 0]);
+
+        $this->service->set($user, $question, 1);
+        $delta = $this->service->clear($user, $question);
 
         $this->assertSame(-1, $delta);
 
@@ -66,13 +85,24 @@ class VoteServiceToggleTest extends TestCase
         $this->assertSame(0, $question->fresh()->likes_count);
     }
 
-    public function test_toggle_changes_like_to_dislike_updates_delta(): void
+    public function test_clear_is_idempotent_when_no_vote_exists(): void
     {
         $user = User::factory()->create();
         $question = Question::factory()->create(['likes_count' => 0]);
 
-        $this->service->toggle($user, $question, 1);
-        $delta = $this->service->toggle($user, $question, -1);
+        $delta = $this->service->clear($user, $question);
+
+        $this->assertSame(0, $delta);
+        $this->assertSame(0, $question->fresh()->likes_count);
+    }
+
+    public function test_set_changes_like_to_dislike_updates_delta(): void
+    {
+        $user = User::factory()->create();
+        $question = Question::factory()->create(['likes_count' => 0]);
+
+        $this->service->set($user, $question, 1);
+        $delta = $this->service->set($user, $question, -1);
 
         $this->assertSame(-2, $delta);
 
@@ -85,7 +115,7 @@ class VoteServiceToggleTest extends TestCase
         $this->assertSame(-1, $question->fresh()->likes_count);
     }
 
-    public function test_toggle_dislike_on_comment_can_make_likes_count_negative(): void
+    public function test_set_dislike_on_comment_can_make_likes_count_negative(): void
     {
         $user = User::factory()->create();
         $question = Question::factory()->create();
@@ -97,7 +127,7 @@ class VoteServiceToggleTest extends TestCase
         $comment->question()->associate($question);
         $comment->save();
 
-        $delta = $this->service->toggle($user, $comment, -1);
+        $delta = $this->service->set($user, $comment, -1);
 
         $this->assertSame(-1, $delta);
         $this->assertSame(-1, $comment->fresh()->likes_count);
@@ -107,14 +137,27 @@ class VoteServiceToggleTest extends TestCase
         ]);
     }
 
-    public function test_vote_changed_dispatched_after_commit(): void
+    public function test_vote_changed_not_dispatched_on_zero_delta(): void
     {
         Event::fake([VoteChanged::class]);
 
         $user = User::factory()->create();
         $question = Question::factory()->create(['likes_count' => 0]);
 
-        $this->service->toggle($user, $question, 1);
+        $this->service->set($user, $question, 1);
+        $this->service->set($user, $question, 1);
+
+        Event::assertDispatchedTimes(VoteChanged::class, 1);
+    }
+
+    public function test_vote_changed_dispatched_when_delta_non_zero(): void
+    {
+        Event::fake([VoteChanged::class]);
+
+        $user = User::factory()->create();
+        $question = Question::factory()->create(['likes_count' => 0]);
+
+        $this->service->set($user, $question, 1);
 
         Event::assertDispatched(VoteChanged::class, function (VoteChanged $event) use ($question) {
             return $event->delta === 1 && $event->votable->is($question);

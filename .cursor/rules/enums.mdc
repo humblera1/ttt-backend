@@ -1,0 +1,41 @@
+---
+description: PHP enums — labels and values only, no orchestration
+globs: app/Enums/**/*.php
+alwaysApply: false
+---
+
+# Enums
+
+Enums describe a **closed set of values** (and optional display labels). They are not a place for application workflow.
+
+## Allowed
+
+- Backed cases (`string` / `int`) and their `->value`
+- Small, pure helpers tied to the enum itself: `values()`, `options()`, `label()`, `tryFrom` wrappers
+- Mapping **only** between enum cases and primitive constants (e.g. `Like` → `1`, `Dislike` → `-1`) when used in validation or persistence — keep it a one-liner per case, no I/O
+
+## Avoid in enums
+
+- Injecting or calling **services**, **repositories**, **models**, **events**, `DB`, `Cache`, HTTP
+- Methods like `apply()`, `execute()`, `handle()` that perform side effects or multi-step domain logic
+- Anything that would belong in a **service**, **controller**, or **listener**
+
+```php
+// Bad — orchestration inside enum
+public function apply(VoteService $voteService, User $user, ModelVotesInterface $votable): int
+{
+    return match ($this) {
+        self::None => $voteService->clear($user, $votable),
+        // ...
+    };
+}
+
+// Good — dispatch in controller or service
+$delta = match ($request->userVote()) {
+    UserVote::None => $this->voteService->clear($user, $question),
+    UserVote::Like => $this->voteService->set($user, $question, 1),
+    UserVote::Dislike => $this->voteService->set($user, $question, -1),
+};
+```
+
+When in doubt, add behavior to a service and pass the enum as a parameter.

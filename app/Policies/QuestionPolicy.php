@@ -117,4 +117,16 @@ class QuestionPolicy
     {
         return $user->hasPermissionTo('send-feedback-question');
     }
+
+    /**
+     * Determine whether the user can vote on the question.
+     */
+    public function vote(User $user, Question $question): bool
+    {
+        if (!$user->hasPermissionTo('vote-question')) {
+            return false;
+        }
+
+        return $user->can('view', $question);
+    }
 }

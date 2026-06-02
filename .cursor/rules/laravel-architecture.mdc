@@ -48,6 +48,7 @@ Reference: `CommentDeleteWithReasonDTO`, `CommentService::deleteWithReason()`.
 ## Services (`app/Services/api/v1/`)
 
 - Prefer early returns and scenario-specific private methods over `elseif` / `else` chains — see [control-flow.mdc](control-flow.mdc).
+- Enums: values and labels only — no services, persistence, or side effects; see [enums.mdc](enums.mdc).
 - Orchestrate use cases; accept DTOs/models, not raw `Request`
 - **Persist changes** via repository: `$this->repository->save($model)`, `insert()`, `delete()`, `bulkUpdate()` — not `$model->save()` or `Model::query()->update()` in services
 - Read/list queries for API: dedicated filter classes in `app/Http/Filters/v1/` (e.g. `QuestionsListFilter`), not inline query building in the controller
@@ -62,6 +63,7 @@ Reference: `CommentDeleteWithReasonDTO`, `CommentService::deleteWithReason()`.
 ## API resources & routes
 
 - JSON resources: `app/Http/Resources/v1/`
+- Use the default Laravel wrapper: responses are `{ "data": { ... } }` for a single resource. Do **not** set `public static $wrap = null` on project resources.
 - Named routes: `route('api.v1.questions.list')`
 
 ## Events & side effects

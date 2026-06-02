@@ -37,6 +37,7 @@ PHPUnit uses SQLite in-memory (`phpunit.xml`). Clean specific tables in `setUp()
 - Method names: `test_{actor}_{condition}_{expected}` (snake_case, readable)
 - Use factories (`Question::factory()`, `User::factory()`) and `actingAs()`
 - Prefer `getJson` / `postJson` for API tests
+- Assert resource payloads under `data.*` (e.g. `assertJsonPath('data.delta', 1)`), not at the JSON root
 
 ## What to cover
 

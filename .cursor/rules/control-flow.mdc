@@ -42,4 +42,4 @@ When branches differ in **both** persistence and result, extract **private metho
 - Add `else` after `return` in the same block — it is dead noise.
 - Use `elseif` to chain unrelated business scenarios — split into methods or a `match` on an explicit state enum.
 
-**Reference:** `VoteService::toggle()`, `createVote()`, `removeVote()`, `switchVote()`.
+**Reference:** `VoteService::set()`, `clear()`, `createVote()`, `removeVote()`, `switchVote()`.
