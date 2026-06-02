@@ -4,12 +4,15 @@ namespace App\Http\Requests\v1\Vote;
 
 use App\Enums\Vote\UserVote;
 use App\Http\Requests\BaseFormRequest;
+use App\Traits\Requests\WithUserVote;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 
-class VoteUpdateRequest extends BaseFormRequest
+class QuestionVoteUpdateRequest extends BaseFormRequest
 {
+    use WithUserVote;
+
     public function authorize(): bool
     {
         $user = $this->user();
@@ -20,11 +23,6 @@ class VoteUpdateRequest extends BaseFormRequest
         }
 
         return $user->can('vote', $question);
-    }
-
-    public function userVote(): UserVote
-    {
-        return $this->enum('user_vote', UserVote::class);
     }
 
     /**

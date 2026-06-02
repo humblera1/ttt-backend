@@ -29,6 +29,7 @@ Pet project in active development: a knowledge base of theoretical technical int
 |-------|----------|
 | API controllers | `app/Http/Controllers/v1/` |
 | Form requests + DTO | `app/Http/Requests/v1/`, `app/DTOs/v1/` |
+| Shared traits | `app/Traits/` — see [traits.mdc](traits.mdc) |
 | Services | `app/Services/api/v1/` |
 | Repositories | `app/Repositories/v1/` |
 | List/query filters | `app/Http/Filters/v1/` |

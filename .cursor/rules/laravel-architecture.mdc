@@ -24,6 +24,7 @@ No business logic, no direct `Model::query()` for writes in controllers.
 
 ## Form Request → DTO
 
+- Shared request behavior: traits in `app/Traits/Requests/` (e.g. `WithUserVote`) — see [traits.mdc](traits.mdc)
 - Extend `App\Http\Requests\BaseFormRequest`
 - Implement `App\Interfaces\v1\Requests\RequestDTOInterface` when passing data to a service
 - Build DTO in `getDTO()` from `$this->validated()`

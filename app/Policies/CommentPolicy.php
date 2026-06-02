@@ -85,6 +85,18 @@ class CommentPolicy
     }
 
     /**
+     * Determine whether the user can vote on the comment.
+     */
+    public function vote(User $user, Comment $comment): bool
+    {
+        if (!$user->hasPermissionTo('vote-comment')) {
+            return false;
+        }
+
+        return $user->can('view', $comment);
+    }
+
+    /**
      * Determine whether the user can permanently delete the model.
      */
     public function forceDelete(User $user): bool
