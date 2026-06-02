@@ -1,0 +1,45 @@
+---
+description: Control flow — prefer early return over else / elseif chains
+globs: app/**/*.php
+alwaysApply: false
+---
+
+# Control flow
+
+## Minimize `else`, `elseif`, and `else if`
+
+Prefer **guard clauses** and **early return** so the happy path and each branch stay flat and named.
+
+```php
+// Avoid
+if ($existing === null) {
+    $this->create(...);
+} elseif ($existing->value === $value) {
+    $this->delete(...);
+} else {
+    $this->update(...);
+}
+
+// Prefer
+if ($existing === null) {
+    return $this->createVote(...);
+}
+if ($existing->value === $value) {
+    return $this->removeVote($existing);
+}
+return $this->switchVote($existing, $value);
+```
+
+When branches differ in **both** persistence and result, extract **private methods** (one scenario per method) instead of growing a single `if/elseif/else` block.
+
+## When a chain is acceptable
+
+- Simple two-way branching with symmetric logic.
+- `match` on a scalar/enum with exhaustive cases (no nested `else`).
+
+## Do not
+
+- Add `else` after `return` in the same block — it is dead noise.
+- Use `elseif` to chain unrelated business scenarios — split into methods or a `match` on an explicit state enum.
+
+**Reference:** `VoteService::toggle()`, `createVote()`, `removeVote()`, `switchVote()`.

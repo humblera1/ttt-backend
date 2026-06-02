@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Interfaces\v1\Vote\ModelVotesInterface;
 use App\Policies\CommentPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(CommentPolicy::class)]
-class Comment extends Model
+class Comment extends Model implements ModelVotesInterface
 {
     use SoftDeletes;
 

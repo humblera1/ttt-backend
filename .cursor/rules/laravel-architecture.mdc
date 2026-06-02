@@ -47,6 +47,7 @@ Reference: `CommentDeleteWithReasonDTO`, `CommentService::deleteWithReason()`.
 
 ## Services (`app/Services/api/v1/`)
 
+- Prefer early returns and scenario-specific private methods over `elseif` / `else` chains — see [control-flow.mdc](control-flow.mdc).
 - Orchestrate use cases; accept DTOs/models, not raw `Request`
 - **Persist changes** via repository: `$this->repository->save($model)`, `insert()`, `delete()`, `bulkUpdate()` — not `$model->save()` or `Model::query()->update()` in services
 - Read/list queries for API: dedicated filter classes in `app/Http/Filters/v1/` (e.g. `QuestionsListFilter`), not inline query building in the controller

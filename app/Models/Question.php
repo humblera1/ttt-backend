@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Interfaces\v1\Status\StatusInterface;
+use App\Interfaces\v1\Vote\ModelVotesInterface;
 use App\Policies\QuestionPolicy;
 use App\Traits\Models\WithStatus;
 use Database\Factories\QuestionFactory;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(QuestionPolicy::class)]
-class Question extends Model implements StatusInterface
+class Question extends Model implements ModelVotesInterface, StatusInterface
 {
     /** @use HasFactory<QuestionFactory> */
     use HasFactory,
@@ -47,6 +48,7 @@ class Question extends Model implements StatusInterface
     {
         return [
             'is_premium' => 'boolean',
+            'likes_count' => 'integer',
         ];
     }
 
