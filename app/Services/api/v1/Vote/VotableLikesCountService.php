@@ -3,7 +3,6 @@
 namespace App\Services\api\v1\Vote;
 
 use App\Interfaces\v1\Vote\ModelVotesInterface;
-use Illuminate\Database\Eloquent\Model;
 
 class VotableLikesCountService
 {

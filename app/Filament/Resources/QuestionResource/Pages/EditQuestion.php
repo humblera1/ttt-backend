@@ -3,15 +3,14 @@
 namespace App\Filament\Resources\QuestionResource\Pages;
 
 use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
-use App\Filament\Actions\Page\Status\Question\{ApproveAction,
-    RejectDuplicateAction,
-    RejectAction,
-    ResetAction};
+use App\Filament\Actions\Page\Status\Question\{ApproveAction, RejectAction, RejectDuplicateAction, ResetAction};
 use App\Filament\Resources\QuestionResource;
 use App\Filament\Resources\Widgets\Status\StatusBadge;
+use App\Models\Question;
 use App\Traits\Filament\Forms\Question\WithRelatedSelects;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\RestoreAction;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -73,6 +72,16 @@ class EditQuestion extends EditRecord
                 ])
                 ->compact()
                 ->columnSpan(1),
+
+            Section::make(__('Engagement'))
+                ->schema([
+                    Placeholder::make('likes_count')
+                        ->label(__('Likes count'))
+                        ->content(fn (Question $record): string => $record->likes_count),
+                ])
+                ->icon('heroicon-m-hand-thumb-up')
+                ->collapsed()
+                ->columnSpanFull(),
         ]);
     }
 

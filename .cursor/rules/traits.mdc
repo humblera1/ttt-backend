@@ -1,0 +1,43 @@
+---
+description: Shared traits — location under app/Traits, With* naming
+globs: app/**/*.php
+alwaysApply: false
+---
+
+# Traits
+
+All reusable traits live under **`app/Traits/`** only. Do not add traits under `Http/Requests/.../Concerns`, `Models/Concerns`, or other layer folders.
+
+## Layout
+
+Group by area, mirroring existing folders:
+
+| Folder | Examples |
+|--------|----------|
+| `app/Traits/Models/` | `WithStatus`, `WithNormalizedName` |
+| `app/Traits/Requests/` | `WithUserVote` |
+| `app/Traits/Tests/` | `WithUser` |
+| `app/Traits/Enums/` | `WithValues` |
+| `app/Traits/User/` | `WithBanned` |
+| `app/Traits/Repository/` | `HasStatus` (legacy `Has*` — prefer `With*` for new traits) |
+
+Pick the subfolder that matches the primary consumer (request, model, test, etc.).
+
+## Naming
+
+- **New traits:** prefer prefix **`With`** + descriptive suffix (`WithUserVote`, `WithRelatedSelects`).
+- Legacy **`Has*`** traits remain as-is; do not rename without a dedicated refactor.
+- One trait per file; class name = file name.
+
+## Usage
+
+```php
+use App\Traits\Requests\WithUserVote;
+
+class QuestionVoteUpdateRequest extends BaseFormRequest
+{
+    use WithUserVote;
+}
+```
+
+Keep traits small and focused. No service calls, HTTP, or multi-step domain logic in traits (same spirit as [enums.mdc](enums.mdc)).

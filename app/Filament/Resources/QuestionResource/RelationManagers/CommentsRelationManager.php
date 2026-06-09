@@ -5,10 +5,10 @@ namespace App\Filament\Resources\QuestionResource\RelationManagers;
 use App\Filament\Actions\Table\Moderation\Comment\ToggleTrashedAction;
 use App\Filament\Columns\Trash\TrashedColumn;
 use App\Filament\Columns\User\UserColumn;
+use App\Filament\Columns\Vote\LikesCountColumn;
 use App\Filament\Resources\CommentResource;
 use App\Models\Comment;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -37,6 +37,7 @@ class CommentsRelationManager extends RelationManager
                     ->label(__('Text'))
                     ->limit()
                     ->searchable(),
+                LikesCountColumn::make(),
                 TrashedColumn::make(),
                 TextColumn::make('created_at')
                     ->label(__('Created'))

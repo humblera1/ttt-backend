@@ -3,12 +3,11 @@
 namespace App\Filament\Resources\CommentResource\Pages;
 
 use App\Filament\Actions\Page\Delete\Comment\DeleteWithReasonAction;
-use App\Filament\Actions\Page\Restore\Comment\RestoreAction;
 use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
+use App\Filament\Actions\Page\Restore\Comment\RestoreAction;
 use App\Filament\Resources\CommentResource;
 use App\Filament\Resources\QuestionResource;
 use App\Models\Comment;
-use App\Services\api\v1\Comment\CommentService;
 use App\Traits\Filament\Forms\Utils\HasLinkUtils;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -16,7 +15,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 class EditComment extends EditRecord
@@ -42,6 +40,9 @@ class EditComment extends EditRecord
                     Placeholder::make('trashed')
                         ->label(__('Status'))
                         ->content(fn (?Comment $record): string => $this->getTrashedStatusLabel($record)),
+                    Placeholder::make('likes_count')
+                        ->label(__('Likes count'))
+                        ->content(fn (Comment $record): string => $record->likes_count),
                 ])
                 ->icon('heroicon-m-information-circle')
                 ->collapsed(),

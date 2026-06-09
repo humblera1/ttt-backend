@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Columns\Trash\TrashedColumn;
+use App\Filament\Columns\Vote\LikesCountColumn;
 use App\Filament\Columns\User\UserColumn;
 use App\Filament\Filters\Date\BetweenFilter;
 use App\Filament\Filters\Trash\TrashedFilter;
@@ -72,6 +73,7 @@ class CommentResource extends Resource
                     ->label(__('Text'))
                     ->limit()
                     ->searchable(),
+                LikesCountColumn::make(),
                 TrashedColumn::make(),
                 TextColumn::make('created_at')
                     ->label(__('Created'))
