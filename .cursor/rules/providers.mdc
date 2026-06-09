@@ -1,0 +1,37 @@
+---
+description: Service providers — specialized boot/register, facade macros
+globs: app/Providers/**/*.php,bootstrap/providers.php
+alwaysApply: false
+---
+
+# Service providers
+
+## AppServiceProvider
+
+Keep [`AppServiceProvider`](../../app/Providers/AppServiceProvider.php) for **global, cross-cutting** bootstrap only (e.g. `RateLimiter::for` definitions). Do **not** add facade macros or domain-specific registration here.
+
+## Specialized providers (`app/Providers/v1/`)
+
+Register narrow concerns in dedicated providers under `app/Providers/v1/` (and subfolders), then list them in [`bootstrap/providers.php`](../../bootstrap/providers.php).
+
+| Concern | Provider | Example |
+|---------|----------|---------|
+| Redis facade macros | `RedisMacroServiceProvider` | `Redis::setnxex()` |
+| HTTP Response macros | `ResponseCreatedServiceProvider` | `Response::created()` |
+| Container bindings | `SettingsServiceProvider` | `singleton('settings', …)` |
+
+```php
+// app/Providers/v1/RedisMacroServiceProvider.php
+Redis::macro('setnxex', function (string $key, string $value, int $ttlSeconds): bool {
+    return (bool) $this->set($key, $value, 'EX', $ttlSeconds, 'NX');
+});
+```
+
+## Facade macro IDE stubs
+
+When adding a Redis (or other) facade macro, extend the matching stub under `stubs/Illuminate/Support/Facades/` with `@method static …` and point `@see` to the provider that registers the macro.
+
+## Avoid
+
+- New `Redis::macro()` / `Response::macro()` calls in `AppServiceProvider`
+- Mixing unrelated boot logic in one specialized provider — split by facade or domain

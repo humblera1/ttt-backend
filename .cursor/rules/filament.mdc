@@ -123,6 +123,7 @@ Extract repeated table UI into shared classes:
 - **Status column**: `App\Filament\Columns\Status\StatusColumn::make()` — badge + `Status::colorByValue()` (workflow `StatusInterface`, not soft deletes)
 - **Likes count column**: `App\Filament\Columns\Vote\LikesCountColumn::make()` — denormalized vote sum (`likes_count`), sortable badge, sign-aware colors (gray / success / danger)
 - **Met in interview count column**: `App\Filament\Columns\Statistic\MetInRealInterviewCountColumn::make()` — denormalized `met_in_real_interview_count`, sortable, numeric
+- **Views count column**: `App\Filament\Columns\Statistic\ViewsCountColumn::make()` — denormalized `views_count`, sortable, numeric badge
 - **Trashed column**: `App\Filament\Columns\Trash\TrashedColumn::make()` — Active/Trashed badge from `deleted_at` / `trashed()`
 - **User column**: `App\Filament\Columns\User\UserColumn::make()` — username, user icon, full name in description, search via `User::matchingSearchTerm()`
 - **Status filter**: `App\Filament\Filters\Status\StatusFilter::make()` — options from `Status::options()`

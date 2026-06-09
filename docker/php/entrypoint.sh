@@ -28,10 +28,9 @@ if [ ! -d /var/www/vendor ] && [ -f /var/www/composer.json ]; then
   composer install --no-interaction --prefer-dist --no-progress || true
 fi
 
-# Warm up Laravel cache dirs (non-fatal if artisan missing)
-if [ -f /var/www/artisan ]; then
-  su-exec www-data php /var/www/artisan config:cache || true
-  su-exec www-data php /var/www/artisan route:cache || true
+# Dev: clear bootstrap cache once on app-dev (php-fpm) start only.
+if [ -f /var/www/artisan ] && [ "$#" -eq 0 ]; then
+  su-exec www-data php /var/www/artisan optimize:clear || true
 fi
 
 # run php-fpm process by default

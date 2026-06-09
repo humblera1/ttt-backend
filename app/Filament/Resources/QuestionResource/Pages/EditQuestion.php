@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\QuestionResource\Pages;
 
 use App\Filament\Actions\Page\Delete\Shared\ForceDeleteAction;
-use App\Filament\Actions\Page\Status\Question\{ApproveAction, RejectAction, RejectDuplicateAction, ResetAction};
+use App\Filament\Actions\Page\Status\Question\ApproveAction;
+use App\Filament\Actions\Page\Status\Question\RejectAction;
+use App\Filament\Actions\Page\Status\Question\RejectDuplicateAction;
+use App\Filament\Actions\Page\Status\Question\ResetAction;
 use App\Filament\Resources\QuestionResource;
 use App\Filament\Resources\Widgets\Status\StatusBadge;
 use App\Models\Question;
@@ -31,7 +34,6 @@ class EditQuestion extends EditRecord
         ];
     }
 
-
     public function form(Form $form): Form
     {
         return $form->schema([
@@ -56,7 +58,7 @@ class EditQuestion extends EditRecord
                             'strike',
                             'underline',
                             'undo',
-                            'subscript'
+                            'subscript',
                         ])
                         ->maxWidth(200),
                 ])
@@ -81,6 +83,9 @@ class EditQuestion extends EditRecord
                     Placeholder::make('met_in_real_interview_count')
                         ->label(__('Met in interview count'))
                         ->content(fn (?Question $record): string => (string) ($record?->met_in_real_interview_count ?? 0)),
+                    Placeholder::make('views_count')
+                        ->label(__('Views count'))
+                        ->content(fn (?Question $record): string => (string) ($record?->views_count ?? 0)),
                 ])
                 ->icon('heroicon-m-hand-thumb-up')
                 ->collapsed()

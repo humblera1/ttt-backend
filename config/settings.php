@@ -79,5 +79,25 @@ return [
             'label' => 'Количество записей на странице вопроса, подгружаемых за раз',
             'value' => 30,
         ],
-    ]
+    ],
+    Section::QuestionViews->value => [
+        [
+            'key' => 'dedup_ttl_seconds',
+            'label' => 'IP deduplication window (seconds)',
+            'description' => 'Time window during which repeated POST /view requests from the same IP for the same question do not increment the Redis buffer. Implemented via SET key NX EX.',
+            'value' => 120,
+        ],
+        [
+            'key' => 'flush_lock_seconds',
+            'label' => 'Flush lock TTL (seconds)',
+            'description' => 'TTL for Cache::lock("flush-question-views") while the Redis view buffer is being flushed to the database. Prevents concurrent flush runs.',
+            'value' => 30,
+        ],
+        [
+            'key' => 'rate_limit_per_minute',
+            'label' => 'POST view rate limit per IP (per minute)',
+            'description' => 'Maximum number of POST /view requests allowed per minute from a single IP address. Exceeding the limit returns HTTP 429 via throttle:question-view middleware.',
+            'value' => 60,
+        ],
+    ],
 ];

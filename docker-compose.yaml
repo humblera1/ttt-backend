@@ -23,6 +23,7 @@ services:
     volumes:
       - ./:/var/www
       - storage-data:/var/www/storage
+      - bootstrap-cache-data:/var/www/bootstrap/cache
     env_file:
       - .env
     extra_hosts:
@@ -42,6 +43,7 @@ services:
     volumes:
       - ./:/var/www
       - storage-data:/var/www/storage
+      - bootstrap-cache-data:/var/www/bootstrap/cache
     env_file:
       - .env
     extra_hosts:
@@ -64,6 +66,7 @@ services:
     volumes:
       - ./:/var/www
       - storage-data:/var/www/storage
+      - bootstrap-cache-data:/var/www/bootstrap/cache
     env_file:
       - .env
     extra_hosts:
@@ -116,3 +119,4 @@ networks:
 volumes:
   db-data:
   storage-data:
+  bootstrap-cache-data:

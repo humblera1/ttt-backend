@@ -36,5 +36,6 @@ Pet project in active development: a knowledge base of theoretical technical int
 | Policies | `app/Policies/` (API: `app/Policies/v1/`) |
 | Filament admin | `app/Filament/` |
 | Feature tests | `tests/Feature/v1/` |
+| Service providers | `app/Providers/` — see [providers.mdc](providers.mdc) |
 
 Follow the scoped rules in `.cursor/rules/` when editing matching files.

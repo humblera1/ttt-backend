@@ -8,6 +8,7 @@ return [
     App\Providers\v1\NormalizerServiceProvider::class,
     App\Providers\v1\PasswordServiceProvider::class,
     App\Providers\v1\ResponseCreatedServiceProvider::class,
+    App\Providers\v1\RedisMacroServiceProvider::class,
     App\Providers\v1\SettingsServiceProvider::class,
     App\Providers\v1\comments\RouteServiceProvider::class,
 ];

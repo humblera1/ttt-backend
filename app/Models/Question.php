@@ -19,14 +19,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $met_in_real_interview_count Denormalized count of {@see Statistic} rows with met_in_real_interview = true.
+ * @property bool $rating_needs_recalculation Set when denormalized aggregates change and rating must be recalculated.
  */
 #[UsePolicy(QuestionPolicy::class)]
 class Question extends Model implements ModelVotesInterface, StatusInterface
 {
     /** @use HasFactory<QuestionFactory> */
     use HasFactory,
-        WithStatus,
-        SoftDeletes;
+        SoftDeletes,
+        WithStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +54,7 @@ class Question extends Model implements ModelVotesInterface, StatusInterface
             'is_premium' => 'boolean',
             'likes_count' => 'integer',
             'met_in_real_interview_count' => 'integer',
+            'rating_needs_recalculation' => 'boolean',
         ];
     }
 

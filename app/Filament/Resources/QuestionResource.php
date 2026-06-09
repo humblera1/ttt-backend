@@ -5,9 +5,12 @@ namespace App\Filament\Resources;
 use App\Enums\Grade;
 use App\Filament\Actions\Table\Delete\Shared\DeleteBulkAction;
 use App\Filament\Actions\Table\Delete\Shared\ForceDeleteBulkAction;
-use App\Filament\Actions\Table\Status\Shared\{ApproveAction, RejectAction, ResetQuestionAction};
-use App\Filament\Columns\Status\StatusColumn;
+use App\Filament\Actions\Table\Status\Shared\ApproveAction;
+use App\Filament\Actions\Table\Status\Shared\RejectAction;
+use App\Filament\Actions\Table\Status\Shared\ResetQuestionAction;
 use App\Filament\Columns\Statistic\MetInRealInterviewCountColumn;
+use App\Filament\Columns\Statistic\ViewsCountColumn;
+use App\Filament\Columns\Status\StatusColumn;
 use App\Filament\Columns\Vote\LikesCountColumn;
 use App\Filament\Filters\Status\StatusFilter;
 use App\Filament\Filters\Trash\TrashedFilter;
@@ -18,7 +21,9 @@ use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\{DeleteAction, EditAction, RestoreAction};
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,6 +69,7 @@ class QuestionResource extends Resource
                     ->iconColor('primary'),
                 LikesCountColumn::make(),
                 MetInRealInterviewCountColumn::make(),
+                ViewsCountColumn::make(),
                 TextColumn::make('created_at')
                     ->sortable()
                     ->since(),
