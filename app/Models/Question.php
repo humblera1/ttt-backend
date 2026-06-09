@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $met_in_real_interview_count Denormalized count of {@see Statistic} rows with met_in_real_interview = true.
+ */
 #[UsePolicy(QuestionPolicy::class)]
 class Question extends Model implements ModelVotesInterface, StatusInterface
 {
@@ -49,6 +52,7 @@ class Question extends Model implements ModelVotesInterface, StatusInterface
         return [
             'is_premium' => 'boolean',
             'likes_count' => 'integer',
+            'met_in_real_interview_count' => 'integer',
         ];
     }
 

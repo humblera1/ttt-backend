@@ -77,7 +77,10 @@ class EditQuestion extends EditRecord
                 ->schema([
                     Placeholder::make('likes_count')
                         ->label(__('Likes count'))
-                        ->content(fn (Question $record): string => $record->likes_count),
+                        ->content(fn (?Question $record): string => (string) ($record?->likes_count ?? 0)),
+                    Placeholder::make('met_in_real_interview_count')
+                        ->label(__('Met in interview count'))
+                        ->content(fn (?Question $record): string => (string) ($record?->met_in_real_interview_count ?? 0)),
                 ])
                 ->icon('heroicon-m-hand-thumb-up')
                 ->collapsed()
