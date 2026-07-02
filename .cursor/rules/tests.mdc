@@ -57,7 +57,7 @@ Do not add trivial unit tests that only assert framework behavior unless request
 
 ## Database cleanup in setUp
 
-Prefer factories and `DatabaseTransactions`. When a test needs an empty table, use `App\Traits\Tests\ClearsTestTables` — do **not** delete parent rows before their FK dependents.
+Prefer factories and `DatabaseTransactions`. When a test needs an empty table, use `App\Traits\Tests\ClearsTestTables` — do **not** delete parent rows before their FK dependents. Full guide: [`docs/guides/testing.md`](../../docs/guides/testing.md).
 
 ```php
 use App\Traits\Tests\ClearsTestTables;
@@ -75,4 +75,4 @@ class QuestionsTest extends TestCase
 }
 ```
 
-Available helpers: `clearQuestionsAndDependencies()`, `clearCompaniesAndDependencies()`, `clearPositionsAndDependencies()`, `clearTagsAndDependencies()`, `clearQuestionDomainTables()` (propose/statistics flows).
+Available helpers: `clearQuestionsAndDependencies()`, `clearCompaniesAndDependencies()`, `clearPositionsAndDependencies()`, `clearTagsAndDependencies()`, `clearQuestionDomainTables()` (propose/statistics flows). FK order: [`docs/explanation/data-model/tables-by-domain.md`](../../docs/explanation/data-model/tables-by-domain.md).

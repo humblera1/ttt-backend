@@ -14,6 +14,8 @@ Pet project in active development: a knowledge base of theoretical technical int
 - Sanctum (API auth), Spatie Permission (roles/permissions)
 - API versioned under `routes/api.php` → prefix `v1`, route names `api.v1.*`
 
+System docs: [`docs/README.md`](../../docs/README.md)
+
 ## Domain (main entities)
 
 - **Question** — title, answer, status workflow (pending/approved/rejected), tags, grades, companies, positions
