@@ -20,4 +20,9 @@ enum Queue: string
      * Задания данной очереди используются для асинхронной отправки различных уведомлений пользователям (в том числе, массово).
      */
     case Notifications = 'notification';
+
+    /**
+     * Recalculation of denormalized question rating from aggregate columns.
+     */
+    case Rating = 'rating';
 }

@@ -229,6 +229,22 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
+
+        'rating-supervisor' => [
+            'connection' => 'redis',
+            'queue' => [
+                Queue::Rating->value,
+            ],
+            'balance' => 'simple',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
     ],
 
     'environments' => [
@@ -237,6 +253,9 @@ return [
                 'maxProcesses' => 1,
             ],
             'notification-supervisor' => [
+                'maxProcesses' => 1,
+            ],
+            'rating-supervisor' => [
                 'maxProcesses' => 1,
             ],
         ],

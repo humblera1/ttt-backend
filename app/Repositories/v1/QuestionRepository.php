@@ -16,6 +16,37 @@ class QuestionRepository extends Repository
     }
 
     /**
+     * @throws RepositoryException
+     */
+    public function findByIdOrFail(int $id): Question
+    {
+        $question = Question::query()->find($id);
+
+        if (!$question instanceof Question) {
+            throw new RepositoryException("Question [{$id}] not found");
+        }
+
+        return $question;
+    }
+
+    /**
+     * Persists rating and clears the pending recalculation flag.
+     *
+     * @throws RepositoryException
+     */
+    public function persistRating(int $questionId, int $rating): void
+    {
+        try {
+            Question::query()->whereKey($questionId)->update([
+                'rating' => $rating,
+                'rating_needs_recalculation' => false,
+            ]);
+        } catch (Throwable) {
+            throw new RepositoryException('Failed to persist question rating');
+        }
+    }
+
+    /**
      * Bulk-increment views_count and mark questions for rating recalculation.
      *
      * @param  array<int, int>  $increments  question_id => delta

@@ -23,7 +23,15 @@ class QuestionsTest extends TestCase
 }
 ```
 
-PHPUnit uses SQLite in-memory (`phpunit.xml`). Clean specific tables in `setUp()` only when the test requires an empty slate (e.g. `DB::table('questions')->delete()`).
+PHPUnit targets the project test suite; **run tests only inside the `app-dev` container** (MySQL, Redis, and app config match production-like dev):
+
+```bash
+docker compose exec app-dev php artisan test --filter=SomeTest
+```
+
+Do **not** run `php artisan test` on the host unless you have explicitly mirrored the container stack.
+
+Use `Illuminate\Foundation\Testing\DatabaseTransactions` — **not** `RefreshDatabase`:
 
 ## Auth & permissions
 
@@ -46,3 +54,7 @@ PHPUnit uses SQLite in-memory (`phpunit.xml`). Clean specific tables in `setUp()
 - Domain-specific edge cases (filters, soft deletes, status transitions)
 
 Do not add trivial unit tests that only assert framework behavior unless requested.
+
+## Database cleanup in setUp
+
+Prefer factories and `DatabaseTransactions`; avoid `DB::table('questions')->delete()` unless dependent rows (statistics, suggestions, votes, etc.) are removed first — see `QuestionRatingRecalculationTest` for the full order.
