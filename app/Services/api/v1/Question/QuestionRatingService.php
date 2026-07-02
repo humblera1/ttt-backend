@@ -12,20 +12,19 @@ class QuestionRatingService
 {
     public function __construct(
         private readonly QuestionRepository $repository,
+        private readonly QuestionRatingCalculator $calculator,
     ) {}
 
     /**
      * Recalculates and persists rating for the given question.
-     *
-     * Step 02 will replace the stub with {@see QuestionRatingCalculator}.
      *
      * @throws RepositoryException
      */
     public function recalculate(int $questionId): void
     {
         $question = $this->repository->findByIdOrFail($questionId);
+        $rating = $this->calculator->calculate($question);
 
-        // Stub until QuestionRatingCalculator is wired in phase-ix step 02.
-        $this->repository->persistRating($questionId, $question->rating);
+        $this->repository->persistRating($questionId, $rating);
     }
 }

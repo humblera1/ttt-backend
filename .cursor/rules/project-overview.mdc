@@ -37,5 +37,6 @@ Pet project in active development: a knowledge base of theoretical technical int
 | Filament admin | `app/Filament/` |
 | Feature tests | `tests/Feature/v1/` |
 | Service providers | `app/Providers/` — see [providers.mdc](providers.mdc) |
+| App settings | `config/settings.php`, `App\Enums\Settings\Section` — see [settings.mdc](settings.mdc) |
 
 Follow the scoped rules in `.cursor/rules/` when editing matching files.

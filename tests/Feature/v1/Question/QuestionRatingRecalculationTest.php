@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Models\Question;
 use App\Models\Statistic;
 use App\Models\User;
+use App\Services\api\v1\Question\QuestionRatingService;
 use App\Services\api\v1\Question\QuestionViewService;
 use App\Traits\Tests\WithUser;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -148,17 +149,21 @@ class QuestionRatingRecalculationTest extends TestCase
     public function test_recalculate_job_clears_flag_after_success(): void
     {
         $question = Question::factory()->common()->create([
+            'likes_count' => 0,
+            'views_count' => 0,
+            'comments_count' => 0,
+            'met_in_real_interview_count' => 0,
             'rating' => 42,
             'rating_needs_recalculation' => true,
         ]);
 
         $job = new RecalculateQuestionRatingJob($question->id);
-        $job->handle(app(\App\Services\api\v1\Question\QuestionRatingService::class));
+        $job->handle(app(QuestionRatingService::class));
 
         $fresh = $question->fresh();
 
         $this->assertFalse($fresh->rating_needs_recalculation);
-        $this->assertSame(42, $fresh->rating);
+        $this->assertSame(0, $fresh->rating);
     }
 
     private function dispatchMetStatisticCreatedEvent(Question $question): void

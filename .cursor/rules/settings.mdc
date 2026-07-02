@@ -1,0 +1,37 @@
+---
+description: Application settings — config/settings.php and Section enum
+globs: config/settings.php,app/Enums/Settings/Section.php
+alwaysApply: false
+---
+
+# Settings
+
+## Section keys in `config/settings.php`
+
+Top-level array keys **must** use [`Section`](../../app/Enums/Settings/Section.php) cases — not raw strings:
+
+```php
+// Good
+Section::RatingWeights->value => [
+    ['key' => 'votes', 'label' => '…', 'value' => 1.0, 'type' => Type::Float->value],
+],
+
+// Avoid
+'rating_weights' => [ /* … */ ],
+```
+
+When adding a new settings group:
+
+1. Add a `Section` enum case (`case RatingWeights = 'rating_weights';`).
+2. Register defaults under `Section::{Case}->value` in [`config/settings.php`](../../config/settings.php).
+3. Read at runtime via `setting('{section}.{key}', $default)` (e.g. `setting('rating_weights.votes', 1.0)`).
+
+## Entry shape
+
+Each item: `key`, `label`, `value`; add `type` when not integer (use [`Type`](../../app/Enums/Type.php) — e.g. `Type::Float->value` for weights).
+
+Do **not** add a `description` field — it is not stored in the `settings` table.
+
+Labels for admin UI: Russian, one concise sentence (see existing sections).
+
+Import new rows: `php artisan app:import-settings` (skips existing keys).

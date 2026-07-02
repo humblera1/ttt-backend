@@ -11,4 +11,5 @@ enum Section: string
     case Notifications = 'notifications';
     case Comments = 'comments';
     case QuestionViews = 'question_views';
+    case RatingWeights = 'rating_weights';
 }

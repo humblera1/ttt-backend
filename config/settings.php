@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Settings\Section;
+use App\Enums\Type;
 
 return [
     Section::Question->value => [
@@ -103,6 +104,32 @@ return [
             'label' => 'POST view rate limit per IP (per minute)',
             'description' => 'Maximum number of POST /view requests allowed per minute from a single IP address. Exceeding the limit returns HTTP 429 via throttle:question-view middleware.',
             'value' => 60,
+        ],
+    ],
+    Section::RatingWeights->value => [
+        [
+            'key' => 'votes',
+            'label' => 'Вес суммы голосов (likes_count)',
+            'value' => 1.0,
+            'type' => Type::Float->value,
+        ],
+        [
+            'key' => 'met',
+            'label' => 'Вес числа встреч на собеседовании (met_in_real_interview_count)',
+            'value' => 3.0,
+            'type' => Type::Float->value,
+        ],
+        [
+            'key' => 'views',
+            'label' => 'Вес логарифма просмотров ln(views_count + 1)',
+            'value' => 0.3,
+            'type' => Type::Float->value,
+        ],
+        [
+            'key' => 'comments',
+            'label' => 'Вес логарифма комментариев ln(comments_count + 1)',
+            'value' => 0.7,
+            'type' => Type::Float->value,
         ],
     ],
 ];
