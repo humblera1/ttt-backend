@@ -3,6 +3,8 @@
 namespace App\Services\api\v1\Question;
 
 use App\Models\Question;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Computes question rating from denormalized aggregate columns only.
@@ -11,6 +13,8 @@ readonly class QuestionRatingCalculator
 {
     /**
      * @return int Rounded rating persisted as integer (may be negative).
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function calculate(Question $question): int
     {
