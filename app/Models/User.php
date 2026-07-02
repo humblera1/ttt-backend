@@ -13,14 +13,39 @@ use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $username
+ * @property string|null $password
+ * @property string|null $email
+ * @property Carbon|null $email_verified_at
+ * @property string|null $avatar_url
+ * @property Carbon|null $birthday
+ * @property Carbon|null $career_start
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $banned_at
+ * @property Carbon|null $deleted_at
+ * @property-read string $full_name Computed from first_name and last_name.
+ * @property-read Collection<int, Statistic> $statistics
+ * @property-read Collection<int, UserNotification> $notifications
+ * @property-read Collection<int, Vote> $votes
+ * @property-read Collection<int, Role> $roles
+ */
 #[ScopedBy([NotBannedScope::class])]
 #[UsePolicy(UserPolicy::class)]
 class User extends Authenticatable implements FilamentUser, HasName

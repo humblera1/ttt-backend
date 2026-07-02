@@ -5,9 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
 /**
+ * @property int $id
+ * @property int $user_id
+ * @property string $votable_type
+ * @property int $votable_id
  * @property int $value Vote value: 1 for like, -1 for dislike.
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $user
+ * @property-read Question|Comment $votable
  */
 class Vote extends Model
 {

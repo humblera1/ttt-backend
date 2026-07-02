@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Period;
 use App\Policies\StatisticPolicy;
 use Database\Factories\StatisticFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -10,7 +11,23 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $question_id
+ * @property bool $met_in_real_interview
+ * @property int|null $company_id
+ * @property int|null $position_id
+ * @property string|null $when_asked {@see Period}
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $user
+ * @property-read Question $question
+ * @property-read Company|null $company
+ * @property-read Position|null $position
+ */
 #[UsePolicy(StatisticPolicy::class)]
 class Statistic extends Model
 {

@@ -7,9 +7,25 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use \Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 use Znck\Eloquent\Relations\BelongsToThrough;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $notification_type_id
+ * @property string $title
+ * @property string $body
+ * @property array<string, mixed>|null $data
+ * @property Carbon|null $read_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read NotificationType $type
+ * @property-read NotificationCategory $category
+ * @property-read User $user
+ */
 #[UsePolicy(UserNotificationPolicy::class)]
 class UserNotification extends Model
 {
