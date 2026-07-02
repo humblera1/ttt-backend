@@ -6,6 +6,8 @@ use App\DTOs\v1\Comment\CommentDeleteWithReasonDTO;
 use App\DTOs\v1\Comment\CommentStoreDTO;
 use App\Enums\Comment\ReasonForDeletion;
 use App\Events\v1\Comment\CommentCreated;
+use App\Events\v1\Comment\CommentDeleted;
+use App\Events\v1\Comment\CommentRestored;
 use App\Exceptions\v1\BusinessLogicException;
 use App\Exceptions\v1\RepositoryException;
 use App\Models\Comment;
@@ -41,7 +43,7 @@ class CommentService
      */
     public function createForQuestion(Question $question, CommentStoreDTO $dto): Comment
     {
-        return DB::transaction(function () use ($question, $dto) {
+        $comment = DB::transaction(function () use ($question, $dto) {
             $comment = new Comment([
                 'body' => $dto->body,
                 'parent_id' => $dto->parentId,
@@ -52,12 +54,14 @@ class CommentService
 
             $this->repository->save($comment);
 
-            $comment->load('question', 'user');
-
-            event(new CommentCreated($comment));
-
             return $comment;
         });
+
+        $comment->load('question', 'user');
+
+        event(new CommentCreated($comment));
+
+        return $comment;
     }
 
     /**
@@ -91,6 +95,10 @@ class CommentService
             $comment->deletedBy()->associate($user);
 
             $this->repository->save($comment);
+
+            $comment->loadMissing('question');
+
+            event(new CommentDeleted($comment));
         } catch (RepositoryException $e) {
             Log::error('Failed to delete comment', ['exception' => $e]);
 
@@ -115,6 +123,10 @@ class CommentService
             $comment->deletedBy()->associate($dto->moderator);
 
             $this->repository->save($comment);
+
+            $comment->loadMissing('question');
+
+            event(new CommentDeleted($comment));
         } catch (RepositoryException $e) {
             Log::error('Failed to delete comment with reason', ['exception' => $e]);
 
@@ -134,6 +146,10 @@ class CommentService
             $comment->deletedBy()->dissociate();
 
             $this->repository->save($comment);
+
+            $comment->loadMissing('question');
+
+            event(new CommentRestored($comment));
         } catch (RepositoryException $e) {
             Log::error('Failed to restore comment', ['exception' => $e]);
 

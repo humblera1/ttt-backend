@@ -6,6 +6,7 @@ use App\Jobs\RecalculateQuestionRatingJob;
 use App\Listeners\v1\Question\RequestQuestionRatingRecalculationListener;
 use App\Models\Question;
 use App\Services\api\v1\Question\QuestionRatingCoordinator;
+use App\Traits\Tests\ClearsTestTables;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Bus;
@@ -14,13 +15,15 @@ use Tests\TestCase;
 
 class QuestionRatingCoordinatorTest extends TestCase
 {
-    use DatabaseTransactions;
+    use ClearsTestTables, DatabaseTransactions;
 
     private QuestionRatingCoordinator $coordinator;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->clearQuestionsAndDependencies();
 
         Cache::flush();
 

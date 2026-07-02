@@ -8,14 +8,14 @@ use App\Enums\Grade;
 use App\Models\Question;
 use App\Models\Tag;
 use App\Models\User;
+use App\Traits\Tests\ClearsTestTables;
 use App\Traits\Tests\WithUser;
-use DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class QuestionsTest extends TestCase
 {
-    use DatabaseTransactions, WithUser;
+    use ClearsTestTables, DatabaseTransactions, WithUser;
 
     protected string $permission = 'view-any-question';
 
@@ -23,7 +23,7 @@ class QuestionsTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('questions')->delete();
+        $this->clearQuestionsAndDependencies();
     }
 
     public function test_regular_user_without_permission_cannot_access_questions_list()

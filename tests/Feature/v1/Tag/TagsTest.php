@@ -4,14 +4,14 @@ namespace Feature\v1\Tag;
 
 use App\Models\Tag;
 use App\Models\User;
+use App\Traits\Tests\ClearsTestTables;
 use App\Traits\Tests\WithUser;
-use DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class TagsTest extends TestCase
 {
-    use DatabaseTransactions, WithUser;
+    use ClearsTestTables, DatabaseTransactions, WithUser;
 
     protected string $permission = 'view-any-tag';
 
@@ -19,7 +19,7 @@ class TagsTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('tags')->delete();
+        $this->clearTagsAndDependencies();
     }
 
     public function test_regular_user_cannot_access_tags_list()

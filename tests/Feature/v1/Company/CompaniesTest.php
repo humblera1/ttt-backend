@@ -4,14 +4,14 @@ namespace Feature\v1\Company;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Traits\Tests\ClearsTestTables;
 use App\Traits\Tests\WithUser;
-use DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class CompaniesTest extends TestCase
 {
-    use DatabaseTransactions, WithUser;
+    use ClearsTestTables, DatabaseTransactions, WithUser;
 
     protected string $permission = 'view-any-company';
 
@@ -19,7 +19,7 @@ class CompaniesTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('companies')->delete();
+        $this->clearCompaniesAndDependencies();
     }
 
     public function test_regular_user_cannot_access_companies_list(): void

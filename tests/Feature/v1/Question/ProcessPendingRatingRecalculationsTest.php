@@ -4,6 +4,7 @@ namespace Feature\v1\Question;
 
 use App\Jobs\RecalculateQuestionRatingJob;
 use App\Models\Question;
+use App\Traits\Tests\ClearsTestTables;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Bus;
@@ -11,7 +12,14 @@ use Tests\TestCase;
 
 class ProcessPendingRatingRecalculationsTest extends TestCase
 {
-    use DatabaseTransactions;
+    use ClearsTestTables, DatabaseTransactions;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->clearQuestionsAndDependencies();
+    }
 
     public function test_process_pending_command_dispatches_jobs_for_flagged_questions(): void
     {

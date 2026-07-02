@@ -8,14 +8,14 @@ use App\Models\Position;
 use App\Models\Question;
 use App\Models\Tag;
 use App\Models\User;
+use App\Traits\Tests\ClearsTestTables;
 use App\Traits\Tests\WithUser;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class QuestionsProposeTest extends TestCase
 {
-    use DatabaseTransactions, WithUser;
+    use ClearsTestTables, DatabaseTransactions, WithUser;
 
     protected string $permission = 'propose-question';
 
@@ -23,13 +23,7 @@ class QuestionsProposeTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('questions')->delete();
-        DB::table('taggables')->delete();
-        DB::table('tags')->delete();
-        DB::table('company_question')->delete();
-        DB::table('companies')->delete();
-        DB::table('positions')->delete();
-        DB::table('statistics')->delete();
+        $this->clearQuestionDomainTables();
     }
 
     public function test_regular_user_without_permission_cannot_propose_questions(): void

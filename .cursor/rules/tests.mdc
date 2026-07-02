@@ -57,4 +57,22 @@ Do not add trivial unit tests that only assert framework behavior unless request
 
 ## Database cleanup in setUp
 
-Prefer factories and `DatabaseTransactions`; avoid `DB::table('questions')->delete()` unless dependent rows (statistics, suggestions, votes, etc.) are removed first — see `QuestionRatingRecalculationTest` for the full order.
+Prefer factories and `DatabaseTransactions`. When a test needs an empty table, use `App\Traits\Tests\ClearsTestTables` — do **not** delete parent rows before their FK dependents.
+
+```php
+use App\Traits\Tests\ClearsTestTables;
+
+class QuestionsTest extends TestCase
+{
+    use ClearsTestTables, DatabaseTransactions;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->clearQuestionsAndDependencies();
+    }
+}
+```
+
+Available helpers: `clearQuestionsAndDependencies()`, `clearCompaniesAndDependencies()`, `clearPositionsAndDependencies()`, `clearTagsAndDependencies()`, `clearQuestionDomainTables()` (propose/statistics flows).

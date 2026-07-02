@@ -4,14 +4,14 @@ namespace Feature\v1\Position;
 
 use App\Models\Position;
 use App\Models\User;
+use App\Traits\Tests\ClearsTestTables;
 use App\Traits\Tests\WithUser;
-use DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class PositionsTest extends TestCase
 {
-    use DatabaseTransactions, WithUser;
+    use ClearsTestTables, DatabaseTransactions, WithUser;
 
     protected string $permission = 'view-any-position';
 
@@ -19,7 +19,7 @@ class PositionsTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('positions')->delete();
+        $this->clearPositionsAndDependencies();
     }
 
     public function test_regular_user_cannot_access_positions_list()
